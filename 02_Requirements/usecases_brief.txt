@@ -1,0 +1,5 @@
+Der User startet die system. Er erstellt ein neues Projekt und gibt dem Projekt einen Bezeichner. Der User benutzt das System um die Aufnahmen zu planen. Er nimmt folgenden Einstellungen für den Luminanzkanal und die 3 Farbkanäle vor.
+-Anzahl Bilder
+-Belichtungszeit
+-Binning
+
