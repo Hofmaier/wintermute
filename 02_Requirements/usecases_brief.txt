@@ -1,5 +1,27 @@
-Der User startet die system. Er erstellt ein neues Projekt und gibt dem Projekt einen Bezeichner. Der User benutzt das System um die Aufnahmen zu planen. Er nimmt folgenden Einstellungen für den Luminanzkanal und die 3 Farbkanäle vor.
+Projekt planen (Plan) 
+Der User startet die system. Er erstellt ein
+neues Projekt und gibt dem Projekt einen Bezeichner. Der User benutzt
+das System um die Aufnahmen zu planen. Er wähl aus mit welcher Kamera
+und welcher Teleskop/Adapter-Konfiguration 
+er die Aufnahmen machen will. Er nimmt folgenden Einstellungen für den Luminanzkanal und die 3 Farbkanäle vor.
 -Anzahl Bilder
 -Belichtungszeit
 -Binning
+Das System zeigt dem User an welche Referenzdaten(Darks, Flats, Bias) fehlen.
+
+Rohbilder erstellen (Collect): 
+Der User wählt ein Projekt aus. Der User teilt dem System mit dass er die Rohbilder machen möchte. Das System zeigt dem User an welche Aufnahmen geplant, aber noch nicht aufgenommen wurden. Der User kann die Aufnahme einzelner oder einer Serie von Bilder starten. 
+
+Alignment, Calibration, Registration (Process): 
+Der User teilt dem System mit dass er die Rohbilder bearbeiten will. Der User fordert das System auf die Farbilder zu erstellen. Das System kalibriert die Bilder und fügt sie zu Farbilder zusammen. Der User wählt Farbbilder aus, die er stacken möchte. Das System führt das Stacking durch und zeigt dem User das Resultat. Wenn der mit dem Resultat zufrieden ist, veranlasst er das System die Zusammensetzung festzuhalten.
+
+Bilderstellungsprozess anschauen (View): Der User wählt ein Bild aus. Das Sytem zeigt folgenden Informationen an. 
+Mit welcher Kamera wurde das Bild aufgenommen wurde
+Teleskop
+Adapter
+Filter
+DSO
+Anzahlbilder und Belichtungszeit für:
+RGBL-Bilder
+FarbCCD
 
