@@ -1,0 +1,4 @@
+* Features
+-Software Assisted Focusing
+-Autoguiding
+
