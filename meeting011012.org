@@ -1,16 +1,24 @@
 *** Fragen
 Können sie uns ein Objektiv für die Imaging Source Kamera zur Verfügung stellen, mit dem man Fotos in einem Raum aufnehmen kann. Wenn man den Refractor verwendet, wäre ein Stativ sehr nützlich. Wäre es möglich ein Stativ zu organisieren?
 
+Teleskop im Büro von Herr Müller aufstellen.
+
 Können Filter in einem Filterrad ausgetauscht werden. Können Filter einem optischen System hinzugefügt werden? 
 
 Das Flat ist auch von dem Chip abhängig. Das heisst an anderer Chip hat ein anderes Flat bei gleichem OpticalSystem und SpectralChannel. Ist das korrekt?
 
-Möchte man eine Durchmusterung machen, dürfen nur Bilder mit der gleichen Position(gleicher Himmelskörper) stacked und später in VisualImages gemappt werden. Dafür ist ein Vergleichswert notwendig. Funktioniert die Deklination?
+Möchte man eine Durchmusterung machen, dürfen nur Bilder mit der gleichen Position(gleicher Himmelskörper) stacked und später in VisualImages gemappt werden. Dafür ist ein Vergleichswert notwendig. Funktioniert die Deklination? Deklination
 
 Ich möchte das Muster der Filter auf dem Chip (z.B. Bayer-Filter) oder zumindest ein Identifier irgendwo festhalten. Das Muster beinhaltet mehrere Filter, dass heisst mehrere Spectral Channels. (siehe Domain Model). Ich würde vorschlagen, zwischen ImagePlane und SpectralChannel noch eine Klasse PixelArrangement einzufügen. Ein Bayer-Filter ImagePlane hat 3 SpectralChannels. Diese sind aber an das Arrangement gebunden. Im e-Mail ist das Arrangement im SpectralChannel
+
+Bayer-RGB Muster wird in Spectral Channel abgebildet.
 
 Was meinen sie mit ein Channelmapper muss sich selbst dokumentieren, reproduzieren können.
 
 Ein UYV-RawImage hat 3 ImagePlanes. Jedes Imageplane hat einen SpectralChannel
 Ein Bayer-Filter-RGB Aufnahme produziert ein ImagePlane. 
 Eine Chip mit Bayer-Filter kann aber auch 3 ImagePlanes produzieren.
+
+Termin mit von Bergen: 
+
+Imaging Source v4l: bleibt so.
