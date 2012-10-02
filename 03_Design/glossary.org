@@ -1,19 +1,38 @@
 * Glossar
 - Image :: 2D-Array dessen Elemente diskrete Werte für Helligkeits(intensity) enthält. Kann auch als Funktion f(x,y) dargestellt werden, wobei x und y Pixelkoordinaten sind und und der Funktionswert der Helligkeit entspricht. Eine weitere Darstellung ist eine Matrix deren Elemente die Helligkeitswerte sind. Alias: digital image,
+
 - RawImage :: Ein Image, dessen Quelle eine Aufnahme ist. Ein Image hat genau einen Filter.
-- Helligkeit :: Quantisierter Wert in einem Image. Alias: Intensity, 
+
+- Helligkeit :: Quantisierter Wert in einem Image. Alias: Intensity,
+ 
 - Aufnahme :: Eine einzelne Bildaufnahme einer Camera. Normalerweise enthält sie ein RawImage. Sie kann aber auch mehrere RawImages enthalten(die zu einem Color image zusammengefasst werden können). Ein CCD-Chip mit Bayer-Filter und eingeschalteter Interpolation erzeugt 3 RawImages. Alias: Shot
+
+- ShotDescription :: Bevor eine Aufnahme mit einer Kamera gemacht wurde, muss man wissen, welche Aufnahmen mit der Kamera möglich sind. ShotDescription hält fest, welche SpectralChannels in einer Aufnahme enthalten sind und teilt den RawImages die richtigen SpectralChannels zu. Das ist nötig weil eine Aufnahme mehrere SpectralChannel enthalten kann.
+
 - Filter :: Ein Filter bestimmt den SpectralChannel einer Aufnahme. Bei monochromen Chips wird der Filter durch den optischen Filter bestimmt. Bei Chips mit Bayer-Filter kann der Filter aber auch virtuell sein. Bei einer Aufnahme mit einem Bayer-Filter und eingeschalteter Interpolation entstehen 3 RawImages. Alle Images haben unterschiedliche Filter für die Farben RGB. Diese Filter existieren nur virtuell. Ein Filter wird mit einem SpectralChannel etikettiert .Die Empfindlichkeit über das gesamte Imageplane ist von der Filterinstanz abhängig (Verschmutzung beeinflusst die Empfindlichkeit). Der Filter muss bei der Kalibrierung berücksichtig werden. CalibrationFrame und Image müssen den selben Filter haben. Ein Filter kann nicht für mehrere Chips verwendet werden. Pro Filter gibt es genau einen Chip.
+
 - Kalibrierung :: Alias: Eichung
+
 - CameraConfiguration :: CameraConfiuration hält die Kombination von Chip und Filter fest. CameraConfiguration ist nötig, weil die Hardwarefilter ausgetauscht werden können. In diesem Fall wird eine neue CameraConfiguartion erstellt und die bisherige Kombination wird für die Rekonstrierbarkeit archviert. CalibrationFrames die mit der alten Konfiguration verwendet wurden können nicht mehr verwendet werden.
+
 - SpectralChannel :: Beschreibt die Empfindlichkeit des Filters für verschiedene Lichtwellenlängen. Kann aber auch einen Bayer-Filter kennzeichnen. Wird vorallem zur Kennzeichnung des Lichtwellenlängebereichs eines Image verwendet. Ein SpectralChannel sagt nichts über die Empfindlichkeit über die gesamte Imageplane aus, sondern etikettiert nur den Filter.
+
 - Bayer-Filter :: Ein Farbfilter, der ein Schachbrettmuster aufweist. Jedes Rechteck auf dem Muster entspricht einem Pixel auf dem CCD-Chip. Das Farbfilter besteht zu 50% aus Grün und zu je 25% aus Rot und Blau.  
+
 - CalibrationFrame :: Die Abbildung einer Szene auf ein Image kann durch Fehler auf dem Chip, thermisches Signal und das optische System verfälscht werden. Um diese Fehler rückgängig zu machen, werden CalibrationFrames von den RawImages subtrahiert. 
+
 - Flatfield :: Ist ein CalibrationFrame. Es gleicht Verfälschungen der Empfindlichkeit, die durch das optische System und durch den Filter verursacht werden, aus. Für RawImages die mit dem selben optischen System und dem selben Filter gemacht wurden, kann das gleiche Flatfield verwendet weden. Alias: AverageFlat
+
 - Bias :: Ist ein CalibrationFrame. Fotochips können Pixelfehler aufweisen. Diese können mit dem Bias korrigiert werden. Obwohl sich die Fehler nur auf einen einzelnen Chip beziehen, ist der Bias vom Filter abhängig. Wird eine Aufnahme mit eingeschalteter Interpolation erstellt ergibt sich für jedes Component Image einen anderen Pixelfehler.
+
 - Darkfield :: Thermische Signal in der Kamera verfälschen die Aufnahme. Ein Darkframe zeichnet diese Signale auf. Darkfields müssen den selben Filter, die selbe Belichtungszeit und Temperatur haben wie das zu kalibrierende Bild.
+
 - Color image :: Mehrere Component Images kombiniert. Normalerweise besteht es aus 3 Component Images für RGB.
+
 - RGB Component Image :: Image dass mit einem monochromen Chip und entweder mit einem Rot, Grün oder Blau-Filter aufgenommen wurde.
+
 - ComponentImage ::  Bei der visuellen Darstellung können unterschiedliche Farbmodelle gewählt werden. Ein ComponentImage ist eine Generaliserung für die Komponenten unterschiedlicher Farbmodelle. Ein ComponentImage kann unterschiedliche Information abspeichern(z.B R Anteil bei RGB oder Hue bei HSI u.s.w) Es ist ein 2D-Array, dass in der spezialisierten Form eine Komponente als Elemente speichert. Ein oder mehrere ComponentImage werden bilden ein VisualImage Alias: ComponentPlane
+
 - VisualImage :: Ein VisualImage ist eine Generalisierung für die Kombination mehrerer Component Images. Ein VisualImage dient dazu über ein Anzeigegerät visualisiert zu werden.
+
 - Hue :: Gibt den Farbton an und hängt mit der dominanten Wellenlänge zusammen. 
