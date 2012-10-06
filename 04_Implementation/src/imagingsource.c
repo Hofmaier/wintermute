@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #define MAX_FORMATS 64
+#define NR_OF_PROPERTIES 9
 
 unicap_handle_t open_imagingsource_camera ()
 {
@@ -22,19 +23,34 @@ void print_formats(unicap_handle_t handle)
   int status = STATUS_SUCCESS;
   while(SUCCESS(status)){
     status =  unicap_enumerate_formats(handle, NULL, &formats[index], index);
-    printf("%d: %s\n", index, formats[index].identifier);
+    if(!SUCCESS(status)) break;
+    unicap_format_t currentFormat = formats[index];
+    printf("%d: %s Size: %d x %d\n", index, currentFormat.identifier, currentFormat.size.width, currentFormat.size.height);
     index++;
   }
   printf("End of Formatslist\n");
 }
 
+void print_properties(unicap_handle_t handle){
+  unicap_property_t properties[NR_OF_PROPERTIES];
+  int status = STATUS_SUCCESS;
+  int propertycount = 0;
+  while(SUCCESS(status)){
+      status = unicap_enumerate_properties(handle, NULL, &properties[propertycount], propertycount);
+      unicap_property_t property = properties[propertycount];
+      
+      printf("%d: %s\n", propertycount, property.identifier);
+propertycount++;
+    }
 
+}
 
 int main (int argc, char **argv)
 {
   unicap_handle_t handle;
   handle = open_imagingsource_camera();
   print_formats(handle);
+  print_properties(handle);
   unicap_close (handle);
   return 0;
 }
