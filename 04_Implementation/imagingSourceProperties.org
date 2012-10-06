@@ -1,0 +1,20 @@
+* Reset Properties Imaging Source DBK 21AU618
+
+Die Default Einstellung beinhaltet folgende Werte
+
+| Property          |       Value |
+|-------------------+-------------|
+| Hue               |         180 |
+| Format            | BY (640x480 |
+| Saturation        |         128 |
+| WhiteBalance      |        Auto |
+| WhiteBalance Red  |           0 |
+| WhiteBalance Blue |          83 |
+| Brightness        |           0 |
+| Gain              |         972 |
+| Exposure          |        1/30 |
+| Auto Reference    |         128 |
+| Auto Max Value    |        1/30 |
+| Gamma             |         100 |
+| Trigger           |     disable |
+| Polarity          |     disable |
