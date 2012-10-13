@@ -1,5 +1,6 @@
 #include <unicap.h>
 #include <stdio.h>
+#include <unicapgtk.h>
 
 #define MAX_FORMATS 64
 #define NR_OF_PROPERTIES 9
@@ -37,20 +38,49 @@ void print_properties(unicap_handle_t handle){
   int propertycount = 0;
   while(SUCCESS(status)){
       status = unicap_enumerate_properties(handle, NULL, &properties[propertycount], propertycount);
-      unicap_property_t property = properties[propertycount];
-      
-      printf("%d: %s\n", propertycount, property.identifier);
+      if(!SUCCESS(status)) break;
+
+      unicap_property_t currentproperty = properties[propertycount];
+      char * propertyType;
+      if(currentproperty.type == UNICAP_PROPERTY_TYPE_RANGE)
+	{
+	  propertyType = "Range";
+	}
+      else
+	{
+	  propertyType = "";
+	}
+      printf("%d: %s RelationsCount: %d ", propertycount, currentproperty.identifier, currentproperty.relations_count);
+      printf("Type: %s \n", propertyType);
 propertycount++;
     }
 
 }
 
+void display_video_stream(int argc, char **argv){
+  GtkWidget * window;
+  GtkWidget * ugtk_display;
+
+  gtk_init(&argc, &argv);
+
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  
+  ugtk_display = unicapgtk_video_display_new_by_device(NULL);
+  gtk_container_add(GTK_CONTAINER (window), ugtk_display);
+  unicapgtk_video_display_start (UNICAPGTK_VIDEO_DISPLAY(ugtk_display));
+
+  gtk_widget_show_all(window);
+  gtk_main();
+}
+
 int main (int argc, char **argv)
 {
-  unicap_handle_t handle;
-  handle = open_imagingsource_camera();
-  print_formats(handle);
-  print_properties(handle);
-  unicap_close (handle);
+  display_video_stream(argc, argv);
+  // unicap_handle_t handle;
+  //handle = open_imagingsource_camera();
+  //print_formats(handle);
+  //print_properties(handle);
+  //unicap_close (handle);
   return 0;
 }

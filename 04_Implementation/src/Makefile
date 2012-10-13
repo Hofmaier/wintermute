@@ -1,8 +1,8 @@
 cap : imagingsource.o
-	gcc imagingsource.o -lunicap
+	gcc imagingsource.o `pkg-config --libs libunicap` -o pgm
 
-imagingsource.o : imagingsource.c
-	gcc -I/usr/include/unicap -c imagingsource.c
+imagingsource.o : pgmexample.c
+	gcc `pkg-config --cflags libunicap` -c pgmexample.c -o imagingsource.o
 
 tut_2_3 : tut_2_3.o
 	gcc tut_2_3.o -lunicap
