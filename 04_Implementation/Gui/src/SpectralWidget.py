@@ -1,9 +1,6 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
-from SpectralFrame import SpectralFrame
-from SpectralAddButton import SpectralAddButton
-from testWidget import TestWidget
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -16,7 +13,7 @@ class SpectralWidget(QtGui.QWidget):
         super(SpectralWidget, self).__init__()
         #self.setGeometry(QtCore.QRect(150, 4, 640, 580))
         self.setMinimumHeight(560)
-        self.setMinimumWidth(600)
+        self.setMinimumWidth(640)
         
         
         #self.horizontalLayout = QtGui.QVBoxLayout()

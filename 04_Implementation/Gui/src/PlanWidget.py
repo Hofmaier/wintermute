@@ -12,13 +12,16 @@ class PlanWidget(QtGui.QWidget):
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         
         self.frameWidget = QtGui.QWidget()
-        self.frameWidget.setMinimumHeight(160)
         self.frameWidget.setMinimumWidth(610)
         self.frame = QtGui.QFrame()
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
+	self.opticalSystemLabel = QtGui.QLabel()
+	self.opticalSystemLabel.setStyleSheet("font: 10pt")
+	self.opticalSystemLabel.setText("Optical System")
+	
         self.gridFrameLayout = QtGui.QGridLayout(self.frameWidget)
-        self.gridFrameLayout.setColumnMinimumWidth(0, 10)
+        self.gridFrameLayout.setColumnMinimumWidth(0, 0)
         self.gridFrameLayout.setColumnMinimumWidth(2, 10)
         self.gridFrameLayout.setColumnMinimumWidth(4, 10)
         self.gridFrameLayout.setColumnMinimumWidth(6, 10)
@@ -64,5 +67,6 @@ class PlanWidget(QtGui.QWidget):
         self.gridFrameLayout.addWidget(self.tempLabel, 7, 1)
         self.tempLineEdit = QtGui.QLineEdit(self.frame)
         self.gridFrameLayout.addWidget(self.tempLineEdit, 7, 3)
-
+	
+	self.verticalLayout.addWidget(self.opticalSystemLabel)
         self.verticalLayout.addWidget(self.frameWidget)
