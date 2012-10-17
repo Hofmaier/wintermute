@@ -16,6 +16,7 @@ class SpectralWidget(QtGui.QWidget):
         #self.setGeometry(QtCore.QRect(150, 4, 640, 580))
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
+        self.spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         
         
         #self.horizontalLayout = QtGui.QVBoxLayout()
@@ -45,26 +46,31 @@ class SpectralWidget(QtGui.QWidget):
 
         self.spectralWidget.setLayout(self.spectralLayout)
         self.spectralLayout.setRowMinimumHeight(1, 7)
+        self.spectralLayout.setRowMinimumHeight(3, 2)
+        self.spectralLayout.setRowMinimumHeight(5, 7)
         self.spectralLayout.setColumnMinimumWidth(0, 10)
         self.spectralLayout.setColumnMinimumWidth(2, 10)
+        self.spectralLayout.setColumnMinimumWidth(4, 10)
         
         self.frame = QtGui.QFrame()
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
-        self.spectralLayout.addWidget(self.frame, 0, 0, 5, 5)
+        self.spectralLayout.addWidget(self.frame, 0, 0, 7, 5)
 
         self.spectralLabel = QtGui.QLabel()
         self.spectralLabel.setText("Spectral:")
         self.spectralLayout.addWidget(self.spectralLabel, 2, 1)
         self.spectralLineEdit = QtGui.QLineEdit()
         self.spectralLayout.addWidget(self.spectralLineEdit, 2, 3)
-
+        
+        self.numberOfImagesLabel = QtGui.QLabel()
+        self.numberOfImagesLabel.setText("Number of Images:")
+        self.spectralLayout.addWidget(self.numberOfImagesLabel, 4, 1)
+        self.numberOfImagesLineEdit = QtGui.QLineEdit()
+        self.spectralLayout.addWidget(self.numberOfImagesLineEdit, 4, 3)
+		
         self.horizontalLayout_2.addWidget(self.spectralWidget)
-        spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.horizontalLayout_2.addItem(spacerItem)
-        self.horizontalLayout_2.removeItem(spacerItem)
-        self.horizontalLayout_2.addWidget(QtGui.QPushButton())
-        self.horizontalLayout_2.addItem(spacerItem)
+        self.horizontalLayout_2.addItem(self.spacerItem)
         
         
      
