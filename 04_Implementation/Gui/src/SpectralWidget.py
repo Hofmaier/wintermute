@@ -29,7 +29,8 @@ class SpectralWidget(QtGui.QWidget):
         self.scrollAreaWidgetContents.setMinimumHeight(550)
         self.scrollAreaWidgetContents.setMinimumWidth(620)
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
-        self.horizontalLayout_2 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.horizontalLayout_2 = QtGui.QVBoxLayout()
+        self.scrollAreaWidgetContents.setLayout(self.horizontalLayout_2)
         #self.gridLayout = QtGui.QGridLayout()
         #self.horizontalLayout_2.addLayout(self.gridLayout)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
@@ -38,26 +39,33 @@ class SpectralWidget(QtGui.QWidget):
         
         
         self.spectralWidget = QtGui.QWidget()
-	self.spectralWidget.setMinimumWidth(200)
-	self.spectralWidget.setMaximumHeight(200)
-	self.spectralLayout = QtGui.QGridLayout(self.spectralWidget)
+        #self.spectralWidget.setMinimumWidth(200)
+        #self.spectralWidget.setMaximumHeight(200)
+        self.spectralLayout = QtGui.QGridLayout()
 
-	self.spectralLayout.setRowMinimumHeight(1, 7)
-	self.spectralLayout.setColumnMinimumWidth(0, 10)
-	self.spectralLayout.setColumnMinimumWidth(2, 10)
+        self.spectralWidget.setLayout(self.spectralLayout)
+        self.spectralLayout.setRowMinimumHeight(1, 7)
+        self.spectralLayout.setColumnMinimumWidth(0, 10)
+        self.spectralLayout.setColumnMinimumWidth(2, 10)
         
         self.frame = QtGui.QFrame()
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
-	self.spectralLayout.addWidget(self.frame, 0, 0, 5, 5)
+        self.spectralLayout.addWidget(self.frame, 0, 0, 5, 5)
 
-	self.spectralLabel = QtGui.QLabel()
-	self.spectralLabel.setText("Spectral:")
-	self.spectralLayout.addWidget(self.spectralLabel, 2, 1)
-	self.spectralLineEdit = QtGui.QLineEdit()
-	self.spectralLayout.addWidget(self.spectralLineEdit, 2, 3)
+        self.spectralLabel = QtGui.QLabel()
+        self.spectralLabel.setText("Spectral:")
+        self.spectralLayout.addWidget(self.spectralLabel, 2, 1)
+        self.spectralLineEdit = QtGui.QLineEdit()
+        self.spectralLayout.addWidget(self.spectralLineEdit, 2, 3)
 
         self.horizontalLayout_2.addWidget(self.spectralWidget)
+        spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.horizontalLayout_2.removeItem(spacerItem)
+        self.horizontalLayout_2.addWidget(QtGui.QPushButton())
+        self.horizontalLayout_2.addItem(spacerItem)
+        
         
      
        
