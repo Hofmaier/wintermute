@@ -1,6 +1,8 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
+import sys
 from PyQt4 import QtCore, QtGui
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -19,33 +21,43 @@ class SpectralWidget(QtGui.QWidget):
         #self.horizontalLayout = QtGui.QVBoxLayout()
         self.scrollArea = QtGui.QScrollArea(self)
         self.scrollArea.setMinimumHeight(560)
-        self.scrollArea.setMinimumWidth(600)
+        self.scrollArea.setMinimumWidth(640)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtGui.QWidget(self.scrollArea)
         #self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 640, 560))
-        #self.scrollAreaWidgetContents.setMinimumHeight(550)
-        #self.scrollAreaWidgetContents.setMinimumWidth(580)
+        self.scrollAreaWidgetContents.setMinimumHeight(550)
+        self.scrollAreaWidgetContents.setMinimumWidth(620)
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
-        self.horizontalLayout_2 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents)
-        self.gridLayout = QtGui.QGridLayout()
-        self.horizontalLayout_2.addLayout(self.gridLayout)
+        self.horizontalLayout_2 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
+        #self.gridLayout = QtGui.QGridLayout()
+        #self.horizontalLayout_2.addLayout(self.gridLayout)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         #self.horizontalLayout.addWidget(self.scrollArea)
        
         
         
-        widget = QtGui.QWidget()
-        widget.setMinimumWidth(200)
-        widget.setMinimumHeight(200)
+        self.spectralWidget = QtGui.QWidget()
+	self.spectralWidget.setMinimumWidth(200)
+	self.spectralWidget.setMaximumHeight(200)
+	self.spectralLayout = QtGui.QGridLayout(self.spectralWidget)
+
+	self.spectralLayout.setRowMinimumHeight(1, 7)
+	self.spectralLayout.setColumnMinimumWidth(0, 10)
+	self.spectralLayout.setColumnMinimumWidth(2, 10)
         
-        frame = QtGui.QFrame(widget)
-        frame.setFrameShape(QtGui.QFrame.StyledPanel)
-        frame.setFrameShadow(QtGui.QFrame.Raised)
-        frame.setGeometry(QtCore.QRect(0, 0, 200, 200))
-        textLabel = QtGui.QLineEdit(frame) 
-        self.gridLayout.addWidget(widget)
-        
+        self.frame = QtGui.QFrame()
+        self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtGui.QFrame.Raised)
+	self.spectralLayout.addWidget(self.frame, 0, 0, 5, 5)
+
+	self.spectralLabel = QtGui.QLabel()
+	self.spectralLabel.setText("Spectral:")
+	self.spectralLayout.addWidget(self.spectralLabel, 2, 1)
+	self.spectralLineEdit = QtGui.QLineEdit()
+	self.spectralLayout.addWidget(self.spectralLineEdit, 2, 3)
+
+        self.horizontalLayout_2.addWidget(self.spectralWidget)
         
      
        
