@@ -14,7 +14,7 @@ class SpectralAddButtonWidget(QtGui.QWidget):
 	
 	self.spectralAddButton = QtGui.QPushButton()
 	self.spectralAddButton.setText("+")
-	self.spectralAddButtonLayout.setColumnMinimumWidth(0, 585)
+	self.spectralAddButtonLayout.setColumnMinimumWidth(0, 570)
 	self.spectralAddButtonLayout.setColumnMinimumWidth(2, 4)
 	self.spectralAddButtonLayout.addWidget(self.spectralAddButton, 0, 1)
 	

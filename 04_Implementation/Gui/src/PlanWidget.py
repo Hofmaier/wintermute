@@ -15,7 +15,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLabel.setStyleSheet("font: 7pt")
         self.opticalSystemLabel.setText("Optical System")
         self.opticalSystemWidget = QtGui.QWidget()
-        self.opticalSystemWidget.setMinimumWidth(610)
+        self.opticalSystemWidget.setMinimumWidth(640)
         self.opticalSystemFrame = QtGui.QFrame()
         self.opticalSystemFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.opticalSystemFrame.setFrameShadow(QtGui.QFrame.Raised)
@@ -70,7 +70,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.addWidget(self.tempLineEdit, 8, 3)
 
 	self.configImagesWidget = QtGui.QWidget()
-        self.configImagesWidget.setMinimumWidth(610)
+        self.configImagesWidget.setMinimumWidth(640)
         self.configImagesFrame = QtGui.QFrame()
         self.configImagesFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.configImagesFrame.setFrameShadow(QtGui.QFrame.Raised)
