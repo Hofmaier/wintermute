@@ -1,8 +1,6 @@
 import os.path
 import imp
 
-
-
 class Session:
     def __init__(self, factory=None):
         if factory == None:
@@ -13,7 +11,7 @@ class Session:
         self.projectFactory.createProject(name)
 
     def createCameraConfiguration(name, interface):
-        cameraConfiguration = new CameraConfiguration()
+        cameraConfiguration = CameraConfiguration()
 
 class CameraConfiguration:
     pass
@@ -22,7 +20,8 @@ class ProjectFactory:
     pass
 
 class Project:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 def getInterfaceImplFiles():
