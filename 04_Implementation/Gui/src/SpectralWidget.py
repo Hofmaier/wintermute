@@ -20,7 +20,7 @@ class SpectralWidget(QtGui.QWidget):
         
         self.scrollArea = QtGui.QScrollArea(self)
         self.scrollArea.setMinimumHeight(560)
-        self.scrollArea.setMinimumWidth(640)
+        self.scrollArea.setMinimumWidth(630)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtGui.QWidget(self.scrollArea)
