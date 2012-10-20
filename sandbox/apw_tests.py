@@ -1,10 +1,10 @@
-import unittest
-import astro
+from nose.tools import *
+import apw
 import mock
 
 class TestSession(unittest.TestCase):
     def test_ctor(self):
-        session = astro.Session()
+        session = apw.Session()
         self.assertIsNotNone(session.projectFactory)
 
     def test_createProject(self):
@@ -13,7 +13,4 @@ class TestSession(unittest.TestCase):
         session = astro.Session(projectFactory)
         session.createProject('testname')
         projectFactory.createProject.assert_called_with('testname')
-            
 
-if __name__ == '__main__':
-    unittest.main()
