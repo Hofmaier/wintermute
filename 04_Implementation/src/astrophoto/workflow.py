@@ -10,11 +10,12 @@ class Session:
     def createProject(self, name):
         self.projectFactory.createProject(name)
 
-    def createCameraConfiguration(name, interface):
-        cameraConfiguration = CameraConfiguration()
+    def createCameraConfiguration(self, name, interface):
+        pass
 
 class CameraConfiguration:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 class ProjectFactory:
     pass
@@ -23,6 +24,8 @@ class Project:
     def __init__(self, name):
         self.name = name
 
+def createCameraConfiguration(name, interface, project):
+    cameraConfiguration = CameraConfiguration(name)
 
 def getInterfaceImplFiles():
     extensionlist = []

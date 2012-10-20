@@ -1,6 +1,6 @@
 import tkinter
 from tkinter import ttk
-import apw
+import workflow
 
 root = tkinter.Tk()
 content= tkinter.Frame(root)
@@ -13,19 +13,27 @@ plancont = tkinter.Frame(root)
 cameracb = ttk.Combobox(plancont)
 cameralbl = tkinter.Label(plancont, text='camera')
 addDevFrame = tkinter.Frame(root)
-camerainterfacelist = 'a', 
+camerainterfacelist = 'a' 
 inames = tkinter.StringVar(value=camerainterfacelist)
+interfacelist = tkinter.Listbox(addDevFrame, listvariable=inames, height=5)
+session = workflow.Session()
+
+def addDeviceOkBtnClicked():
+    selectionlist = interfacelist.curselection()
+    strindex = selectionlist[0]
+    index = int(strindex)
+    selectedInterface = camerainterfacelist[index]
+    session.createCameraConfiguration()
 
 def addDevice():
     plancont.grid_forget()
-    interfacelist = apw.getInterfaceNames()
-    camerainterfacelist = tuple(interfacelist)
+    namelist = workflow.getInterfaceNames()
+    camerainterfacelist = tuple(namelist)
     inames = tkinter.StringVar(value=camerainterfacelist)
     addDevFrame.grid(column=0, row=0)
-    interfacelist = tkinter.Listbox(addDevFrame, listvariable=inames, width=300)
-    interfacelist.grid(column=0, row=0)
     okbtn = tkinter.Button(addDevFrame, text='ok', command=addDeviceOkBtnClicked)
-    okbtn.grid(column=0, row=1)
+    okbtn.grid(column=0, row=1, sticky=tkinter.W)
+    interfacelist.grid(column=0, row=2, rowspan=6, sticky=(tkinter.N,tkinter.S,tkinter.E,tkinter.W))
 
 def newprojOkBtnClicked():
     newprojcont.grid_forget()
