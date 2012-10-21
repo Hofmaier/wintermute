@@ -1,11 +1,14 @@
-import camerainterface
+from astrophoto import camerainterface
 
-class CameraInterfaceMock(camerainterface.Camera):
+class Camerainterfacemock(camerainterface.Camera):
     def __init__(self):
         self.name = 'interfacemock'
 
+    def getInterfaceName(self):
+        return getInterfaceName()
+
 def getInterfaceName():
-    return 'The Imaging Source'
+    return 'Interface Mock'
 
 def createCameraControl():
-    return CameraInterfaceMock()
+    return Camerainterfacemock()

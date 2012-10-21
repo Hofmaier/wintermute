@@ -9,7 +9,7 @@ class Camera:
 
 def createCamera(interface):
     interfacemodule = getModule(interface)
-    camera = interfacemodule.getCameraControl()
+    camera = interfacemodule.createCameraControl()
     return camera
 
 
