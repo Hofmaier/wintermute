@@ -36,27 +36,14 @@ def getInterfaceImplModules():
     for sourcefile in sourcefiles:
         module = getExtensionModule(sourcefile)
         interfaceModules.append(module)
-       
+        concreteModuleName = module.getInterfaceName()
+        moduleDict[concreteModuleName] = module
     return interfaceModules
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def getInterfaceNames():
+    print('getInterfaceNames')
+    imModules = getInterfaceImplModules()
+    names = moduleDict.keys()
+    return names
 
 

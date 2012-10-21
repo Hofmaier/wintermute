@@ -10,9 +10,20 @@ class TestProject(unittest.TestCase):
 
 
 class TestSession(unittest.TestCase):
+    
+    def setUp(self):
+        self.session = workflow.Session()
+        self.projectname = 'jupiter'
+        
     def test_ctor(self):
         session = workflow.Session()
         self.assertIsNotNone(session)
+
+    def test_createProject(self):
+        project = self.session.createProject(self.projectname)
+        self.assertIsNotNone(project)
+        self.assertEqual(project.name, self.projectname)
+        self.assertEqual(self.session.currentProject, project)
 
     def test_createCameraConfiguration(self):
         session = workflow.Session()

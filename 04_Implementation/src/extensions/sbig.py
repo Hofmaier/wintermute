@@ -1,0 +1,2 @@
+def getInterfaceName():
+    return 'SBIG'

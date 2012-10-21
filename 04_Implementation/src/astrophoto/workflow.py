@@ -7,14 +7,19 @@ class Session:
         if factory == None:
             factory = ProjectFactory()
         self.projectFactory = factory
-        self.currentProject = ""
+        self.currentProject = None
 
     def createProject(self, name):
-        self.projectFactory.createProject(name)
+        project = Project(name)
+        self.currentProject = project
+        return project
 
     def createCameraConfiguration(self, name, interface):
         cameraConfiguration = createCameraConfiguration(name, interface, self.currentProject)
         return cameraConfiguration
+
+    def getInterfaces():
+        return camerainterface.getInterfaceNames()
 
 class CameraConfiguration:
     def __init__(self, name, camera):
@@ -36,14 +41,9 @@ def createCameraConfiguration(name, interface, project):
     project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
 
-def getInterfaceNames():
-    print('getInterfaceNames')
-    imModules = getInterfaceImplModules()
-    names = []
-    for interfaceImpl in imModules:
-        name = interfaceImpl.getInterfaceName()
-        names.append(name)
-    return names
-
 def createCamera(interface):
+    """used for unittesting.
+
+    This function will be replace with a mock. Get rid of camerainterfacedependency.
+    """
     return camerainterface.createCamera(interface)
