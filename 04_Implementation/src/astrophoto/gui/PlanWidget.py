@@ -1,6 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
+from NewAdapter import *
 
 class PlanWidget(QtGui.QWidget):
     def __init__(self):
@@ -113,3 +114,14 @@ class PlanWidget(QtGui.QWidget):
 	
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
+
+        QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
+        QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
+
+    def addNewAdapter(self):
+        self.newAdapterDialog = NewAdapter(self)
+        self.newAdapterDialog.show()
+
+    def addNewTelescope(self):
+        self.newTelescopeDialog = NewTelescope(self)
+        self.newTelescopeDialog.show()
