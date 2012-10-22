@@ -18,3 +18,12 @@ class TestCamera(unittest.TestCase):
         module =  camerainterface.getModule(self.name)
         self.assertIsNotNone(module)
         self.assertEqual(module, camerainterface.moduledict[self.name])
+
+
+class TestImageType(unittest.TestCase):
+    
+    def test_simpleUsage(self):
+        imagetype = camerainterface.ImageType.Bayermatrix
+        self.assertIsNotNone(imagetype)
+        self.assertEqual(camerainterface.ImageType.toStr[imagetype], 'Bayer-Matrix')
+

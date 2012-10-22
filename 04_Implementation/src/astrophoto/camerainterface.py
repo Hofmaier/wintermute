@@ -7,6 +7,10 @@ def getModule(interface):
 class Camera:
     pass
 
+class ImageType:
+    Bayermatrix = 1
+    toStr = {Bayermatrix:'Bayer-Matrix'}
+
 def createCamera(interface):
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
