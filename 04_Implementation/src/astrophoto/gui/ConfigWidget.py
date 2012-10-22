@@ -9,20 +9,18 @@ class ConfigWidget(QtGui.QWidget):
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
        
-	self.verticalLayoutWidget = QtGui.QWidget(self)
+        self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
 
-	self.configSpectralWidgetList = []
-	
-	
+        self.configSpectralWidgetList = []
 
 
     def updateConfigWidget(self, spectralWidget):
-	self.verticalLayoutWidget.deleteLater()
-	self.verticalLayoutWidget = QtGui.QWidget(self)
-	self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
-	for spectral in spectralWidget.spectralColourWidgetList:
-		self.configSpectralWidget = ConfigSpectralWidget()
-		self.verticalLayout.addWidget(self.configSpectralWidget)
+        self.verticalLayoutWidget.deleteLater()
+        self.verticalLayoutWidget = QtGui.QWidget(self)
+        self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
+        for spectral in spectralWidget.spectralColourWidgetList:
+                self.configSpectralWidget = ConfigSpectralWidget()
+                self.verticalLayout.addWidget(self.configSpectralWidget)
 	
 

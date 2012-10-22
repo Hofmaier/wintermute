@@ -15,7 +15,7 @@ class SpectralWidget(QtGui.QWidget):
         super(SpectralWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
-	self.spectralColourWidgetList = []
+        self.spectralColourWidgetList = []
         self.spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         
         self.scrollArea = QtGui.QScrollArea(self)
@@ -30,25 +30,25 @@ class SpectralWidget(QtGui.QWidget):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
              
         spectralColourWidget = SpectralColourWidget(self)
-	self.spectralAddButtonWidget = SpectralAddButtonWidget(self)
+        self.spectralAddButtonWidget = SpectralAddButtonWidget(self)
 	
         self.horizontalLayout_2.addWidget(spectralColourWidget)
-	self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
-	self.spectralColourWidgetList.append(spectralColourWidget)
+        self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
+        self.spectralColourWidgetList.append(spectralColourWidget)
         self.horizontalLayout_2.addItem(self.spacerItem)
         
         
      	
 
     def addSpectralColourWidget(self):
-	self.horizontalLayout_2.removeItem(self.spacerItem)
-	self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
-	spectralColourWidget = SpectralColourWidget(self)
+        self.horizontalLayout_2.removeItem(self.spacerItem)
+        self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
+        spectralColourWidget = SpectralColourWidget(self)
         self.spectralColourWidgetList.append(spectralColourWidget)
-	self.horizontalLayout_2.addWidget(spectralColourWidget)
-	self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
-	self.horizontalLayout_2.addItem(self.spacerItem)
+        self.horizontalLayout_2.addWidget(spectralColourWidget)
+        self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
+        self.horizontalLayout_2.addItem(self.spacerItem)
     def deleteSpectralColourWidget(self):
-	self.horizontalLayout_2.removeWidget(self.sender().parent())
-	self.spectralColourWidgetList.pop(self.spectralColourWidgetList.index(self.sender().parent()))
-	self.sender().parent().deleteLater()
+        self.horizontalLayout_2.removeWidget(self.sender().parent())
+        self.spectralColourWidgetList.pop(self.spectralColourWidgetList.index(self.sender().parent()))
+        self.sender().parent().deleteLater()

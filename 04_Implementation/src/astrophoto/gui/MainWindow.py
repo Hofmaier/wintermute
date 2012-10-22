@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
             self.planWidget.hide()
             self.configWidget.hide()
         elif item.text() == "Configuration":
-	    self.configWidget.updateConfigWidget(self.spectralWidget)
+            self.configWidget.updateConfigWidget(self.spectralWidget)
             self.configWidget.show()
             self.spectralWidget.hide()
             self.planWidget.hide()
