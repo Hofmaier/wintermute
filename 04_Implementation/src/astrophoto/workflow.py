@@ -20,7 +20,7 @@ class Session:
         self.workspace.cameraconfigurations.append(cameraConfiguration)
         return cameraConfiguration
 
-    def getInterfaces():
+    def getInterfaces(self):
         return camerainterface.getInterfaceNames()
 
 class CameraConfiguration:
