@@ -43,6 +43,9 @@ class TestSession(unittest.TestCase):
         mockfunc.assert_called_with(name, interface, session.currentProject)
         self.assertIn(cameraconfiguration, session.workspace.cameraconfigurations)
 
+    def test_getInterfaceNames(self):
+        session = workflow.Session()
+
 class TestCameraConfiguration(unittest.TestCase):
     def test_ctor(self):
         name = 'imaging source 2012'
@@ -64,7 +67,6 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIsNotNone(cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
         
-
 class Workspace(unittest.TestCase):
     def test_ctor(self):
         workspace = workflow.Workspace()

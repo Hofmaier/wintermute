@@ -32,4 +32,4 @@ class TestImageType(unittest.TestCase):
         imagetype = camerainterface.ImageType.Bayermatrix
         self.assertIsNotNone(imagetype)
         self.assertEqual(camerainterface.ImageType.toStr[imagetype], 'Bayer-Matrix')
-
+        rgbimagetype = camerainterface.ImageType.RGB_Image
