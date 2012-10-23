@@ -4,7 +4,6 @@ from MainWindow import Ui_MainWindow
 from NewProject import NewProject
 import workflow
 import sys
-import workflow
 
 
 class StartUpScreen(QtGui.QWidget):
@@ -30,7 +29,7 @@ class StartUpScreen(QtGui.QWidget):
 
     def newProject(self):
         self.session = workflow.Session()
-        self.newProject = NewProject()
+        self.newProject = NewProject(self.session)
         self.hide()
         self.newProject.show()
 

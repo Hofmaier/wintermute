@@ -4,8 +4,9 @@ from MainWindow import Ui_MainWindow
 
 
 class NewProject(QtGui.QWidget):
-    def __init__(self):
+    def __init__(self, session):
         super(NewProject, self).__init__()
+        self.session = session
         self.widgetLayout = QtGui.QGridLayout()
         self.setLayout(self.widgetLayout)
 
@@ -23,16 +24,18 @@ class NewProject(QtGui.QWidget):
 
         self.okButton = QtGui.QPushButton()
         self.okButton.setText("OK")
+        self.okButton.setDefault(True)
         self.widgetLayout.addWidget(self.okButton, 3, 5)
 
         self.setFixedSize(self.sizeHint())
 
-        QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.openMainWindow)
+        QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.createNewProject)
 
-    def openMainWindow(self):
+    def createNewProject(self):
+        newProject = self.session.createProject(self.projectNameLineEdit.text())
         self.MainWindow = QtGui.QMainWindow()
         self.bla = Ui_MainWindow()
-        self.bla.setupUi(self.MainWindow)
+        self.bla.setupUi(self.MainWindow, self.session)
         self.hide()
         self.MainWindow.show()
 

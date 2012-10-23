@@ -18,26 +18,22 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, session):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(800, 600)
         MainWindow.setFixedSize(800, 600)
+        self.session = session
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.centralWidget.setGeometry(QtCore.QRect(0, 0, 800, 600))
         self.horizontalLayoutWidget = QtGui.QWidget(self.centralWidget)
-        #self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 800, 600))
-        #self.horizontalLayoutWidget.setMinimumHeight(600)
-        #self.horizontalLayoutWidget.setMinimumWidth(800)
         self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
 
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
 
-        
         self.listWidget = QtGui.QListWidget()
-        #self.listWidget.setGeometry(QtCore.QRect(0, 0, 140, 560))
         self.listWidget.setObjectName(_fromUtf8("listWidget"))
         self.listWidget.setMinimumHeight(560)
         self.listWidget.setMinimumWidth(140)
@@ -55,15 +51,13 @@ class Ui_MainWindow(object):
         item = QtGui.QListWidgetItem()
         item.setFont(font)
         self.listWidget.addItem(item)
-    
-        
- 
+
         MainWindow.setCentralWidget(self.centralWidget)
         self.mainToolBar = QtGui.QToolBar(MainWindow)
         self.mainToolBar.setObjectName(_fromUtf8("mainToolBar"))
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
 
-        self.planWidget = PlanWidget()
+        self.planWidget = PlanWidget(self.session)
         self.planWidget.show()
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.horizontalLayout.addWidget(self.planWidget)
