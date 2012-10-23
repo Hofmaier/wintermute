@@ -18,6 +18,7 @@ class TestSession(unittest.TestCase):
     def test_ctor(self):
         session = workflow.Session()
         self.assertIsNotNone(session)
+        self.assertIsNotNone(session.workspace)
 
     def test_createProject(self):
         project = self.session.createProject(self.projectname)
@@ -40,6 +41,7 @@ class TestSession(unittest.TestCase):
         self.assertIsNotNone(cameraconfiguration)
         self.assertEqual(cameraconfiguration, cameraconfigurationmock)
         mockfunc.assert_called_with(name, interface, session.currentProject)
+        self.assertIn(cameraconfiguration, session.workspace.cameraconfigurations)
 
 class TestCameraConfiguration(unittest.TestCase):
     def test_ctor(self):
@@ -61,5 +63,10 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIsNotNone(cameraConfiguration)
         self.assertIsNotNone(cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
-        self.assertIsNotNone(project.cameraConfiguration)
+        
 
+class Workspace(unittest.TestCase):
+    def test_ctor(self):
+        workspace = workflow.Workspace()
+        self.assertIsNotNone(workspace)
+        self.assertIsNotNone(workspace.cameraconfigurations)

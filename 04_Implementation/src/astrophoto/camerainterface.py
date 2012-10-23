@@ -1,3 +1,6 @@
+import os
+import imp
+
 moduledict = {}
 
 def getModule(interface):
@@ -5,7 +8,9 @@ def getModule(interface):
     return module
 
 class Camera:
-    pass
+    def getImageTypes(self):
+        imageTypes = []
+        return imageTypes
 
 class ImageType:
     Bayermatrix = 1
@@ -15,7 +20,6 @@ def createCamera(interface):
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
     return camera
-
 
 def getInterfaceImplFiles():
     extensionlist = []
@@ -41,13 +45,12 @@ def getInterfaceImplModules():
         module = getExtensionModule(sourcefile)
         interfaceModules.append(module)
         concreteModuleName = module.getInterfaceName()
-        moduleDict[concreteModuleName] = module
+        moduledict[concreteModuleName] = module
     return interfaceModules
 
 def getInterfaceNames():
     print('getInterfaceNames')
     imModules = getInterfaceImplModules()
-    names = moduleDict.keys()
+    names = moduledict.keys()
     return names
-
 

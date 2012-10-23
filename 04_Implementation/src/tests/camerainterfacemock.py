@@ -7,6 +7,10 @@ class Camerainterfacemock(camerainterface.Camera):
     def getInterfaceName(self):
         return getInterfaceName()
 
+    def getImageTypes(self):
+        self.imageTypeList = [camerainterface.ImageType.Bayermatrix]
+        return self.imageTypeList
+    
 def getInterfaceName():
     return 'Interface Mock'
 

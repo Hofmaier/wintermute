@@ -7,8 +7,8 @@ class TestCamera(unittest.TestCase):
     def setUp(self):
         self.name = 'interfacemock'
         moduletuple = imp.find_module('camerainterfacemock', ['tests'])
-        modulemock = imp.load_module('camerainterfacemock', *moduletuple)
-        camerainterface.moduledict[self.name] = modulemock
+        self.modulemock = imp.load_module('camerainterfacemock', *moduletuple)
+        camerainterface.moduledict[self.name] = self.modulemock
     
     def test_createCamera(self):
         camera = camerainterface.createCamera(self.name)
@@ -18,7 +18,13 @@ class TestCamera(unittest.TestCase):
         module =  camerainterface.getModule(self.name)
         self.assertIsNotNone(module)
         self.assertEqual(module, camerainterface.moduledict[self.name])
-
+        
+    def test_getImageTypes(self):
+        expectedType = [camerainterface.ImageType.Bayermatrix]
+        camera = self.modulemock.createCameraControl()
+        imageTypeList = camera.getImageTypes()
+        self.assertIsNotNone(imageTypeList)
+        self.assertEqual(imageTypeList, expectedType)
 
 class TestImageType(unittest.TestCase):
     

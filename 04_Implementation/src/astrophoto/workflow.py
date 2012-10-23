@@ -1,6 +1,6 @@
 import os.path
 import imp
-from astrophoto import camerainterface
+import camerainterface
 
 class Session:
     def __init__(self, factory=None):
@@ -8,6 +8,7 @@ class Session:
             factory = ProjectFactory()
         self.projectFactory = factory
         self.currentProject = None
+        self.workspace = Workspace()
 
     def createProject(self, name):
         project = Project(name)
@@ -16,6 +17,7 @@ class Session:
 
     def createCameraConfiguration(self, name, interface):
         cameraConfiguration = createCameraConfiguration(name, interface, self.currentProject)
+        self.workspace.cameraconfigurations.append(cameraConfiguration)
         return cameraConfiguration
 
     def getInterfaces():
@@ -34,11 +36,14 @@ class Project:
         self.name = name
         self.cameraConfiguration = None
 
+class Workspace:
+    def __init__(self):
+        self.cameraconfigurations = []
+
 def createCameraConfiguration(name, interface, project):
     print(project)
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
-    project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
 
 def createCamera(interface):
@@ -47,3 +52,6 @@ def createCamera(interface):
     This function will be replace with a mock. Get rid of camerainterfacedependency.
     """
     return camerainterface.createCamera(interface)
+
+def getInterfaceNames():
+    return camerainterface.getInterfaceNames()
