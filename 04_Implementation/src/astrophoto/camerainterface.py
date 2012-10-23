@@ -14,7 +14,8 @@ class Camera:
 
 class ImageType:
     Bayermatrix = 1
-    toStr = {Bayermatrix:'Bayer-Matrix'}
+    RGB_Image = 2
+    toStr = {Bayermatrix:'Bayer-Matrix', RGB_Image:'RGB-Image'}
 
 def createCamera(interface):
     interfacemodule = getModule(interface)
@@ -23,7 +24,7 @@ def createCamera(interface):
 
 def getInterfaceImplFiles():
     extensionlist = []
-    for root, dirs, files in os.walk('/home/lukas/wintermute/04_Implementation/src/extensions/'):
+    for root, dirs, files in os.walk('extensions/'):
         for file in files:
             if file.endswith('.py'):
                 extensionlist.append(file)
@@ -33,7 +34,7 @@ def getInterfaceImplFiles():
 def getExtensionModule(file):
     print('getExtionsionModules')
     filestr = str(file)
-    path = '/home/lukas/wintermute/04_Implementation/src/extensions/' + filestr
+    path = 'extensions/' + filestr
     fin = open(path, 'rb')
     module = imp.load_source(filestr, path, fin)
     return module

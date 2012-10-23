@@ -1,6 +1,6 @@
 import os.path
 import imp
-import camerainterface
+from astrophoto import camerainterface
 
 class Session:
     def __init__(self, factory=None):
@@ -20,7 +20,7 @@ class Session:
         self.workspace.cameraconfigurations.append(cameraConfiguration)
         return cameraConfiguration
 
-    def getInterfaces(self):
+    def getInterfaceNames(self):
         return camerainterface.getInterfaceNames()
 
 class CameraConfiguration:

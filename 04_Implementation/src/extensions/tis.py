@@ -1,4 +1,4 @@
-import camerainterface
+from astrophoto import camerainterface
 
 class TISCamera(camerainterface.Camera):
     def __init__(self):
