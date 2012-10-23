@@ -1,6 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
+from NewAdapter import *
 
 class PlanWidget(QtGui.QWidget):
     def __init__(self):
@@ -69,48 +70,58 @@ class PlanWidget(QtGui.QWidget):
         self.tempLineEdit = QtGui.QLineEdit()
         self.opticalSystemLayout.addWidget(self.tempLineEdit, 8, 3)
 
-	self.configImagesWidget = QtGui.QWidget()
+        self.configImagesWidget = QtGui.QWidget()
         self.configImagesWidget.setMinimumWidth(640)
         self.configImagesFrame = QtGui.QFrame()
         self.configImagesFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.configImagesFrame.setFrameShadow(QtGui.QFrame.Raised)
 
-	self.configImagesLayout = QtGui.QGridLayout(self.configImagesWidget)
-	self.configImagesLayout.setRowMinimumHeight(1, 7)
-	self.configImagesLayout.setRowMinimumHeight(3, 2)
-	self.configImagesLayout.setRowMinimumHeight(5, 7)
-	self.configImagesLayout.setColumnMinimumWidth(0, 10)
-	self.configImagesLayout.setColumnMinimumWidth(2, 10)
-	self.configImagesLayout.setColumnMinimumWidth(4, 10)
-	self.configImagesLayout.setColumnMinimumWidth(6, 10)
+        self.configImagesLayout = QtGui.QGridLayout(self.configImagesWidget)
+        self.configImagesLayout.setRowMinimumHeight(1, 7)
+        self.configImagesLayout.setRowMinimumHeight(3, 2)
+        self.configImagesLayout.setRowMinimumHeight(5, 7)
+        self.configImagesLayout.setColumnMinimumWidth(0, 10)
+        self.configImagesLayout.setColumnMinimumWidth(2, 10)
+        self.configImagesLayout.setColumnMinimumWidth(4, 10)
+        self.configImagesLayout.setColumnMinimumWidth(6, 10)
 	
-	self.configImagesLayout.addWidget(self.configImagesFrame, 1, 0, 6, 7)
+        self.configImagesLayout.addWidget(self.configImagesFrame, 1, 0, 6, 7)
 
-	self.configImagesLabel = QtGui.QLabel()
-	self.configImagesLabel.setText("Configuration Frames")
-	self.configImagesLabel.setStyleSheet("font: 7pt")
-	self.configImagesLayout.addWidget(self.configImagesLabel, 0, 1)
+        self.configImagesLabel = QtGui.QLabel()
+        self.configImagesLabel.setText("Configuration Frames")
+        self.configImagesLabel.setStyleSheet("font: 7pt")
+        self.configImagesLayout.addWidget(self.configImagesLabel, 0, 1)
 
-	self.biasLabel = QtGui.QLabel()
-	self.biasLabel.setText("Bias:")
-	self.configImagesLayout.addWidget(self.biasLabel, 2,1)
-	self.biasResult = QtGui.QLabel()
-	self.biasResult.setText("X")
-	self.configImagesLayout.addWidget(self.biasResult, 2,3)
-	self.takeBiasButton = QtGui.QPushButton()
-	self.takeBiasButton.setText("Collect")
-	self.configImagesLayout.addWidget(self.takeBiasButton, 2, 5)
+        self.biasLabel = QtGui.QLabel()
+        self.biasLabel.setText("Bias:")
+        self.configImagesLayout.addWidget(self.biasLabel, 2,1)
+        self.biasResult = QtGui.QLabel()
+        self.biasResult.setText("X")
+        self.configImagesLayout.addWidget(self.biasResult, 2,3)
+        self.takeBiasButton = QtGui.QPushButton()
+        self.takeBiasButton.setText("Collect")
+        self.configImagesLayout.addWidget(self.takeBiasButton, 2, 5)
 
-	self.darkFrameLabel = QtGui.QLabel()
-	self.darkFrameLabel.setText("Dark Frame:")
-	self.configImagesLayout.addWidget(self.darkFrameLabel, 4,1)
-	self.darkFrameResult = QtGui.QLabel()
-	self.darkFrameResult.setText("X")
-	self.configImagesLayout.addWidget(self.darkFrameResult, 4,3)
-	self.takeDarkFrameButton = QtGui.QPushButton()
-	self.takeDarkFrameButton.setText("Collect")
-	self.configImagesLayout.addWidget(self.takeDarkFrameButton, 4, 5)
+        self.darkFrameLabel = QtGui.QLabel()
+        self.darkFrameLabel.setText("Dark Frame:")
+        self.configImagesLayout.addWidget(self.darkFrameLabel, 4,1)
+        self.darkFrameResult = QtGui.QLabel()
+        self.darkFrameResult.setText("X")
+        self.configImagesLayout.addWidget(self.darkFrameResult, 4,3)
+        self.takeDarkFrameButton = QtGui.QPushButton()
+        self.takeDarkFrameButton.setText("Collect")
+        self.configImagesLayout.addWidget(self.takeDarkFrameButton, 4, 5)
 	
-	self.verticalLayout.addWidget(self.opticalSystemWidget)
-	self.verticalLayout.addWidget(self.configImagesWidget)
-	
+        self.verticalLayout.addWidget(self.opticalSystemWidget)
+        self.verticalLayout.addWidget(self.configImagesWidget)
+
+        QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
+        QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
+
+    def addNewAdapter(self):
+        self.newAdapterDialog = NewAdapter(self)
+        self.newAdapterDialog.show()
+
+    def addNewTelescope(self):
+        self.newTelescopeDialog = NewTelescope(self)
+        self.newTelescopeDialog.show()

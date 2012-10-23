@@ -29,9 +29,9 @@ class SpectralColourWidget(QtGui.QWidget):
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
         self.spectralLayout.addWidget(self.frame, 0, 0, 10, 10)
 
-	self.deleteSpectralColourWidget = QtGui.QPushButton()
-	self.deleteSpectralColourWidget.setText("-")
-	self.spectralLayout.addWidget(self.deleteSpectralColourWidget, 2, 8)
+        self.deleteSpectralColourWidget = QtGui.QPushButton()
+        self.deleteSpectralColourWidget.setText("-")
+        self.spectralLayout.addWidget(self.deleteSpectralColourWidget, 2, 8)
 
         self.spectralLabel = QtGui.QLabel()
         self.spectralLabel.setText("Spectral:")
@@ -45,20 +45,20 @@ class SpectralColourWidget(QtGui.QWidget):
         self.numberOfImagesLineEdit = QtGui.QLineEdit()
         self.spectralLayout.addWidget(self.numberOfImagesLineEdit, 4, 7)
 
-	self.durationLabel = QtGui.QLabel()
+        self.durationLabel = QtGui.QLabel()
         self.durationLabel.setText("Duration:")
         self.spectralLayout.addWidget(self.durationLabel, 6, 1)
         self.durationLineEdit = QtGui.QLineEdit()
         self.spectralLayout.addWidget(self.durationLineEdit, 6, 3)
 
-	self.binningLabel = QtGui.QLabel()
+        self.binningLabel = QtGui.QLabel()
         self.binningLabel.setText("Binning:")
         self.spectralLayout.addWidget(self.binningLabel, 6, 5)
 
-	self.flatFieldLabel = QtGui.QLabel()
+        self.flatFieldLabel = QtGui.QLabel()
         self.flatFieldLabel.setText("Flat Field:")
         self.spectralLayout.addWidget(self.flatFieldLabel, 8, 1)
 	
 	
 
-	QtCore.QObject.connect(self.deleteSpectralColourWidget, QtCore.SIGNAL(_fromUtf8("clicked()")),  mainGui.deleteSpectralColourWidget)
+        QtCore.QObject.connect(self.deleteSpectralColourWidget, QtCore.SIGNAL(_fromUtf8("clicked()")),  mainGui.deleteSpectralColourWidget)

@@ -21,6 +21,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(800, 600)
+        MainWindow.setFixedSize(800, 600)
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.centralWidget.setGeometry(QtCore.QRect(0, 0, 800, 600))
@@ -72,9 +73,6 @@ class Ui_MainWindow(object):
         self.configWidget = ConfigWidget()
         self.configWidget.hide()
         self.horizontalLayout.addWidget(self.configWidget)
-      
-        
-        
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL(_fromUtf8("itemClicked(QListWidgetItem*)")), self.menuEntryChanged)
@@ -102,7 +100,7 @@ class Ui_MainWindow(object):
             self.planWidget.hide()
             self.configWidget.hide()
         elif item.text() == "Configuration":
-	    self.configWidget.updateConfigWidget(self.spectralWidget)
+            self.configWidget.updateConfigWidget(self.spectralWidget)
             self.configWidget.show()
             self.spectralWidget.hide()
             self.planWidget.hide()
