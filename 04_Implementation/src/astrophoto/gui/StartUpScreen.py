@@ -3,6 +3,7 @@ from PyQt4 import QtCore, QtGui
 from MainWindow import Ui_MainWindow
 from NewProject import NewProject
 import sys
+import workflow
 
 
 class StartUpScreen(QtGui.QWidget):
@@ -31,8 +32,7 @@ class StartUpScreen(QtGui.QWidget):
         self.hide()
         self.newProject.show()
 
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    startUp = StartUpScreen()
-    startUp.show()
-    sys.exit(app.exec_())
+app = QtGui.QApplication(sys.argv)
+startUp = StartUpScreen()
+startUp.show()
+sys.exit(app.exec_())
