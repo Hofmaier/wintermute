@@ -2,12 +2,14 @@
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
 from NewAdapter import *
+from SelectCameraInterface import SelectCameraInterface
 
 class PlanWidget(QtGui.QWidget):
-    def __init__(self):
+    def __init__(self, session):
         super(PlanWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
+        self.session = session
         
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
@@ -115,6 +117,7 @@ class PlanWidget(QtGui.QWidget):
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
 
+        QtCore.QObject.connect(self.addCameraButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
 
@@ -125,3 +128,7 @@ class PlanWidget(QtGui.QWidget):
     def addNewTelescope(self):
         self.newTelescopeDialog = NewTelescope(self)
         self.newTelescopeDialog.show()
+
+    def addNewCamera(self):
+        self.selectCameraDialog = SelectCameraInterface(self, self.session)
+        self.selectCameraDialog.show()
