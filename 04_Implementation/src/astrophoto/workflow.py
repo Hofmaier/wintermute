@@ -53,5 +53,3 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
-def getInterfaceNames():
-    return camerainterface.getInterfaceNames()
