@@ -45,6 +45,7 @@ class TestSession(unittest.TestCase):
 
     def test_getInterfaceNames(self):
         session = workflow.Session()
+        
 
 class TestCameraConfiguration(unittest.TestCase):
     def test_ctor(self):
@@ -53,6 +54,7 @@ class TestCameraConfiguration(unittest.TestCase):
         cameraconfig = workflow.CameraConfiguration(name, camera )
         self.assertIsNotNone(cameraconfig)
         self.assertEqual(cameraconfig.name, name)
+        self.assertIsNotNone(cameraconfig.spectralchannels)
 
     def test_createCameraConfiguration(self):
         name = 'tis dbk22au618.as'
@@ -66,9 +68,30 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIsNotNone(cameraConfiguration)
         self.assertIsNotNone(cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
+        self.assertEqual(cameraConfiguration.spectralchannels[0].name, 'rgb')
+
+class TestTelescope(unittest.TestCase):
+    def test_ctor(self):
+        name = 'Celestron Edge HD 1400'
+        telescope = workflow.Telescope(name)
+        self.assertIsNotNone(telescope)
+        self.assertEqual(telescope.name, name)
         
-class Workspace(unittest.TestCase):
+class TestWorkspace(unittest.TestCase):
     def test_ctor(self):
         workspace = workflow.Workspace()
         self.assertIsNotNone(workspace)
         self.assertIsNotNone(workspace.cameraconfigurations)
+
+class TestSpectralChannel(unittest.TestCase):
+    def test_ctor(self):
+        spectralchannel = workflow.SpectralChannel()
+        self.assertIsNotNone(spectralchannel)
+
+class TestShotdesciption(unittest.TestCase):
+    def test_ctor(self):
+        shotdescription = workflow.Shotdescription()
+        self.assertIsNotNone(shotdescription)
+
+    def test_createShotdescription(self):
+        

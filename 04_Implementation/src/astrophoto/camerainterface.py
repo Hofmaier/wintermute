@@ -9,14 +9,18 @@ def getModule(interface):
 
 class Camera:
     def getImageTypes(self):
-        imageTypes = []
+        self.imageTypes = []
         return imageTypes
 
+    def getImageTypesAsStr(self):
+        names = [ImageType.toStr[imagetype] for imagetype in self.imageTypes]
+        return names
+    
 class ImageType:
     Bayermatrix = 1
     RGB_Image = 2
     toStr = {Bayermatrix:'Bayer-Matrix', RGB_Image:'RGB-Image'}
-
+    
 def createCamera(interface):
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
@@ -54,4 +58,3 @@ def getInterfaceNames():
     imModules = getInterfaceImplModules()
     names = moduledict.keys()
     return names
-

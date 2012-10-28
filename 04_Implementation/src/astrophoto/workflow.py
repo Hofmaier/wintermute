@@ -1,6 +1,6 @@
 import os.path
 import imp
-from astrophoto import camerainterface
+import camerainterface
 
 class Session:
     def __init__(self, factory=None):
@@ -27,6 +27,7 @@ class CameraConfiguration:
     def __init__(self, name, camera):
         self.name = name
         self.camera = camera
+        self.spectralchannels = []
 
 class ProjectFactory:
     pass
@@ -41,9 +42,11 @@ class Workspace:
         self.cameraconfigurations = []
 
 def createCameraConfiguration(name, interface, project):
-    print(project)
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
+    spectralchannel = SpectralChannel()
+    spectralchannel.name = 'rgb'
+    cameraConfiguration.spectralchannels.append(spectralchannel)
     return cameraConfiguration
 
 def createCamera(interface):
@@ -53,3 +56,9 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
+class SpectralChannel:
+    def __init__(self):
+        self.name = ''
+
+class Shotdescription:
+    pass
