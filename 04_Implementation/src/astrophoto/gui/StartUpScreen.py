@@ -1,7 +1,7 @@
 
 from PyQt4 import QtCore, QtGui
-from MainWindow import Ui_MainWindow
 from NewProject import NewProject
+from MainWindow import Ui_MainWindow
 import workflow
 import sys
 
@@ -26,6 +26,7 @@ class StartUpScreen(QtGui.QWidget):
         self.setFixedSize(self.sizeHint())
 
         QtCore.QObject.connect(self.openNewProjectButton, QtCore.SIGNAL("clicked()"), self.newProject)
+        QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), sys.exit)
 
     def newProject(self):
         self.session = workflow.Session()

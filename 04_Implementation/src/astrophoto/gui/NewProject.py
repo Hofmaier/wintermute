@@ -40,3 +40,4 @@ class NewProject(QtGui.QWidget):
         self.MainWindow.show()
 
 
+
