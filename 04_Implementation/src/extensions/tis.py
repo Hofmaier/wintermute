@@ -1,10 +1,10 @@
-from astrophoto import camerainterface
-from camerainterface import ImageType
+import astrophoto
+import astrophoto.camerainterface
 
-class TISCamera(camerainterface.Camera):
+class TISCamera(astrophoto.camerainterface.Camera):
     def __init__(self):
         self.name = 'tis interface'
-        self.imageTypes = [ImageType.Bayermatrix, ImageType.RGB_Image]
+        self.imageTypes = [camerainterface.ImageType.Bayermatrix, camerainterface.xImageType.RGB_Image]
         
     def getInterfaceName(self):
         return getInterfaceName()

@@ -30,7 +30,7 @@ def getInterfaceImplFiles():
     extensionlist = []
     for root, dirs, files in os.walk('extensions/'):
         for file in files:
-            if file.endswith('.py'):
+            if file.endswith('tis.py'):
                 extensionlist.append(file)
 
     return extensionlist

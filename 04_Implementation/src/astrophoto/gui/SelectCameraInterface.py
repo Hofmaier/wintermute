@@ -20,7 +20,7 @@ class SelectCameraInterface(QtGui.QDialog):
         self.selectCameraLayout.setColumnMinimumWidth(3, 10)
         self.selectCameraLayout.addWidget(self.myList, 3, 1, 1, 2)
 
-        self.myList.addItems(self.session.getInterfaces())
+        self.myList.addItems(self.session.getInterfaceNames())
 
         self.cancelButton = QtGui.QPushButton()
         self.cancelButton.setText("Cancel")

@@ -2,7 +2,7 @@
 from PyQt4 import QtCore, QtGui
 from MainWindow import Ui_MainWindow
 from NewProject import NewProject
-import workflow
+from astrophoto import workflow
 import sys
 
 
