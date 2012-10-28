@@ -7,6 +7,7 @@ class NewAdapter(QtGui.QDialog):
         super(NewAdapter, self).__init__()
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setModal(True)
+        self.planWidget = PlanWidget
         self.adapterLayout = QtGui.QGridLayout()
         self.setLayout(self.adapterLayout)
 
@@ -34,6 +35,7 @@ class NewAdapter(QtGui.QDialog):
 
 
     def saveAndClose(self):
+        self.planWidget.createAdapter(self.adapterNameLineEdit.text())
         self.close()
 
 class NewTelescope(QtGui.QDialog):
@@ -41,6 +43,7 @@ class NewTelescope(QtGui.QDialog):
         super(NewTelescope, self).__init__()
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         self.setModal(True)
+        self.planWidget = PlanWidget
         self.move(PlanWidget.pos())
         self.adapterLayout = QtGui.QGridLayout()
         self.setLayout(self.adapterLayout)
@@ -69,4 +72,5 @@ class NewTelescope(QtGui.QDialog):
 
 
     def saveAndClose(self):
+        self.planWidget.createTelescope(self.telescopeNameLineEdit.text())
         self.close()

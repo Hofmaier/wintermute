@@ -8,7 +8,6 @@ class TestProject(unittest.TestCase):
         project = workflow.Project('jupiter')
         self.assertEqual(project.name, 'jupiter')
 
-
 class TestSession(unittest.TestCase):
     
     def setUp(self):
@@ -83,6 +82,17 @@ class TestAdapter(unittest.TestCase):
         adapter = workflow.Adapter(name)
         self.assertIsNotNone(adapter)
         self.assertEqual(adapter.name, name)
+
+class TestOpticalSystem(unittest.TestCase):
+    def test_ctor(self):
+        adapter = workflow.Adapter("SBIG Starlight Adapter")
+        telescope = workflow.Telescope("Celestron Edge HD 1400")
+        name = 'SBIGCelestronConfig'
+        opticalSystem = workflow.Opticalsystem(name, adapter, telescope)
+        self.assertIsNotNone(opticalSystem)
+        self.assertEqual(opticalSystem.adapter, adapter)
+        self.assertEqual(opticalSystem.telescope, telescope)
+        self.assertEqual(opticalSystem.name, name)
 
 class TestWorkspace(unittest.TestCase):
     def test_ctor(self):
