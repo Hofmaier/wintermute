@@ -62,3 +62,12 @@ class SpectralChannel:
 
 class Shotdescription:
     pass
+
+class Telescope:
+    def __init__(self, name):
+        self.name = name
+
+class Adapter:
+    def __init__(self, name):
+        self.name = name
+

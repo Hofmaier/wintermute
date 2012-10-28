@@ -10,7 +10,7 @@
 from PyQt4 import QtCore, QtGui
 from SpectralWidget import SpectralWidget
 from PlanWidget import PlanWidget
-from ConfigWidget import ConfigWidget
+from CollectWidget import CollectWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -64,9 +64,9 @@ class Ui_MainWindow(object):
         self.spectralWidget = SpectralWidget()
         self.spectralWidget.hide()
         self.horizontalLayout.addWidget(self.spectralWidget)
-        self.configWidget = ConfigWidget()
-        self.configWidget.hide()
-        self.horizontalLayout.addWidget(self.configWidget)
+        self.collectWidget = CollectWidget()
+        self.collectWidget.hide()
+        self.horizontalLayout.addWidget(self.collectWidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL(_fromUtf8("itemClicked(QListWidgetItem*)")), self.menuEntryChanged)
@@ -81,21 +81,21 @@ class Ui_MainWindow(object):
         item = self.listWidget.item(1)
         item.setText(QtGui.QApplication.translate("MainWindow", "Spectrals", None, QtGui.QApplication.UnicodeUTF8))
         item = self.listWidget.item(2)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Configuration", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("MainWindow", "Collect", None, QtGui.QApplication.UnicodeUTF8))
         self.listWidget.setSortingEnabled(__sortingEnabled)
 
     def menuEntryChanged(self, item):
         if item.text() == "Plan":
             self.planWidget.show()
             self.spectralWidget.hide()
-            self.configWidget.hide()
+            self.collectWidget.hide()
         elif item.text() == "Spectrals":
             self.spectralWidget.show()
             self.planWidget.hide()
-            self.configWidget.hide()
-        elif item.text() == "Configuration":
-            self.configWidget.updateConfigWidget(self.spectralWidget)
-            self.configWidget.show()
+            self.collectWidget.hide()
+        elif item.text() == "Collect":
+            self.collectWidget.updateCollectWidget(self.spectralWidget)
+            self.collectWidget.show()
             self.spectralWidget.hide()
             self.planWidget.hide()
 

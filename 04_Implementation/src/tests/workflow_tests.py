@@ -76,7 +76,14 @@ class TestTelescope(unittest.TestCase):
         telescope = workflow.Telescope(name)
         self.assertIsNotNone(telescope)
         self.assertEqual(telescope.name, name)
-        
+
+class TestAdapter(unittest.TestCase):
+    def test_ctor(self):
+        name = 'SBIG Starlight Adapter'
+        adapter = workflow.Adapter(name)
+        self.assertIsNotNone(adapter)
+        self.assertEqual(adapter.name, name)
+
 class TestWorkspace(unittest.TestCase):
     def test_ctor(self):
         workspace = workflow.Workspace()
@@ -93,5 +100,5 @@ class TestShotdesciption(unittest.TestCase):
         shotdescription = workflow.Shotdescription()
         self.assertIsNotNone(shotdescription)
 
-    def test_createShotdescription(self):
+    #def test_createShotdescription(self):
         

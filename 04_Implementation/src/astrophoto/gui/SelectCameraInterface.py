@@ -12,15 +12,16 @@ class SelectCameraInterface(QtGui.QDialog):
     def __init__(self, planWidget, session):
         super(SelectCameraInterface, self).__init__()
         self.setModal(True)
+        self.planWidget = planWidget
         self.session = session
         self.selectCameraLayout = QtGui.QGridLayout()
         self.setLayout(self.selectCameraLayout)
-        self.myList = QtGui.QListWidget()
+        self.interfaceList = QtGui.QListWidget()
         self.selectCameraLayout.setColumnMinimumWidth(0, 10)
         self.selectCameraLayout.setColumnMinimumWidth(3, 10)
-        self.selectCameraLayout.addWidget(self.myList, 3, 1, 1, 2)
+        self.selectCameraLayout.addWidget(self.interfaceList, 3, 1, 1, 2)
 
-        self.myList.addItems(self.session.getInterfaceNames())
+        self.interfaceList.addItems(self.session.getInterfaceNames())
 
         self.cancelButton = QtGui.QPushButton()
         self.cancelButton.setText("Cancel")
@@ -33,5 +34,10 @@ class SelectCameraInterface(QtGui.QDialog):
 
         self.setFixedSize(self.sizeHint())
 
+        QtCore.QObject.connect(self.okButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.closeAndSave)
+        QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.close)
 
 
+    def closeAndSave(self):
+        self.planWidget.createCameraConfiguration(self.interfaceList.currentItem())
+        self.close()

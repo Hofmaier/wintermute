@@ -6,9 +6,9 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class ConfigSpectralWidget(QtGui.QWidget):
+class CollectSpectralWidget(QtGui.QWidget):
     def __init__(self):
-        super(ConfigSpectralWidget, self).__init__()
+        super(CollectSpectralWidget, self).__init__()
         self.setMinimumWidth(640)
 
         self.spectralConfigFrame = QtGui.QFrame()

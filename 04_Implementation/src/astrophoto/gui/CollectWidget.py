@@ -1,11 +1,11 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
-from ConfigSpectralWidget import ConfigSpectralWidget
+from CollectSpectralWidget import CollectSpectralWidget
 
-class ConfigWidget(QtGui.QWidget):
+class CollectWidget(QtGui.QWidget):
     def __init__(self):
-        super(ConfigWidget, self).__init__()
+        super(CollectWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
        
@@ -15,12 +15,12 @@ class ConfigWidget(QtGui.QWidget):
         self.configSpectralWidgetList = []
 
 
-    def updateConfigWidget(self, spectralWidget):
+    def updateCollectWidget(self, spectralWidget):
         self.verticalLayoutWidget.deleteLater()
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         for spectral in spectralWidget.spectralColourWidgetList:
-                self.configSpectralWidget = ConfigSpectralWidget()
+                self.configSpectralWidget = CollectSpectralWidget()
                 self.verticalLayout.addWidget(self.configSpectralWidget)
 	
 

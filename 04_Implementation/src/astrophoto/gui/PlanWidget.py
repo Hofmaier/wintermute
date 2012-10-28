@@ -132,3 +132,6 @@ class PlanWidget(QtGui.QWidget):
     def addNewCamera(self):
         self.selectCameraDialog = SelectCameraInterface(self, self.session)
         self.selectCameraDialog.show()
+
+    def createCameraConfiguration(self, currentItem):
+        print(currentItem.text())
