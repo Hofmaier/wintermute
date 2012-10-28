@@ -9,8 +9,6 @@ class Session:
         self.projectFactory = factory
         self.currentProject = None
         self.workspace = Workspace()
-        self.adapterList = []
-        self.telescopeList = []
 
     def createProject(self, name):
         project = Project(name)
@@ -24,18 +22,23 @@ class Session:
 
     def getInterfaceNames(self):
         return camerainterface.getInterfaceNames()
+		
+    def getInterfaceByName(self, modulName):
+        pass
 
     def createOpticalSystem(self, name, adapter, telescope):
-        self.opticalSystem = Opticalsystem(name, adapter, telescope)
+        opticalSystem = Opticalsystem(name, adapter, telescope)
+        self.workplace.opticalSystemList.append(opticalSystem)
+        return opticalSystem
 
     def createAdapter(self, name):
         adapter = Adapter(name)
-        self.adapterList.append(adapter)
+        self.workspace.adapterList.append(adapter)
         return adapter
 
     def createTelescope(self, name):
         telescope = Telescope(name)
-        self.telescopeList.append(telescope)
+        self.workspace.telescopeList.append(telescope)
         return telescope
 
 class CameraConfiguration:
@@ -55,6 +58,9 @@ class Project:
 class Workspace:
     def __init__(self):
         self.cameraconfigurations = []
+        self.adapterList = []
+        self.telescopeList = []
+        self.opticalSystemList = []
 
 def createCameraConfiguration(name, interface, project):
     camera = createCamera(interface)

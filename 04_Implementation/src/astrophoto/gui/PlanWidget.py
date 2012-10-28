@@ -123,10 +123,19 @@ class PlanWidget(QtGui.QWidget):
 	
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
+		
+        self.fillComboBoxes()
 
         QtCore.QObject.connect(self.addDeviceButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
+		
+    def fillComboBoxes(self):
+        for adapter in self.session.workspace.adapterList:
+            self.adapterComboBox.addItem(adapter.name)
+			
+        for telescope in self.session.workspace.telescopeList:
+            self.telescopeComboBox.addItem(telescope.name)
 
     def addNewAdapter(self):
         self.newAdapterDialog = NewAdapter(self)
@@ -140,13 +149,24 @@ class PlanWidget(QtGui.QWidget):
         self.selectCameraDialog = SelectCameraInterface(self, self.session)
         self.selectCameraDialog.show()
 
-    def createCameraConfiguration(self, currentItem):
+    def createCameraConfiguration(self, cameraName, currentItem):
         print(currentItem.text())
+        self.session.createCameraConfiguration(cameraName, self.session.getInterfaceByName(currentItem.text()))
+        self.deviceComboBox.clear()
+        for configuration in self.session.workspace.cameraconfigurations:
+            self.deviceComboBox.addItem(self.session.workspace.cameraconfigurations.name)
+        self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraName))
 
     def createAdapter(self, name):
         self.session.createAdapter(name)
-        self.adapterComboBox.addItem(name)
+        self.adapterComboBox.clear()
+        for adapter in self.session.workspace.adapterList:
+            self.adapterComboBox.addItem(adapter.name)
         self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(name))
 
     def createTelescope(self, name):
         self.session.createTelescope(name)
+        self.telescopeComboBox.clear()
+        for telescope in self.session.workspace.telescopeList:
+            self.telescopeComboBox.addItem(telescope.name)
+        self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(name))
