@@ -34,8 +34,9 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralColourLabel = QtGui.QLabel()
         self.spectralColourLabel.setText("Spectral:")
         self.spectralConfigLayout.addWidget(self.spectralColourLabel, 2, 3)
-	
+
         self.spectralLineEdit = QtGui.QLineEdit()
+        self.spectralLineEdit.setReadOnly(True)
         self.spectralConfigLayout.addWidget(self.spectralLineEdit, 2, 5)
 
         self.spectralTimesLabel = QtGui.QLabel()
@@ -43,8 +44,9 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralConfigLayout.addWidget(self.spectralTimesLabel, 2, 7)
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
+        self.spectralTimesLineEdit.setReadOnly(True)
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, 2, 9)
-	
+
         self.spectralTakeButton = QtGui.QPushButton()
         self.spectralTakeButton.setText("Take All")
         self.spectralConfigLayout.addWidget(self.spectralTakeButton, 2, 11)

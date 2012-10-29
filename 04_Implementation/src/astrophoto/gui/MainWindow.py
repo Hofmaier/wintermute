@@ -61,12 +61,13 @@ class Ui_MainWindow(object):
         self.planWidget.show()
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.horizontalLayout.addWidget(self.planWidget)
-        self.spectralWidget = SpectralWidget()
-        self.spectralWidget.hide()
-        self.horizontalLayout.addWidget(self.spectralWidget)
         self.collectWidget = CollectWidget()
         self.collectWidget.hide()
         self.horizontalLayout.addWidget(self.collectWidget)
+        self.spectralWidget = SpectralWidget(self.collectWidget)
+        self.spectralWidget.hide()
+        self.horizontalLayout.addWidget(self.spectralWidget)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL(_fromUtf8("itemClicked(QListWidgetItem*)")), self.menuEntryChanged)
@@ -94,7 +95,7 @@ class Ui_MainWindow(object):
             self.planWidget.hide()
             self.collectWidget.hide()
         elif item.text() == "Collect":
-            self.collectWidget.updateCollectWidget(self.spectralWidget)
+#            self.collectWidget.updateCollectWidget(self.spectralWidget)
             self.collectWidget.show()
             self.spectralWidget.hide()
             self.planWidget.hide()

@@ -20,7 +20,6 @@ class CollectWidget(QtGui.QWidget):
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
         for spectral in spectralWidget.spectralColourWidgetList:
-                self.configSpectralWidget = CollectSpectralWidget()
-                self.verticalLayout.addWidget(self.configSpectralWidget)
-	
+                collectSpectralWidget = CollectSpectralWidget()
+                self.verticalLayout.addWidget(collectSpectralWidget)
 

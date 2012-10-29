@@ -110,5 +110,5 @@ class TestShotdesciption(unittest.TestCase):
         shotdescription = workflow.Shotdescription()
         self.assertIsNotNone(shotdescription)
 
-    #def test_createShotdescription(self):
-        
+#    def test_createShotdescription(self):
+

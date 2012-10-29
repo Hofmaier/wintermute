@@ -11,13 +11,14 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 class SpectralWidget(QtGui.QWidget):
-    def __init__(self):
+    def __init__(self, collectWidget):
         super(SpectralWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
         self.spectralColourWidgetList = []
         self.spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        
+        self.collectWidget = collectWidget
+
         self.scrollArea = QtGui.QScrollArea(self)
         self.scrollArea.setMinimumHeight(560)
         self.scrollArea.setMinimumWidth(630)
@@ -31,14 +32,12 @@ class SpectralWidget(QtGui.QWidget):
              
         spectralColourWidget = SpectralColourWidget(self)
         self.spectralAddButtonWidget = SpectralAddButtonWidget(self)
-	
+
         self.horizontalLayout_2.addWidget(spectralColourWidget)
         self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
         self.spectralColourWidgetList.append(spectralColourWidget)
         self.horizontalLayout_2.addItem(self.spacerItem)
-        
-        
-     	
+        self.collectWidget.updateCollectWidget(self)
 
     def addSpectralColourWidget(self):
         self.horizontalLayout_2.removeItem(self.spacerItem)
@@ -48,7 +47,10 @@ class SpectralWidget(QtGui.QWidget):
         self.horizontalLayout_2.addWidget(spectralColourWidget)
         self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
         self.horizontalLayout_2.addItem(self.spacerItem)
+        self.collectWidget.updateCollectWidget(self)
+
     def deleteSpectralColourWidget(self):
         self.horizontalLayout_2.removeWidget(self.sender().parent())
         self.spectralColourWidgetList.pop(self.spectralColourWidgetList.index(self.sender().parent()))
+        self.collectWidget.updateCollectWidget(self)
         self.sender().parent().deleteLater()
