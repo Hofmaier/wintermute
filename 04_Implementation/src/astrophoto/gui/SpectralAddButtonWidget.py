@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -13,7 +13,7 @@ class SpectralAddButtonWidget(QtGui.QWidget):
         self.setLayout(self.spectralAddButtonLayout)
 	
         self.spectralAddButton = QtGui.QPushButton()
-        self.spectralAddButton.setText("+")
+        self.spectralAddButton.setIcon(QtGui.QIcon(os.getcwd() + "/astrophoto/gui/icons/add-icon.png"))
         self.spectralAddButtonLayout.setColumnMinimumWidth(2, 4)
         spacerItem = QtGui.QSpacerItem(0, 0, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.spectralAddButtonLayout.addWidget(self.spectralAddButton, 0, 1)

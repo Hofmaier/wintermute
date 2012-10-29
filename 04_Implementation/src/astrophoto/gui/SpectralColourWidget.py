@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -10,6 +10,7 @@ class SpectralColourWidget(QtGui.QWidget):
     def __init__(self, mainGui):
         super(SpectralColourWidget, self).__init__(mainGui)
         self.spectralLayout = QtGui.QGridLayout()
+        self.numberValidator = QtGui.QIntValidator(1, 100)
 
         self.setLayout(self.spectralLayout)
 
@@ -19,7 +20,7 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLayout.addWidget(self.frame, 0, 0, 10, 12)
 
         self.deleteSpectralColourButton = QtGui.QPushButton()
-        self.deleteSpectralColourButton.setText("-")
+        self.deleteSpectralColourButton.setIcon(QtGui.QIcon(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.spectralLayout.addWidget(self.deleteSpectralColourButton, 2, 10)
 
 
@@ -39,12 +40,14 @@ class SpectralColourWidget(QtGui.QWidget):
         self.numberOfImagesLabel.setText("Number of Images:")
         self.spectralLayout.addWidget(self.numberOfImagesLabel, 3, 5)
         self.numberOfImagesLineEdit = QtGui.QLineEdit()
+        self.numberOfImagesLineEdit.setValidator(self.numberValidator)
         self.spectralLayout.addWidget(self.numberOfImagesLineEdit, 3, 7, 1, 3)
 
         self.durationLabel = QtGui.QLabel()
         self.durationLabel.setText("Duration:")
         self.spectralLayout.addWidget(self.durationLabel, 4, 1)
         self.durationLineEdit = QtGui.QLineEdit()
+        self.durationLineEdit.setValidator(self.numberValidator)
         self.spectralLayout.addWidget(self.durationLineEdit, 4, 3)
 
         self.binningLabel = QtGui.QLabel()

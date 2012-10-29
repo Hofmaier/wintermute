@@ -1,5 +1,6 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
+import os
 from PyQt4 import QtCore, QtGui
 from astrophoto.gui.NewItems import *
 from astrophoto.gui.SelectCameraInterface import SelectCameraInterface
@@ -105,7 +106,8 @@ class PlanWidget(QtGui.QWidget):
         self.biasLabel.setText("Bias:")
         self.configImagesLayout.addWidget(self.biasLabel, 2,1)
         self.biasResult = QtGui.QLabel()
-        self.biasResult.setText("X")
+        print(os.getcwd())
+        self.biasResult.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.configImagesLayout.addWidget(self.biasResult, 2,3)
         self.takeBiasButton = QtGui.QPushButton()
         self.takeBiasButton.setText("Collect")
@@ -115,7 +117,7 @@ class PlanWidget(QtGui.QWidget):
         self.darkFrameLabel.setText("Dark Frame:")
         self.configImagesLayout.addWidget(self.darkFrameLabel, 3,1)
         self.darkFrameResult = QtGui.QLabel()
-        self.darkFrameResult.setText("X")
+        self.darkFrameResult.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.configImagesLayout.addWidget(self.darkFrameResult, 3,3)
         self.takeDarkFrameButton = QtGui.QPushButton()
         self.takeDarkFrameButton.setText("Collect")
