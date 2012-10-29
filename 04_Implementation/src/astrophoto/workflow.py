@@ -74,6 +74,15 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
+def createShotDescription(nrOfShots, duration, temperature, binning, project):
+    shotDescription = Shotdescription()
+    shotDescription.nrOfShots = nrOfShots
+    shotDescription.duration = duration
+    shotDescription.temperature = temperature
+    shotDescription.binningMode = binning
+    shotDescription.project = project
+    return shotDescription
+
 class SpectralChannel:
     def __init__(self):
         self.name = ''

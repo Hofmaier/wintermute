@@ -33,8 +33,8 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLabel = QtGui.QLabel()
         self.spectralLabel.setText("Spectral:")
         self.spectralLayout.addWidget(self.spectralLabel, 3, 1)
-        self.spectralLineEdit = QtGui.QComboBox()
-        self.spectralLayout.addWidget(self.spectralLineEdit, 3, 3)
+        self.spectralComboBox = QtGui.QComboBox()
+        self.spectralLayout.addWidget(self.spectralComboBox, 3, 3)
         
         self.numberOfImagesLabel = QtGui.QLabel()
         self.numberOfImagesLabel.setText("Number of Images:")
@@ -65,7 +65,7 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLayout.addWidget(self.flatFieldLabel, 5, 1)
 
         self.flatFieldResultLabel = QtGui.QLabel()
-        self.flatFieldResultLabel.setText("X")
+        self.flatFieldResultLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.spectralLayout.addWidget(self.flatFieldResultLabel, 5, 3)
 
         self.collectFlatFieldButton = QtGui.QPushButton()

@@ -35,8 +35,6 @@ class SelectCameraInterface(QtGui.QDialog):
 
         for interface in self.session.getInterfaceNames():
             self.interfaceList.addItem(interface)
-#        self.interfaceList.addItems(self.session.getInterfaceNames())
-
 
         self.cancelButton = QtGui.QPushButton()
         self.cancelButton.setText("Cancel")

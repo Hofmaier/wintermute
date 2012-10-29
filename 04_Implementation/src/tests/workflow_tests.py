@@ -110,5 +110,17 @@ class TestShotdesciption(unittest.TestCase):
         shotdescription = workflow.Shotdescription()
         self.assertIsNotNone(shotdescription)
 
-#    def test_createShotdescription(self):
+    def test_createShotdescription(self):
+        nrOfShots = 5
+        duration = 30
+        temperature = 1
+        binningMode = 2
+        project = workflow.Project("TestProject")
+        shotDescription = workflow.createShotDescription(nrOfShots, duration, temperature, binningMode, project)
+        self.assertIsNotNone(shotDescription)
+        self.assertEqual(shotDescription.nrOfShots, nrOfShots)
+        self.assertEqual(shotDescription.duration, duration)
+        self.assertEqual(shotDescription.temperature, temperature)
+        self.assertEqual(shotDescription.binningMode, binningMode)
+        self.assertEqual(shotDescription.project, project)
 

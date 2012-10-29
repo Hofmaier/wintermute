@@ -106,7 +106,6 @@ class PlanWidget(QtGui.QWidget):
         self.biasLabel.setText("Bias:")
         self.configImagesLayout.addWidget(self.biasLabel, 2,1)
         self.biasResult = QtGui.QLabel()
-        print(os.getcwd())
         self.biasResult.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.configImagesLayout.addWidget(self.biasResult, 2,3)
         self.takeBiasButton = QtGui.QPushButton()
@@ -159,7 +158,7 @@ class PlanWidget(QtGui.QWidget):
         self.session.createCameraConfiguration(cameraName, currentItem.text())
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
-            self.deviceComboBox.addItem(self.session.workspace.cameraconfigurations.name)
+            self.deviceComboBox.addItem(configuration.name)
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraName))
 
     def createAdapter(self, name):

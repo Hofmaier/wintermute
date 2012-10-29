@@ -54,3 +54,26 @@ class SpectralWidget(QtGui.QWidget):
         self.spectralColourWidgetList.pop(self.spectralColourWidgetList.index(self.sender().parent()))
         self.collectWidget.updateCollectWidget(self)
         self.sender().parent().deleteLater()
+
+    def checkAllVariablesSet(self):
+        print("checkAllVariablesSet")
+        for spectralColourWidget in self.spectralColourWidgetList:
+            if spectralColourWidget.numberOfImagesLineEdit.text() == "":
+                print("FALSCH!")
+                return False
+            elif spectralColourWidget.durationLineEdit.text() == "":
+                print("FALSCH!")
+                return False
+            elif spectralColourWidget.imageTypeComboBox.currentText() == "":
+                print("FALSCH!")
+                return False
+            elif spectralColourWidget.spectralComboBox.currentText() == "":
+                print("FALSCH!")
+                return False
+            elif not spectralColourWidget.binning2Radio.isChecked() and not spectralColourWidget.binning4Radio.isChecked():
+                print("FALSCH!")
+                return False
+        return True
+
+    def saveAllSpectralColourWidgets(self):
+        print("saveAllSpectralColourWidgets")
