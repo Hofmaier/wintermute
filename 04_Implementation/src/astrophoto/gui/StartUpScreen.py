@@ -1,9 +1,8 @@
 
 from PyQt4 import QtCore, QtGui
-from NewProject import NewProject
+from astrophoto.gui.NewProject import NewProject
 from astrophoto import workflow
-from MainWindow import Ui_MainWindow
-from astrophoto import workflow
+from astrophoto.gui.MainWindow import Ui_MainWindow
 import sys
 
 

@@ -1,6 +1,6 @@
 
 from PyQt4 import QtCore, QtGui
-from MainWindow import Ui_MainWindow
+from astrophoto.gui.MainWindow import Ui_MainWindow
 
 
 class NewProject(QtGui.QWidget):

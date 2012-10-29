@@ -2,8 +2,8 @@
 # and open the template in the editor.
 import sys
 from PyQt4 import QtCore, QtGui
-from SpectralColourWidget import SpectralColourWidget
-from SpectralAddButtonWidget import SpectralAddButtonWidget
+from astrophoto.gui.SpectralColourWidget import SpectralColourWidget
+from astrophoto.gui.SpectralAddButtonWidget import SpectralAddButtonWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

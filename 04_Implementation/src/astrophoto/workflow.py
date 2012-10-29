@@ -22,9 +22,6 @@ class Session:
 
     def getInterfaceNames(self):
         return camerainterface.getInterfaceNames()
-		
-    def getInterfaceByName(self, modulName):
-        pass
 
     def createOpticalSystem(self, name, adapter, telescope):
         opticalSystem = Opticalsystem(name, adapter, telescope)

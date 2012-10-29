@@ -1,7 +1,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 from PyQt4 import QtCore, QtGui
-from CollectSpectralWidget import CollectSpectralWidget
+from astrophoto.gui.CollectSpectralWidget import CollectSpectralWidget
 
 class CollectWidget(QtGui.QWidget):
     def __init__(self):

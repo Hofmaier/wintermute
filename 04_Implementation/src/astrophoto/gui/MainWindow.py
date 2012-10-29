@@ -8,9 +8,9 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from SpectralWidget import SpectralWidget
-from PlanWidget import PlanWidget
-from CollectWidget import CollectWidget
+from astrophoto.gui.SpectralWidget import SpectralWidget
+from astrophoto.gui.PlanWidget import PlanWidget
+from astrophoto.gui.CollectWidget import CollectWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
