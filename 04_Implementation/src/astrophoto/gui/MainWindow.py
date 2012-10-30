@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.collectWidget = CollectWidget(self.session)
         self.collectWidget.hide()
         self.horizontalLayout.addWidget(self.collectWidget)
-        self.spectralWidget = SpectralWidget(self.collectWidget, self.session)
+        self.spectralWidget = SpectralWidget(self.planWidget, self.session)
         self.spectralWidget.hide()
         self.horizontalLayout.addWidget(self.spectralWidget)
 
@@ -91,6 +91,7 @@ class Ui_MainWindow(object):
             self.spectralWidget.hide()
             self.collectWidget.hide()
         elif item.text() == "Spectrals":
+            self.spectralWidget.updateAllSpectralColourWidgets()
             self.spectralWidget.show()
             self.planWidget.hide()
             self.collectWidget.hide()

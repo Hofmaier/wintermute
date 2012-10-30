@@ -155,7 +155,6 @@ class PlanWidget(QtGui.QWidget):
 
     def createCameraConfiguration(self, cameraName, currentItem):
         self.session.createCameraConfiguration(cameraName, currentItem.text())
-        print(self.session.currentProject.cameraConfiguration)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(configuration.name)

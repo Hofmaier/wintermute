@@ -38,8 +38,8 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
-    def createShotDescription(self, nrOfShots, duration, temperature, binning):
-        shotDescription = createShotDescription(nrOfShots, duration, temperature, binning, self.currentProject)
+    def createShotDescription(self, nrOfShots, duration, temperature, binning, spectralChannel):
+        shotDescription = createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel, self.currentProject)
         self.currentProject.shotDescriptionList.append(shotDescription)
         return shotDescription
 
@@ -81,12 +81,13 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
-def createShotDescription(nrOfShots, duration, temperature, binning, project):
+def createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel, project):
     shotDescription = Shotdescription()
     shotDescription.nrOfShots = nrOfShots
     shotDescription.duration = duration
     shotDescription.temperature = temperature
     shotDescription.binningMode = binning
+    shotDescription.spectralChannel = spectralChannel
     return shotDescription
 
 class SpectralChannel:

@@ -11,14 +11,14 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 class SpectralWidget(QtGui.QWidget):
-    def __init__(self, collectWidget, session):
+    def __init__(self, planWidget, session):
         super(SpectralWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
         self.spectralColourWidgetList = []
         self.spacerItem = QtGui.QSpacerItem(0,0,QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.collectWidget = collectWidget
         self.session = session
+        self.planWidget = planWidget
 
         self.scrollArea = QtGui.QScrollArea(self)
         self.scrollArea.setMinimumHeight(560)
@@ -43,7 +43,7 @@ class SpectralWidget(QtGui.QWidget):
     def addSpectralColourWidget(self):
         self.horizontalLayout_2.removeItem(self.spacerItem)
         self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
-        shotDescription = self.session.createShotDescription(0, 0, 0, 1)
+        shotDescription = self.session.createShotDescription(0, 0, 0, 1, None)
         spectralColourWidget = SpectralColourWidget(self, self.session, shotDescription)
         self.spectralColourWidgetList.append(spectralColourWidget)
         self.horizontalLayout_2.addWidget(spectralColourWidget)
@@ -74,9 +74,22 @@ class SpectralWidget(QtGui.QWidget):
     def saveAllSpectralColourWidgets(self):
         print("saveAllSpectralColourWidgets")
         for spectralColourWidget in self.spectralColourWidgetList:
+            spectralColourWidget.shotDescription.temperature = self.planWidget.tempLineEdit.text()
             spectralColourWidget.shotDescription.nrOfShots = spectralColourWidget.numberOfImagesLineEdit.text()
             spectralColourWidget.shotDescription.duration = spectralColourWidget.durationLineEdit.text()
+            spectralName = spectralColourWidget.spectralComboBox.currentText()
+            for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
+                if spectralChannel.name == spectralName:
+                    spectralColourWidget.shotDescription.spectralChannel = spectralChannel
             if spectralColourWidget.binning2Radio.isChecked():
                 spectralColourWidget.shotDescription.binning = 2
             elif spectralColourWidget.binning4Radio.isChecked():
                 spectralColourWidget.shotDescription.binning = 4
+
+    def updateAllSpectralColourWidgets(self):
+        for spectralColourWidget in self.spectralColourWidgetList:
+            if not spectralColourWidget.imageTypeComboBox.currentText() in self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr():
+                print("Auswahl nicht mehr möglich")
+            for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
+                if not spectralColourWidget.spectralComboBox.currentText() == spectralChannel.name:
+                    print("Auswahl nicht mehr möglich")
