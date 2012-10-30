@@ -61,10 +61,10 @@ class Ui_MainWindow(object):
         self.planWidget.show()
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.horizontalLayout.addWidget(self.planWidget)
-        self.collectWidget = CollectWidget()
+        self.collectWidget = CollectWidget(self.session)
         self.collectWidget.hide()
         self.horizontalLayout.addWidget(self.collectWidget)
-        self.spectralWidget = SpectralWidget(self.collectWidget)
+        self.spectralWidget = SpectralWidget(self.collectWidget, self.session)
         self.spectralWidget.hide()
         self.horizontalLayout.addWidget(self.spectralWidget)
 
@@ -95,11 +95,12 @@ class Ui_MainWindow(object):
             self.planWidget.hide()
             self.collectWidget.hide()
         elif item.text() == "Collect":
-            self.collectWidget.show()
-            self.spectralWidget.hide()
-            self.planWidget.hide()
             if self.spectralWidget.checkAllVariablesSet():
                 self.spectralWidget.saveAllSpectralColourWidgets()
+            self.collectWidget.updateCollectWidget()
+            self.spectralWidget.hide()
+            self.planWidget.hide()
+            self.collectWidget.show()
 
 if __name__ == "__main__":
     import sys

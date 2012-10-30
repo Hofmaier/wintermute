@@ -7,9 +7,10 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 class CollectSpectralWidget(QtGui.QWidget):
-    def __init__(self):
+    def __init__(self, shotDescription):
         super(CollectSpectralWidget, self).__init__()
         self.setMinimumWidth(640)
+        self.shotDescription = shotDescription
 
         self.spectralConfigFrame = QtGui.QFrame()
         self.spectralConfigFrame.setFrameShape(QtGui.QFrame.StyledPanel)
@@ -45,6 +46,7 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
         self.spectralTimesLineEdit.setEnabled(False)
+        self.spectralTimesLineEdit.setText(str(self.shotDescription.nrOfShots))
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, 2, 9)
 
         self.spectralTakeButton = QtGui.QPushButton()

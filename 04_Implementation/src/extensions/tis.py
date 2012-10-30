@@ -11,7 +11,7 @@ class TISCamera(camerainterface.Camera):
     
     def getImageTypes(self):
         self.imageTypes = [camerainterface.ImageType.Bayermatrix]
-        return self.imageTypeList
+        return self.imageTypes
 
 def getInterfaceName():
     return 'The Imaging Source'

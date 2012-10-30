@@ -7,10 +7,12 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 class SpectralColourWidget(QtGui.QWidget):
-    def __init__(self, mainGui):
+    def __init__(self, mainGui, session, shotDescription):
         super(SpectralColourWidget, self).__init__(mainGui)
         self.spectralLayout = QtGui.QGridLayout()
         self.numberValidator = QtGui.QIntValidator(1, 100)
+        self.shotDescription = shotDescription
+        self.session = session
 
         self.setLayout(self.spectralLayout)
 
@@ -28,12 +30,15 @@ class SpectralColourWidget(QtGui.QWidget):
         self.imageTypeLabel.setText("Image Type:")
         self.spectralLayout.addWidget(self.imageTypeLabel, 2, 1)
         self.imageTypeComboBox = QtGui.QComboBox()
+        self.imageTypeComboBox.addItems(self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr())
         self.spectralLayout.addWidget(self.imageTypeComboBox, 2, 3, 1, 7)
 
         self.spectralLabel = QtGui.QLabel()
         self.spectralLabel.setText("Spectral:")
         self.spectralLayout.addWidget(self.spectralLabel, 3, 1)
         self.spectralComboBox = QtGui.QComboBox()
+        for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
+            self.spectralComboBox.addItem(spectralChannel.name)
         self.spectralLayout.addWidget(self.spectralComboBox, 3, 3)
         
         self.numberOfImagesLabel = QtGui.QLabel()
