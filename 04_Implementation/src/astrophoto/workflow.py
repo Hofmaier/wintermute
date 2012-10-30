@@ -39,7 +39,7 @@ class Session:
         return telescope
 
     def createShotDescription(self, nrOfShots, duration, temperature, binning, spectralChannel):
-        shotDescription = createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel, self.currentProject)
+        shotDescription = createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel)
         self.currentProject.shotDescriptionList.append(shotDescription)
         return shotDescription
 
@@ -81,7 +81,7 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
-def createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel, project):
+def createShotDescription(nrOfShots, duration, temperature, binning, spectralChannel):
     shotDescription = Shotdescription()
     shotDescription.nrOfShots = nrOfShots
     shotDescription.duration = duration

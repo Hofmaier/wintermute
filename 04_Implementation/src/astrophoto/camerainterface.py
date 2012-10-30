@@ -15,7 +15,11 @@ class Camera:
     def getImageTypesAsStr(self):
         names = [ImageType.toStr[imagetype] for imagetype in self.imageTypes]
         return names
-    
+
+    def capture(self, gain, shutter):
+        print("CAPTURE!")
+        pass
+
 class ImageType:
     Bayermatrix = 1
     RGB_Image = 2
@@ -32,7 +36,6 @@ def getInterfaceImplFiles():
         for file in files:
             if file.endswith('tis.py'):
                 extensionlist.append(file)
-
     return extensionlist
 
 def getExtensionModule(file):
@@ -52,7 +55,7 @@ def getInterfaceImplModules():
         concreteModuleName = module.getInterfaceName()
         moduledict[concreteModuleName] = module
     return interfaceModules
-	
+
 def getInterfaceNames():
     print('getInterfaceNames')
     imModules = getInterfaceImplModules()

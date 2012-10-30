@@ -14,7 +14,7 @@ class PlanWidget(QtGui.QWidget):
         
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
-		
+
         self.opticalSystemLabel = QtGui.QLabel()
         self.opticalSystemLabel.setStyleSheet("font: 7pt")
         self.opticalSystemLabel.setText("Optical System")
@@ -23,7 +23,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemFrame = QtGui.QFrame()
         self.opticalSystemFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.opticalSystemFrame.setFrameShadow(QtGui.QFrame.Raised)
-			
+
         self.opticalSystemLayout = QtGui.QGridLayout(self.opticalSystemWidget)
         self.opticalSystemLayout.setColumnMinimumWidth(0, 10)
         self.opticalSystemLayout.setColumnMinimumWidth(2, 10)
@@ -38,47 +38,47 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.addWidget(self.opticalSystemLabel, 0, 1)
         self.opticalSystemLayout.addWidget(self.opticalSystemFrame, 1, 0, 11, 8)
 
-        self.confNameLabel = QtGui.QLabel()
-        self.confNameLabel.setText("Configuration Name:")
-        self.opticalSystemLayout.addWidget(self.confNameLabel, 2, 1)
-        self.confNameLineEdit = QtGui.QLineEdit()
-        self.opticalSystemLayout.addWidget(self.confNameLineEdit, 2, 3)
+#        self.confNameLabel = QtGui.QLabel()
+#        self.confNameLabel.setText("Configuration Name:")
+#        self.opticalSystemLayout.addWidget(self.confNameLabel, 2, 1)
+#        self.confNameLineEdit = QtGui.QLineEdit()
+#        self.opticalSystemLayout.addWidget(self.confNameLineEdit, 2, 3)
         
         self.deviceLabel = QtGui.QLabel()
         self.deviceLabel.setText("Select Device:")
-        self.opticalSystemLayout.addWidget(self.deviceLabel, 3, 1)
+        self.opticalSystemLayout.addWidget(self.deviceLabel, 2, 1)
         self.deviceComboBox = QtGui.QComboBox()
-        self.opticalSystemLayout.addWidget(self.deviceComboBox, 3, 3)
+        self.opticalSystemLayout.addWidget(self.deviceComboBox, 2, 3)
         self.addDeviceButton = QtGui.QPushButton()
         self.addDeviceButton.setText("Add Device")
         self.addDeviceButton.setMinimumWidth(150)
-        self.opticalSystemLayout.addWidget(self.addDeviceButton, 3, 5)
+        self.opticalSystemLayout.addWidget(self.addDeviceButton, 2, 5)
     
         self.telescopeLabel = QtGui.QLabel()
         self.telescopeLabel.setText("Select Telescope:")
-        self.opticalSystemLayout.addWidget(self.telescopeLabel, 4, 1)
+        self.opticalSystemLayout.addWidget(self.telescopeLabel, 3, 1)
         self.telescopeComboBox = QtGui.QComboBox()
-        self.opticalSystemLayout.addWidget(self.telescopeComboBox, 4, 3)
+        self.opticalSystemLayout.addWidget(self.telescopeComboBox, 3, 3)
         self.addTelescopeButton = QtGui.QPushButton()
         self.addTelescopeButton.setText("Add Telescope")
         self.addTelescopeButton.setMinimumWidth(150)
-        self.opticalSystemLayout.addWidget(self.addTelescopeButton, 4, 5)
-        
+        self.opticalSystemLayout.addWidget(self.addTelescopeButton, 3, 5)
+
         self.adapterLabel = QtGui.QLabel()
         self.adapterLabel.setText("Select Adapter:")
-        self.opticalSystemLayout.addWidget(self.adapterLabel, 5, 1)
+        self.opticalSystemLayout.addWidget(self.adapterLabel, 4, 1)
         self.adapterComboBox = QtGui.QComboBox()
-        self.opticalSystemLayout.addWidget(self.adapterComboBox, 5, 3)
+        self.opticalSystemLayout.addWidget(self.adapterComboBox, 4, 3)
         self.addAdapterButton = QtGui.QPushButton()
         self.addAdapterButton.setText("Add Adapter")
         self.addAdapterButton.setMinimumWidth(150)
-        self.opticalSystemLayout.addWidget(self.addAdapterButton, 5, 5)
-        
+        self.opticalSystemLayout.addWidget(self.addAdapterButton, 4, 5)
+
         self.tempLabel = QtGui.QLabel()
         self.tempLabel.setText("Chip Temperatur:")
-        self.opticalSystemLayout.addWidget(self.tempLabel, 6, 1)
+        self.opticalSystemLayout.addWidget(self.tempLabel, 5, 1)
         self.tempLineEdit = QtGui.QLineEdit()
-        self.opticalSystemLayout.addWidget(self.tempLineEdit, 6, 3)
+        self.opticalSystemLayout.addWidget(self.tempLineEdit, 5, 3)
 
         self.configImagesWidget = QtGui.QWidget()
         self.configImagesWidget.setMinimumWidth(640)
@@ -173,3 +173,14 @@ class PlanWidget(QtGui.QWidget):
         for telescope in self.session.workspace.telescopeList:
             self.telescopeComboBox.addItem(telescope.name)
         self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(name))
+
+    def checkAllVariablesSet(self):
+#        if self.deviceComboBox.currentText() == "":
+#            return False
+#        elif self.telescopeComboBox.currentText() == "":
+#            return False
+#        elif self.adapterComboBox.currentText() == "":
+#            return False
+#        elif self.tempLineEdit.text() == "":
+#            return False
+        return True

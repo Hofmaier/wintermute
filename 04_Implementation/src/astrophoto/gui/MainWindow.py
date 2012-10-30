@@ -91,17 +91,18 @@ class Ui_MainWindow(object):
             self.spectralWidget.hide()
             self.collectWidget.hide()
         elif item.text() == "Spectrals":
-            self.spectralWidget.updateAllSpectralColourWidgets()
-            self.spectralWidget.show()
-            self.planWidget.hide()
-            self.collectWidget.hide()
+            if self.planWidget.checkAllVariablesSet():
+                self.spectralWidget.updateAllSpectralColourWidgets()
+                self.spectralWidget.show()
+                self.planWidget.hide()
+                self.collectWidget.hide()
         elif item.text() == "Collect":
-            if self.spectralWidget.checkAllVariablesSet():
+            if self.spectralWidget.checkAllVariablesSet() and self.planWidget.checkAllVariablesSet():
                 self.spectralWidget.saveAllSpectralColourWidgets()
-            self.collectWidget.updateCollectWidget()
-            self.spectralWidget.hide()
-            self.planWidget.hide()
-            self.collectWidget.show()
+                self.collectWidget.updateCollectWidget()
+                self.spectralWidget.hide()
+                self.planWidget.hide()
+                self.collectWidget.show()
 
 if __name__ == "__main__":
     import sys
