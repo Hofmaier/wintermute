@@ -184,3 +184,19 @@ class PlanWidget(QtGui.QWidget):
 #        elif self.tempLineEdit.text() == "":
 #            return False
         return True
+
+    def savePlanWidget(self):
+        adapter = self.getAdapterByName(self.adapterComboBox.currentText())
+        telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
+        self.session.createOpticalSystem("testing", adapter, telescope)
+
+
+    def getAdapterByName(self, adapterName):
+        for adapter in self.session.workspace.adapterList:
+            if adapter.name == adapterName:
+                return adapter
+
+    def getTelescopeByName(self, telescopeName):
+        for telescope in self.session.workspace.telescopeList:
+            if telescope.name == telescopeName:
+                return telescope

@@ -2,11 +2,11 @@
 from PyQt4 import QtCore, QtGui
 from astrophoto.gui.MainWindow import Ui_MainWindow
 
-
 class NewProject(QtGui.QWidget):
-    def __init__(self, session):
+    def __init__(self, session, lastWidget):
         super(NewProject, self).__init__()
         self.session = session
+        self.lastWidget = lastWidget
         self.widgetLayout = QtGui.QGridLayout()
         self.setLayout(self.widgetLayout)
 
@@ -30,6 +30,7 @@ class NewProject(QtGui.QWidget):
         self.setFixedSize(self.sizeHint())
 
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.createNewProject)
+        QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), self.showLastScreen)
 
     def createNewProject(self):
         newProject = self.session.createProject(self.projectNameLineEdit.text())
@@ -38,6 +39,10 @@ class NewProject(QtGui.QWidget):
         self.bla.setupUi(self.MainWindow, self.session)
         self.hide()
         self.MainWindow.show()
+
+    def showLastScreen(self):
+        self.hide()
+        self.lastWidget.show()
 
 
 

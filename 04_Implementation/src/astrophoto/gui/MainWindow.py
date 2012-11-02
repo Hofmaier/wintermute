@@ -92,6 +92,7 @@ class Ui_MainWindow(object):
             self.collectWidget.hide()
         elif item.text() == "Spectrals":
             if self.planWidget.checkAllVariablesSet():
+                self.planWidget.savePlanWidget()
                 self.spectralWidget.updateAllSpectralColourWidgets()
                 self.spectralWidget.show()
                 self.planWidget.hide()

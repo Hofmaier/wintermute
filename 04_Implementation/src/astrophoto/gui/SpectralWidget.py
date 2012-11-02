@@ -31,7 +31,7 @@ class SpectralWidget(QtGui.QWidget):
         self.scrollAreaWidgetContents.setLayout(self.horizontalLayout_2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-#        shotDescription = self.session.createShotDescription(0, 0, 0, 1)
+#        shotDescription = self.session.createShotDescription(0, 0, 0, 1, None)
 #        spectralColourWidget = SpectralColourWidget(self, self.session, shotDescription)
         self.spectralAddButtonWidget = SpectralAddButtonWidget(self)
 
@@ -89,7 +89,7 @@ class SpectralWidget(QtGui.QWidget):
     def updateAllSpectralColourWidgets(self):
         for spectralColourWidget in self.spectralColourWidgetList:
             if not spectralColourWidget.imageTypeComboBox.currentText() in self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr():
-                print("Auswahl nicht mehr möglich")
+                print("Auswahl nicht mehr moeglich")
             for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
                 if not spectralColourWidget.spectralComboBox.currentText() == spectralChannel.name:
-                    print("Auswahl nicht mehr möglich")
+                    print("Auswahl nicht mehr moeglich")

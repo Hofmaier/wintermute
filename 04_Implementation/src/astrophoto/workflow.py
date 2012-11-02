@@ -12,6 +12,7 @@ class Session:
 
     def createProject(self, name):
         project = Project(name)
+        self.workspace.projectList.append(project)
         self.currentProject = project
         return project
 
@@ -25,7 +26,7 @@ class Session:
 
     def createOpticalSystem(self, name, adapter, telescope):
         opticalSystem = Opticalsystem(name, adapter, telescope)
-        self.workplace.opticalSystemList.append(opticalSystem)
+        self.workspace.opticalSystemList.append(opticalSystem)
         return opticalSystem
 
     def createAdapter(self, name):
@@ -64,6 +65,7 @@ class Workspace:
         self.adapterList = []
         self.telescopeList = []
         self.opticalSystemList = []
+        self.projectList = []
 
 def createCameraConfiguration(name, interface, project):
     camera = createCamera(interface)
