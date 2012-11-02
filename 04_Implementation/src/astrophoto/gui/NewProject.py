@@ -6,6 +6,7 @@ class NewProject(QtGui.QWidget):
     def __init__(self, session, lastWidget):
         super(NewProject, self).__init__()
         self.session = session
+        self.setWindowTitle("New Project")
         self.lastWidget = lastWidget
         self.widgetLayout = QtGui.QGridLayout()
         self.setLayout(self.widgetLayout)
@@ -35,9 +36,10 @@ class NewProject(QtGui.QWidget):
     def createNewProject(self):
         newProject = self.session.createProject(self.projectNameLineEdit.text())
         self.MainWindow = QtGui.QMainWindow()
-        self.bla = Ui_MainWindow()
-        self.bla.setupUi(self.MainWindow, self.session)
-        self.hide()
+        self.mainWindow_ui = Ui_MainWindow()
+        self.mainWindow_ui.setupUi(self.MainWindow, self.session)
+        self.deleteLater()
+        self.lastWidget.deleteLater()
         self.MainWindow.show()
 
     def showLastScreen(self):

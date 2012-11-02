@@ -11,18 +11,28 @@ from PyQt4 import QtCore, QtGui
 from astrophoto.gui.SpectralWidget import SpectralWidget
 from astrophoto.gui.PlanWidget import PlanWidget
 from astrophoto.gui.CollectWidget import CollectWidget
+from astrophoto.gui.MenuBar import MenuBar
+from astrophoto.gui.LoadProject import LoadProject
+import sys
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtGui.QMainWindow):
     def setupUi(self, MainWindow, session):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        super(Ui_MainWindow, self).__init__()
+        MainWindow.setObjectName(_fromUtf8("AstroPhoto"))
         MainWindow.resize(800, 600)
         MainWindow.setFixedSize(800, 600)
         self.session = session
+        self.statusBar = MainWindow.statusBar()
+        self.statusBar.showMessage("")
+
+        menuBar = MenuBar(self)
+        MainWindow.setMenuBar(menuBar)
+
         self.centralWidget = QtGui.QWidget(MainWindow)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.centralWidget.setGeometry(QtCore.QRect(0, 0, 800, 600))
@@ -39,7 +49,7 @@ class Ui_MainWindow(object):
         self.listWidget.setMinimumWidth(140)
         self.listWidget.setMaximumWidth(140)
         self.horizontalLayout.addWidget(self.listWidget)
-        
+
         item = QtGui.QListWidgetItem()
         font = QtGui.QFont()
         font.setPointSize(15)
@@ -74,15 +84,15 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("AstroPhoto", "AstroPhoto", None, QtGui.QApplication.UnicodeUTF8))
         __sortingEnabled = self.listWidget.isSortingEnabled()
         self.listWidget.setSortingEnabled(False)
         item = self.listWidget.item(0)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Plan", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("AstroPhoto", "Plan", None, QtGui.QApplication.UnicodeUTF8))
         item = self.listWidget.item(1)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Spectrals", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("AstroPhoto", "Spectrals", None, QtGui.QApplication.UnicodeUTF8))
         item = self.listWidget.item(2)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Collect", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(QtGui.QApplication.translate("AstroPhoto", "Collect", None, QtGui.QApplication.UnicodeUTF8))
         self.listWidget.setSortingEnabled(__sortingEnabled)
 
     def menuEntryChanged(self, item):
@@ -105,12 +115,21 @@ class Ui_MainWindow(object):
                 self.planWidget.hide()
                 self.collectWidget.show()
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    def closeApplication(self):
+        sys.exit()
+
+    def showLoadProjectWidget(self):
+        self.loadProjectDialog = LoadProject(self.session, self)
+        self.loadProjectDialog.show()
+
+    def loadProject(self):
+        self.listWidget.setCurrentItem(self.listWidget.item(0))
+
+#if __name__ == "__main__":
+#    app = QtGui.QApplication(sys.argv)
+#    MainWindow = QtGui.QMainWindow()
+#    ui = Ui_MainWindow()
+#    ui.setupUi(MainWindow)
+#    MainWindow.show()
+#    sys.exit(app.exec_())
 

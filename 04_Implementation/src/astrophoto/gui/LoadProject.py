@@ -1,5 +1,6 @@
 
 from PyQt4 import QtCore, QtGui
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -9,6 +10,9 @@ except AttributeError:
 class LoadProject(QtGui.QDialog):
     def __init__(self, session, lastWidget):
         super(LoadProject, self).__init__()
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowTitle("Select Project")
+        self.setModal(True)
         self.session = session
         self.lastWidget = lastWidget
         self.loadProjectLayout = QtGui.QGridLayout()
@@ -33,14 +37,24 @@ class LoadProject(QtGui.QDialog):
         self.cancelButton.setText("Cancel")
         self.loadProjectLayout.addWidget(self.cancelButton, 3, 1)
 
-
-
-        QtCore.QObject.connect(self.okButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.closeAndSave)
+        QtCore.QObject.connect(self.okButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.loadProject)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.showLastScreen)
 
-    def closeAndSave(self):
-        pass
+    def loadProject(self):
+        for project in self.session.workspace.projectList:
+            if project.name == self.projectList.currentItem():
+                self.session.currentProject = project
+        self.close()
+        if isinstance( self.lastWidget, QtGui.QMainWindow ):
+            self.lastWidget.show()
+        else:
+            from astrophoto.gui.MainWindow import Ui_MainWindow
+            self.MainWindow = QtGui.QMainWindow()
+            self.mainWindow_ui = Ui_MainWindow()
+            self.mainWindow_ui.setupUi(self.MainWindow, self.session)
+            self.MainWindow.show()
+            self.lastWidget.deleteLater()
 
     def showLastScreen(self):
-        self.hide()
+        self.deleteLater()
         self.lastWidget.show()

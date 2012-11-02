@@ -12,6 +12,7 @@ class StartUpScreen(QtGui.QWidget):
         super(StartUpScreen, self).__init__()
         self.horizontalLayout = QtGui.QVBoxLayout()
         self.setLayout(self.horizontalLayout)
+        self.setWindowTitle("StartUp")
         self.openNewProjectButton = QtGui.QPushButton()
         self.openNewProjectButton.setText("New Project")
         self.horizontalLayout.addWidget(self.openNewProjectButton)
