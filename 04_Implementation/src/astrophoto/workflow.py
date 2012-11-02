@@ -1,5 +1,6 @@
 import os.path
 import imp
+import sqlite3
 from astrophoto import camerainterface
 
 class Session:
@@ -58,6 +59,7 @@ class Project:
         self.name = name
         self.cameraConfiguration = None
         self.shotDescriptionList = []
+        self.opticalSystem = None
 
 class Workspace:
     def __init__(self):
@@ -113,3 +115,15 @@ class Opticalsystem:
         self.adapter = adapter
         self.telescope = telescope
 
+class DBConnection:
+    def __init__(self):
+        databaseName = "workspace/testing.db"
+        if not os.path.isfile(databaseName):
+            connection = sqlite3.connect(databaseName)
+            self.createTables()
+        else:
+            connection = sqlite3.connect(databaseName)
+        cursor = connection.cursor()
+
+    def createTables(self):
+        pass

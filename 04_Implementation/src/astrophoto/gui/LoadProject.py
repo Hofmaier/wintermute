@@ -47,6 +47,7 @@ class LoadProject(QtGui.QDialog):
         self.close()
         if isinstance( self.lastWidget, QtGui.QMainWindow ):
             self.lastWidget.show()
+            self.lastWidget.loadProject()
         else:
             from astrophoto.gui.MainWindow import Ui_MainWindow
             self.MainWindow = QtGui.QMainWindow()

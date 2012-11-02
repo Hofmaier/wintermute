@@ -188,8 +188,16 @@ class PlanWidget(QtGui.QWidget):
     def savePlanWidget(self):
         adapter = self.getAdapterByName(self.adapterComboBox.currentText())
         telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
-        self.session.createOpticalSystem("testing", adapter, telescope)
+        opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
+        self.session.currentProject.opticalSystem = opticalSystem
+        cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
+        self.session.currentProject.cameraConfiguration = cameraConfiguration
 
+
+    def getCameraConfigurationByName(self, cameraName):
+        for cameraConf in self.session.workspace.cameraconfigurations:
+            if cameraConf.name == cameraName:
+                return cameraConf
 
     def getAdapterByName(self, adapterName):
         for adapter in self.session.workspace.adapterList:
@@ -200,3 +208,11 @@ class PlanWidget(QtGui.QWidget):
         for telescope in self.session.workspace.telescopeList:
             if telescope.name == telescopeName:
                 return telescope
+
+    def loadProject(self):
+        opticalSystem = self.session.currentProject.opticalSystem
+        self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
+        self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
+        cameraConfiguration = self.session.currentProject.cameraConfiguration
+        self.deviceComboBox.setCurrentIndex(self.deviceBomboBox.findText(cameraConfiguration.name))
+        

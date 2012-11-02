@@ -124,6 +124,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     def loadProject(self):
         self.listWidget.setCurrentItem(self.listWidget.item(0))
+        self.planWidget.loadProject()
 
 #if __name__ == "__main__":
 #    app = QtGui.QApplication(sys.argv)
