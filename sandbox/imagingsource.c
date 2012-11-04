@@ -1,6 +1,5 @@
 #include <unicap.h>
 #include <stdio.h>
-#include <unicapgtk.h>
 
 #define MAX_FORMATS 64
 #define NR_OF_PROPERTIES 9
@@ -15,6 +14,17 @@ unicap_handle_t open_imagingsource_camera ()
   unicap_handle_t handle;
   unicap_open (&handle, &imaging_source_dev);
   return handle;
+}
+
+void isAvailable(const char name)
+{
+
+  unicap_device_t tis_dev;
+  while(SUCCESS(status))
+    {
+      status = unicap_enumerate_devices(NULL, &tis_dev, dev_count);
+      if(!SUCCESS(status)) break;
+    }
 }
 
 void print_formats(unicap_handle_t handle)
@@ -57,6 +67,7 @@ propertycount++;
 
 }
 
+/*
 void display_video_stream(int argc, char **argv){
   GtkWidget * window;
   GtkWidget * ugtk_display;
@@ -73,12 +84,13 @@ void display_video_stream(int argc, char **argv){
   gtk_widget_show_all(window);
   gtk_main();
 }
+*/
 
 int main (int argc, char **argv)
 {
-  display_video_stream(argc, argv);
-  // unicap_handle_t handle;
-  //handle = open_imagingsource_camera();
+  //display_video_stream(argc, argv);
+  unicap_handle_t handle;
+  handle = open_imagingsource_camera();
   //print_formats(handle);
   //print_properties(handle);
   //unicap_close (handle);

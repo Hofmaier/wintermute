@@ -1,23 +1,7 @@
-cap : imagingsource.o
-	gcc imagingsource.o `pkg-config --libs libunicap` -o pgm
+appex : unicapmodule.o
+	gcc unicapmodule.o `pkg-config --libs libunicap` -lcfitsio -lpthread -o appex
+unicapmodule.o : unicapmodule.c
+	gcc `pkg-config --cflags libunicap` -c unicapmodule.c
 
-imagingsource.o : pgmexample.c
-	gcc `pkg-config --cflags libunicap` -c pgmexample.c -o imagingsource.o
-
-tut_2_3 : tut_2_3.o
-	gcc tut_2_3.o -lunicap
-
-tut_2_3.o : tut_2_3.c
-	gcc -I/usr/include/unicap -c tut_2_3.c
-
-tut_2_2 : tut_2_2.o
-	gcc tut_2_2.o -lunicap
-
-tut_2_2.o : tut_2_2.c
-	gcc -I/usr/include/unicap -c tut_2_2.c
-
-tut_2_1 : tut_2_1.o
-	gcc tut_2_1.o -lunicap
-
-tut_2_1.o : tut_2_1.c
-	gcc -I/usr/include/unicap -c tut_2_1.c
+clean:
+	rm *.o appex
