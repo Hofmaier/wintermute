@@ -6,5 +6,8 @@
 *.gls
 *.xdy
 *.el
-*.asta.bak
 *.pyc
+TAGS
+*.fits
+*.bak
+04_Implementation/src/extensions/build/
