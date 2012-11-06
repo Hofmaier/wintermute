@@ -27,7 +27,7 @@ class CalibrationFrames:
         iraf.ccdhedit(self.inputFolder, parameter="IMAGETYP", value = headerType)
 
     def processImagesWithCalibration(self):
-        iraf.ccdproc(images="NGC1.fit",zerocor="yes",darkcor="yes",flatcor="yes",zero="masterbias.fit",flat="masterflat.fit",dark="masterdark.fit",output="lala.fit",fixpix="No",ccdtype="none")
+        iraf.ccdproc(images="NGC1.fit",zerocor="yes",darkcor="yes",flatcor="yes",zero="masterbias.fit",flat="masterflat.fit",dark="masterdark.fit",output="lala.fit")
 
     def stackImages(self):
         imcombine(input=self.inputFolder,output=self.outputFile)

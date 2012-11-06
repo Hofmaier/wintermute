@@ -1,0 +1,48 @@
+
+Nov  3 16:52: IMCOMBINE
+  combine = average, scale = none, zero = none, weight = none
+  reject = minmax, nlow = 0, nhigh = 1
+  blank = 0.
+                Images 
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-001_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-002_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-003_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-004_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-005_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-006_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-007_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-008_Bin1.fit
+
+  Output image = juhu, ncombine = 8
+
+Nov  3 17:15: IMCOMBINE
+  combine = average, scale = none, zero = none, weight = none
+  reject = minmax, nlow = 0, nhigh = 1
+  blank = 0.
+                Images 
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-001_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-002_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-003_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-004_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-005_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-006_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-007_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-008_Bin1.fit
+
+  Output image = jello, ncombine = 8
+
+Nov  3 17:16: IMCOMBINE
+  combine = average, scale = none, zero = none, weight = none
+  reject = minmax, nlow = 0, nhigh = 1
+  blank = 0.
+                Images 
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-001_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-002_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-003_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-004_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-005_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-006_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-007_Bin1.fit
+  /home/rkohler/BA/picsByBergen/Bias/Bias_-30C-008_Bin1.fit
+
+  Output image = jello, ncombine = 8
