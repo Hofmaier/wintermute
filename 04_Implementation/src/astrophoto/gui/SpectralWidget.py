@@ -43,7 +43,7 @@ class SpectralWidget(QtGui.QWidget):
     def addSpectralColourWidget(self):
         self.horizontalLayout_2.removeItem(self.spacerItem)
         self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
-        shotDescription = self.session.createShotDescription(0, 0, 0, 1, None)
+        shotDescription = self.session.createShotDescription(0, 0, None)
         spectralColourWidget = SpectralColourWidget(self, self.session, shotDescription)
         self.spectralColourWidgetList.append(spectralColourWidget)
         self.horizontalLayout_2.addWidget(spectralColourWidget)
@@ -74,17 +74,13 @@ class SpectralWidget(QtGui.QWidget):
     def saveAllSpectralColourWidgets(self):
         print("saveAllSpectralColourWidgets")
         for spectralColourWidget in self.spectralColourWidgetList:
-            spectralColourWidget.shotDescription.temperature = self.planWidget.tempLineEdit.text()
             spectralColourWidget.shotDescription.nrOfShots = spectralColourWidget.numberOfImagesLineEdit.text()
             spectralColourWidget.shotDescription.duration = spectralColourWidget.durationLineEdit.text()
+            spectralColourWidget.shotDescription.imageTyp = spectralColourWidget.imageTypeComboBox.text()
             spectralName = spectralColourWidget.spectralComboBox.currentText()
             for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
                 if spectralChannel.name == spectralName:
                     spectralColourWidget.shotDescription.spectralChannel = spectralChannel
-            if spectralColourWidget.binning2Radio.isChecked():
-                spectralColourWidget.shotDescription.binning = 2
-            elif spectralColourWidget.binning4Radio.isChecked():
-                spectralColourWidget.shotDescription.binning = 4
 
     def updateAllSpectralColourWidgets(self):
         for spectralColourWidget in self.spectralColourWidgetList:
