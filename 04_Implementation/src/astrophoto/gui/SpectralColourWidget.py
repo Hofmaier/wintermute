@@ -30,7 +30,9 @@ class SpectralColourWidget(QtGui.QWidget):
         self.imageTypeLabel.setText("Image Type:")
         self.spectralLayout.addWidget(self.imageTypeLabel, 2, 1)
         self.imageTypeComboBox = QtGui.QComboBox()
-        self.imageTypeComboBox.addItems(self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr())
+        for imageTyp in self.session.currentProject.cameraConfiguration.camera.getImageTypes():
+            self.imageTypeComboBox.addItem(ImageType.toStr[imageTyp])
+        #self.imageTypeComboBox.addItems(self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr())
         self.spectralLayout.addWidget(self.imageTypeComboBox, 2, 3, 1, 7)
 
         self.spectralLabel = QtGui.QLabel()
