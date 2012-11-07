@@ -39,8 +39,8 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
-    def createShotDescription(self, nrOfShots, duration, spectralChannel):
-        shotDescription = createShotDescription(nrOfShots, duration, spectralChannel)
+    def createShotDescription(self):
+        shotDescription = Shotdescription()
         self.currentProject.shotDescriptionList.append(shotDescription)
         return shotDescription
 
@@ -84,24 +84,21 @@ def createCamera(interface):
     """
     return camerainterface.createCamera(interface)
 
-def createShotDescription(nrOfShots, duration, spectralChannel):
-    shotDescription = Shotdescription()
-    shotDescription.shotList = []
-    i = 0
-    while i < nrOfShots:
-        shot = Shot()
-        shotDescription.shotList.append(shot)
-        i = i + 1
-    shotDescription.duration = duration
-    shotDescription.spectralChannel = spectralChannel
-    return shotDescription
-
 class SpectralChannel:
     def __init__(self):
         self.name = ''
 
 class Shotdescription:
-    pass
+    def __init__(self):
+        pass
+    def setProperties(self, nrOfShots, duration, imageTyp):
+        self.duration = duration
+        self.imageTyp = imageTyp
+        self.shotList = []
+        i = 0
+        for i in range(nrOfShots):
+            shot = Shot()
+            shotDescription.shotList.append(shot)
 
 class Shot:
     pass

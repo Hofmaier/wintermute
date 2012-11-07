@@ -63,9 +63,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.listWidget.addItem(item)
 
         MainWindow.setCentralWidget(self.centralWidget)
-        self.mainToolBar = QtGui.QToolBar(MainWindow)
-        self.mainToolBar.setObjectName(_fromUtf8("mainToolBar"))
-        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
 
         self.planWidget = PlanWidget(self.session)
         self.planWidget.show()
@@ -85,15 +82,15 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("AstroPhoto", "AstroPhoto", None, QtGui.QApplication.UnicodeUTF8))
-        __sortingEnabled = self.listWidget.isSortingEnabled()
-        self.listWidget.setSortingEnabled(False)
+        #__sortingEnabled = self.listWidget.isSortingEnabled()
+        #self.listWidget.setSortingEnabled(False)
         item = self.listWidget.item(0)
         item.setText(QtGui.QApplication.translate("AstroPhoto", "Plan", None, QtGui.QApplication.UnicodeUTF8))
         item = self.listWidget.item(1)
         item.setText(QtGui.QApplication.translate("AstroPhoto", "Spectrals", None, QtGui.QApplication.UnicodeUTF8))
         item = self.listWidget.item(2)
         item.setText(QtGui.QApplication.translate("AstroPhoto", "Collect", None, QtGui.QApplication.UnicodeUTF8))
-        self.listWidget.setSortingEnabled(__sortingEnabled)
+        #self.listWidget.setSortingEnabled(__sortingEnabled)
 
     def menuEntryChanged(self, item):
         if item.text() == "Plan":
@@ -125,12 +122,3 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def loadProject(self):
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.planWidget.loadProject()
-
-#if __name__ == "__main__":
-#    app = QtGui.QApplication(sys.argv)
-#    MainWindow = QtGui.QMainWindow()
-#    ui = Ui_MainWindow()
-#    ui.setupUi(MainWindow)
-#    MainWindow.show()
-#    sys.exit(app.exec_())
-
