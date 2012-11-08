@@ -19,12 +19,12 @@ class TestCamera(unittest.TestCase):
         self.assertIsNotNone(module)
         self.assertEqual(module, camerainterface.moduledict[self.name])
         
-    def test_getImageTypes(self):
-        expectedType = [camerainterface.ImageType.Bayermatrix]
+    def test_getFormats(self):
+        expectedFormat = ['RGB Bayer']
         camera = self.modulemock.createCameraControl()
-        imageTypeList = camera.getImageTypes()
-        self.assertIsNotNone(imageTypeList)
-        self.assertEqual(imageTypeList, expectedType)
+        formatList = camera.getFormats()
+        self.assertIsNotNone(formatList)
+        self.assertEqual(formatList, expectedFormat)
 
 class TestImageType(unittest.TestCase):
     

@@ -3,12 +3,13 @@ from astrophoto import camerainterface
 class Camerainterfacemock(camerainterface.Camera):
     def __init__(self):
         self.name = 'interfacemock'
+        self.formats = 'RGB Bayer'
 
     def getInterfaceName(self):
         return getInterfaceName()
 
-    def getImageTypes(self):
-        self.imageTypeList = [camerainterface.ImageType.Bayermatrix]
+    def getFormats(self):
+        self.imageTypeList = ['RGB Bayer']
         return self.imageTypeList
     
 def getInterfaceName():

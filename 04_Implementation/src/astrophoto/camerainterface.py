@@ -8,7 +8,7 @@ def getModule(interface):
     return module
 
 class Camera:
-    def getImageTypes(self):
+    def getFormats(self):
         self.imageTypes = []
         return imageTypes
 
