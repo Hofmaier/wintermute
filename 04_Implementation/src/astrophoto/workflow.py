@@ -3,10 +3,7 @@ import imp
 from astrophoto import camerainterface
 
 class Session:
-    def __init__(self, factory=None):
-        if factory == None:
-            factory = ProjectFactory()
-        self.projectFactory = factory
+    def __init__(self):
         self.currentProject = None
         self.workspace = Workspace()
 
@@ -48,10 +45,33 @@ class CameraConfiguration:
     def __init__(self, name, camera):
         self.name = name
         self.camera = camera
+        self.imageTypes = []
         self.spectralchannels = []
 
-class ProjectFactory:
+    def initImageTypes(self, camera):
+        for form in camera.formats:
+            if(form == 'RGB Bayer'):
+                newImageType = ImageType()
+                bayer_red_if = ImagingFunction()
+                bayer_red_if.spectralchannel = SpectralChannel('bayer_red')
+                newImageType.imagingfunctions.append(bayer_red_if)
+
+                bayer_green_if = ImagingFunction()
+                bayer_green_if.spectralchannel = SpectralChannel('bayer_green')
+                newImageType.imagingfunctions.append(bayer_green_if)
+
+                bayer_blue_if = ImagingFunction()
+                bayer_blue_if.spectralchannel = SpectralChanel('bayer_blue')
+                
+                self.imageTypes.append
+
+class ImagingFunction:
     pass
+
+class ImageType:
+    def __init__(self):
+        self.imagingfunctions = []
+
 
 class Project:
     def __init__(self, name):

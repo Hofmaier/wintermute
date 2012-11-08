@@ -60,6 +60,8 @@ class TestCameraConfiguration(unittest.TestCase):
         interface = 'tis'
         project = workflow.Project('jupiter')
         camera = camerainterface.Camera()
+        camera.formats = 'RGB Bayer'
+        rawbayerImagetype = workflow.ImageType()
         createCameraMock = mock.MagicMock(return_value = camera)
         workflow.createCamera = createCameraMock
 
@@ -68,6 +70,8 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIsNotNone(cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
         self.assertEqual(cameraConfiguration.spectralchannels[0].name, 'rgb')
+        self.assertIsNotNone(cameraConfiguration.imageTypes)
+        self.assertEqual(cameraConfiguration.imageTypes[0], rawbayerImagetype)
 
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):
