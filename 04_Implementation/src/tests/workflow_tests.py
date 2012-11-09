@@ -9,11 +9,11 @@ class TestProject(unittest.TestCase):
         self.assertEqual(project.name, 'jupiter')
 
 class TestSession(unittest.TestCase):
-    
+
     def setUp(self):
         self.session = workflow.Session()
         self.projectname = 'jupiter'
-        
+
     def test_ctor(self):
         session = workflow.Session()
         self.assertIsNotNone(session)
@@ -31,7 +31,8 @@ class TestSession(unittest.TestCase):
         session.currentProject = project
         name = 'tis dbk22au618.as 2012'
         interface = 'tis'
-        cameraconfigurationmock = workflow.CameraConfiguration(name, interface)
+        cameramock = camerainterface.Camera()
+        cameraconfigurationmock = workflow.CameraConfiguration(name )
         mockfunc = mock.MagicMock(return_value = cameraconfigurationmock)
         workflow.createCameraConfiguration = mockfunc
 
@@ -44,13 +45,14 @@ class TestSession(unittest.TestCase):
 
     def test_getInterfaceNames(self):
         session = workflow.Session()
-        
+
 
 class TestCameraConfiguration(unittest.TestCase):
     def test_ctor(self):
         name = 'imaging source 2012'
-        camera = camerainterface.Camera()
-        cameraconfig = workflow.CameraConfiguration(name, camera )
+        testcamera = camerainterface.Camera()
+        testcamera.formats = ['RGB Bayer']
+        cameraconfig = workflow.CameraConfiguration(name, testcamera )
         self.assertIsNotNone(cameraconfig)
         self.assertEqual(cameraconfig.name, name)
         self.assertIsNotNone(cameraconfig.spectralchannels)
@@ -59,19 +61,19 @@ class TestCameraConfiguration(unittest.TestCase):
         name = 'tis dbk22au618.as'
         interface = 'tis'
         project = workflow.Project('jupiter')
-        camera = camerainterface.Camera()
-        camera.formats = 'RGB Bayer'
-        rawbayerImagetype = workflow.ImageType()
-        createCameraMock = mock.MagicMock(return_value = camera)
+        testcamera = camerainterface.Camera()
+        testcamera.formats = ['RGB Bayer']
+        createCameraMock = mock.MagicMock(return_value = testcamera)
         workflow.createCamera = createCameraMock
 
         cameraConfiguration = workflow.createCameraConfiguration(name, interface, project)
         self.assertIsNotNone(cameraConfiguration)
         self.assertIsNotNone(cameraConfiguration.camera)
+        self.assertIs(testcamera, cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
-        self.assertEqual(cameraConfiguration.spectralchannels[0].name, 'rgb')
+        self.assertEqual(cameraConfiguration.spectralchannels[0].identifier, 'bayer_red')
         self.assertIsNotNone(cameraConfiguration.imageTypes)
-        self.assertEqual(cameraConfiguration.imageTypes[0], rawbayerImagetype)
+        self.assertIsNotNone(cameraConfiguration.imageTypes[0])
 
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):

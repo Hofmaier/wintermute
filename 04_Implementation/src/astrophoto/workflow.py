@@ -42,18 +42,22 @@ class Session:
         return shotDescription
 
 class CameraConfiguration:
-    def __init__(self, name, camera):
+    def __init__(self, name, camera=None):
         self.name = name
         self.camera = camera
         self.imageTypes = []
         self.spectralchannels = []
+        if camera is not None:
+            self.initImageTypes()
 
-    def initImageTypes(self, camera):
-        for form in camera.formats:
+    def initImageTypes(self):
+        for form in self.camera.formats:
             if(form == 'RGB Bayer'):
                 newImageType = ImageType()
                 bayer_red_if = ImagingFunction()
-                bayer_red_if.spectralchannel = SpectralChannel('bayer_red')
+                bayer_red = SpectralChannel('bayer_red')
+                bayer_red_if.spectralchannel = bayer_red
+                self.spectralchannels.append(bayer_red)
                 newImageType.imagingfunctions.append(bayer_red_if)
 
                 bayer_green_if = ImagingFunction()
@@ -61,9 +65,9 @@ class CameraConfiguration:
                 newImageType.imagingfunctions.append(bayer_green_if)
 
                 bayer_blue_if = ImagingFunction()
-                bayer_blue_if.spectralchannel = SpectralChanel('bayer_blue')
-                
-                self.imageTypes.append
+                bayer_blue_if.spectralchannel = SpectralChannel('bayer_blue')
+
+                self.imageTypes.append(newImageType)
 
 class ImagingFunction:
     pass
@@ -71,7 +75,7 @@ class ImagingFunction:
 class ImageType:
     def __init__(self):
         self.imagingfunctions = []
-
+        self.isSpectralVariable = 'False'
 
 class Project:
     def __init__(self, name):
@@ -91,9 +95,7 @@ class Workspace:
 def createCameraConfiguration(name, interface, project):
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
-    spectralchannel = SpectralChannel()
-    spectralchannel.name = 'rgb'
-    cameraConfiguration.spectralchannels.append(spectralchannel)
+
     project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
 
@@ -105,8 +107,8 @@ def createCamera(interface):
     return camerainterface.createCamera(interface)
 
 class SpectralChannel:
-    def __init__(self):
-        self.name = ''
+    def __init__(self, name=''):
+        self.identifier = name
 
 class Shotdescription:
     def __init__(self):
@@ -136,4 +138,3 @@ class Opticalsystem:
         self.name = name
         self.adapter = adapter
         self.telescope = telescope
-
