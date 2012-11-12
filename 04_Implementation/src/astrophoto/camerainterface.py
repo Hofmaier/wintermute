@@ -10,7 +10,7 @@ def getModule(interface):
 class Camera:
     def getFormats(self):
         self.imageTypes = []
-        return imageTypes
+        return self.imageTypes
 
     def getImageTypesAsStr(self):
         names = [ImageType.toStr[imagetype] for imagetype in self.imageTypes]
@@ -26,6 +26,8 @@ class ImageType:
     toStr = {Bayermatrix:'Bayer-Matrix', RGB_Image:'RGB-Image'}
     
 def createCamera(interface):
+    print("CreateCamera:")
+    print(interface)
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
     return camera
