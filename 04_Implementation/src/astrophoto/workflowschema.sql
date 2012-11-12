@@ -1,2 +1,8 @@
 CREATE TABLE IF NOT EXISTS projects(
-       name text);
+       name text
+);
+
+CREATE TABLE IF NOT EXISTS cameraconfigurations(
+       name text,
+       project INTEGER
+);
