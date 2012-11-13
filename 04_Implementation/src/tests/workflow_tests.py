@@ -128,3 +128,29 @@ class TestShotdesciption(unittest.TestCase):
         self.assertEqual(shotDescription.duration, duration)
         self.assertEqual(shotDescription.temperature, temperature)
         self.assertEqual(shotDescription.binningMode, binningMode)
+
+
+class TestPersistenceFacade(unittest.TestCase):
+    def setUp(self):
+        self.persistencefacade = workflow.PersistenceFacade()
+
+    def test_ctor(self):
+        persistencefacade = workflow.PersistenceFacade()
+        dbmock = mock.Mock()
+        persistencefacade.getDatabase = mock.Mock(return_value=dbmock)
+        self.assertIsNotNone(persistencefacade.database)
+
+    def test_insertproject(self):
+        dbmock = mock.MagicMock()
+        projectname = 'jupiter'
+        dbmock.insertproject.return_value = 'True'
+        persistencefacade = workflow.PersistenceFacade()
+        persistencefacade.getDatabase = mock.MagicMock(return_value=dbmock)
+        persistencefacade.database = dbmock
+        persistencefacade.insertproject(projectname)
+        dbmock.insertproject.assert_called_with(projectname)
+
+    def test_loadprojects(self):
+        projects = self.persistencefacade.loadprojects()
+        self.assertIsNotNone(projects)
+        self.assertEqual(1, len(projects))

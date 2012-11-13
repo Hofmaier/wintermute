@@ -1,20 +1,13 @@
 import sqlite3
 
-class PersistenceFacade:
-
-    def __init__(self):
-        self.database = createDatabase()
-
-    def insertproject(self, name):
-        self.database.insertproject(name)
-
 class Database:
     def __init__(self):
         self.connection = sqlite3.connect("workflow.db")
+        self.connection.row_factory = sqlite3.Row
 
     def init(self):
         cursor = self.connection.cursor()
-        with open('workflowschema.sql','r') as f:
+        with open('astrophoto/workflowschema.sql','r') as f:
             schema = f.read();
         cursor.executescript(schema)
 
@@ -22,9 +15,52 @@ class Database:
         cursor = self.connection.cursor()
         cursor.execute('INSERT INTO projects (name) VALUES (?)', (name,))
         self.connection.commit()
-        c.close()
+        cursor.close()
 
-    def insertcameraconfiguration(self, name, project)
+    def insertcameraconfiguration(self, name, project, interface):
+        cursor = self.connection.cursor()
+        queryparameter = (project,)
+        cursor.execute("""
+        SELECT ROWID FROM projects
+        WHERE name = ?
+        """, queryparameter)
+        projectrow = cursor.fetchone()
+
+        cursor.execute('INSERT INTO cameraconfigurations (name, project, interface) VALUES (?, ?, ?)', ( name, projectrow[0], interface ))
+        self.connection.commit()
+        cursor.close()
+
+    def getprojects(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT name FROM projects')
+        projecttuples = cursor.fetchall()
+        cursor.close()
+        return projecttuples
+
+    def getCameraconfigOf(self, project):
+        cursor = self.connection.cursor()
+        queryparameter = (project,)
+        cursor.execute("""
+        SELECT cc.name, cc.interface FROM cameraconfigurations cc
+        INNER JOIN projects ON cc.project = projects.ROWID
+        WHERE projects.name = ?
+        """, queryparameter)
+        cameraconfig = cursor.fetchone()
+        cursor.close()
+        return cameraconfig
+
+    def getCameraOf(self, cameraconfig):
+        cursor = self.connection.cursor()
+        queryparamater = (cameraconfig,)
+        cursor.execute("""
+        SELECT interface FROM cameras
+        INNER JOIN cameraconfigurations
+        ON cameras.cameraconfig = cameraconfigurations.ROWID
+        WHERE cameraconfigurations.name = ?
+        """, queryparameter)
+        camera = cursor.fetchone()
+        cursor.close()
+        return camera
 
 def createDatabase():
     database = Database()

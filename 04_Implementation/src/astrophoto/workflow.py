@@ -1,6 +1,7 @@
 import os.path
 import imp
 from astrophoto import camerainterface
+import persistence
 
 class Session:
     def __init__(self):
@@ -80,7 +81,7 @@ class ImageType:
 class Project:
     def __init__(self, name):
         self.name = name
-        self.cameraConfiguration = None
+        self.cameraconfiguration = None
         self.shotDescriptionList = []
         self.opticalSystem = None
 
@@ -138,3 +139,36 @@ class Opticalsystem:
         self.name = name
         self.adapter = adapter
         self.telescope = telescope
+
+
+class PersistenceFacade:
+
+    def __init__(self):
+        self.database = self.getDatabase()
+
+    def insertproject(self, name):
+        self.database.insertproject(name)
+
+    def getDatabase(self):
+        self.database = persistence.Database()
+        return self.database
+
+    def loadcameraconfig(self, tupel):
+        interface = tupel[1]
+        camera = createCamera(interface)
+        cameraconfig = CameraConfiguration(tupel[0], camera)
+        return cameraconfig
+
+
+    def loadproject(self, projectname):
+        project = Project(projectname)
+        cameraconfigtupel = self.database.getCameraconfigOf(projectname)
+        cameraconfig = self.loadcameraconfig(cameraconfigtupel)
+        project.cameraconfiguration = cameraconfig
+        return project
+
+    def loadprojects(self):
+        projects = []
+        projecttupels = self.database.getprojects()
+        projects = [self.loadproject(projecttupel[0]) for projecttupel in projecttupels]
+        return projects
