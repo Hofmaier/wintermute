@@ -45,8 +45,8 @@ class LoadProject(QtGui.QDialog):
             if project.name == self.projectList.currentItem():
                 self.session.currentProject = project
         self.close()
+        self.deleteLater()
         if isinstance( self.lastWidget, QtGui.QMainWindow ):
-            self.lastWidget.show()
             self.lastWidget.loadProject()
         else:
             from astrophoto.gui.MainWindow import Ui_MainWindow
@@ -57,5 +57,9 @@ class LoadProject(QtGui.QDialog):
             self.lastWidget.deleteLater()
 
     def showLastScreen(self):
-        self.deleteLater()
-        self.lastWidget.show()
+        if isinstance( self.lastWidget, QtGui.QMainWindow ):
+            self.close()
+            self.deleteLater()
+        else:
+            self.close()
+            self.lastWidget.show()
