@@ -5,7 +5,7 @@ class Database:
         self.connection = sqlite3.connect("workflow.db")
         self.connection.row_factory = sqlite3.Row
 
-    def init(self):
+    def initschema(self):
         cursor = self.connection.cursor()
         with open('astrophoto/workflowschema.sql','r') as f:
             schema = f.read();
