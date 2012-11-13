@@ -1,7 +1,7 @@
 import os.path
 import imp
 from astrophoto import camerainterface
-import persistence
+from astrophoto import persistence
 
 class Session:
     def __init__(self):
@@ -122,7 +122,7 @@ class Shotdescription:
         i = 0
         for i in range(nrOfShots):
             shot = Shot()
-            shotDescription.shotList.append(shot)
+            self.shotList.append(shot)
 
 class Shot:
     pass

@@ -74,10 +74,11 @@ class SpectralWidget(QtGui.QWidget):
     def saveAllSpectralColourWidgets(self):
         print("saveAllSpectralColourWidgets")
         for spectralColourWidget in self.spectralColourWidgetList:
-            nrOfShots = spectralColourWidget.numberOfImagesLineEdit.text()
+            nrOfShots = int(spectralColourWidget.numberOfImagesLineEdit.text())
             duration = spectralColourWidget.durationLineEdit.text()
-            imageTypComboBoxName = spectralColourWidget.imageTypeComboBox.text()
-            for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getFormats:
+            imageTypComboBoxName = spectralColourWidget.imageTypeComboBox.currentText()
+            imageTyp = None
+            for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getFormats():
                 if ImageType.toStr[imageTypCameraConfiguration] == imageTypComboBoxName:
                     imageTyp = imageTypCameraConfiguration
             spectralColourWidget.shotDescription.setProperties(nrOfShots, duration, imageTyp)

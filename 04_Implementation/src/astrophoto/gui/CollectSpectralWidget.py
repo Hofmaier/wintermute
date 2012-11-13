@@ -39,7 +39,7 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralLineEdit = QtGui.QLineEdit()
         self.spectralLineEdit.setEnabled(False)
-        self.spectralLineEdit.setText(self.shotDescription.spectralChannel.name)
+#        self.spectralLineEdit.setText(self.shotDescription.spectralChannel.name)
         self.spectralConfigLayout.addWidget(self.spectralLineEdit, 2, 5)
 
         self.spectralTimesLabel = QtGui.QLabel()
@@ -48,7 +48,7 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
         self.spectralTimesLineEdit.setEnabled(False)
-        self.spectralTimesLineEdit.setText(str(self.shotDescription.nrOfShots))
+        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shotList)))
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, 2, 9)
 
         self.spectralTakeButton = QtGui.QPushButton()
