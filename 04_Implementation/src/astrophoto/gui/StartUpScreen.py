@@ -17,6 +17,9 @@ class StartUpScreen(QtGui.QWidget):
         self.openNewProjectButton.setText("New Project")
         self.horizontalLayout.addWidget(self.openNewProjectButton)
 
+        self.session = workflow.Session()
+        self.session.workspace.load()
+
         self.loadProjectButton = QtGui.QPushButton()
         self.loadProjectButton.setText("Load Project")
         self.horizontalLayout.addWidget(self.loadProjectButton)
@@ -32,13 +35,11 @@ class StartUpScreen(QtGui.QWidget):
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), sys.exit)
 
     def newProject(self):
-        self.session = workflow.Session()
         self.newProject = NewProject(self.session, self)
         self.hide()
         self.newProject.show()
 
     def loadProject(self):
-        self.session = workflow.Session()
         self.loadProject = LoadProject(self.session, self)
         self.hide()
         self.loadProject.show()
