@@ -46,6 +46,7 @@ class CameraConfiguration:
     def __init__(self, name, camera=None):
         self.name = name
         self.camera = camera
+        self.interface = ''
         self.imageTypes = []
         self.spectralchannels = []
         if camera is not None:
@@ -86,6 +87,7 @@ class Project:
         self.opticalSystem = None
 
 class Workspace:
+
     def __init__(self):
         self.cameraconfigurations = []
         self.adapterList = []
@@ -94,7 +96,7 @@ class Workspace:
         self.projectList = []
 
 def createCameraConfiguration(name, interface, project):
-    print(interface)
+    self.camerainterface = interface
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
 
@@ -146,9 +148,13 @@ class PersistenceFacade:
 
     def __init__(self):
         self.database = self.getDatabase()
+        self.database.initschema()
 
     def insertproject(self, name):
         self.database.insertproject(name)
+
+    def insertcameraconfiguration(self, cameraconfig, project):
+        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
 
     def getDatabase(self):
         self.database = persistence.Database()
@@ -159,7 +165,6 @@ class PersistenceFacade:
         camera = createCamera(interface)
         cameraconfig = CameraConfiguration(tupel[0], camera)
         return cameraconfig
-
 
     def loadproject(self, projectname):
         project = Project(projectname)
