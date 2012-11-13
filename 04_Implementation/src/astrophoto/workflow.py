@@ -149,6 +149,7 @@ class PersistenceFacade:
     def __init__(self):
         self.database = self.getDatabase()
         self.database.initschema()
+        self.cameraconfigurations = []
 
     def insertproject(self, name):
         self.database.insertproject(name)
@@ -164,6 +165,7 @@ class PersistenceFacade:
         interface = tupel[1]
         camera = createCamera(interface)
         cameraconfig = CameraConfiguration(tupel[0], camera)
+        self.cameraconfigurations.append(cameraconfigs)
         return cameraconfig
 
     def loadproject(self, projectname):
