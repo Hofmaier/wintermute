@@ -113,6 +113,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 self.collectWidget.show()
 
     def closeApplication(self):
+        self.session.workspace.persFacade.insertproject(self.session.currentProject)
         sys.exit()
 
     def showLoadProjectWidget(self):
