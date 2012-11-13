@@ -91,7 +91,10 @@ class Workspace:
         self.adapterList = []
         self.telescopeList = []
         self.opticalSystemList = []
-        self.projectList = []
+        self.persFacade = PersistenceFacade()
+
+    def load(self):
+        self.projectList = self.persFacade.loadprojects()
 
 def createCameraConfiguration(name, interface, project):
     print(interface)
