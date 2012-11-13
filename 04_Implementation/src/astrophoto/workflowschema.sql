@@ -7,3 +7,12 @@ CREATE TABLE IF NOT EXISTS cameraconfigurations(
        project INTEGER,
        interface text
 );
+
+CREATE TABLE IF NOT EXISTS imagetypes(
+       identifier text
+);
+
+CREATE TABLE IF NOT EXISTS shotdescriptions(
+       imagetype INTEGER,
+       duration INTEGER	
+);

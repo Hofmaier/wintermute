@@ -96,6 +96,7 @@ class Workspace:
         self.persFacade = PersistenceFacade()
 
     def load(self):
+        camerainterface.getInterfaceNames()
         self.projectList = self.persFacade.loadprojects()
 
 def createCameraConfiguration(name, interface, project):
@@ -168,7 +169,7 @@ class PersistenceFacade:
         interface = tupel[1]
         camera = createCamera(interface)
         cameraconfig = CameraConfiguration(tupel[0], camera)
-        self.cameraconfigurations.append(cameraconfigs)
+        self.cameraconfigurations.append(cameraconfig)
         return cameraconfig
 
     def loadproject(self, projectname):

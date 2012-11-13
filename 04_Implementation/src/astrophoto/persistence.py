@@ -30,6 +30,8 @@ class Database:
         self.connection.commit()
         cursor.close()
 
+    def insertshotdescription(self, duration, 
+
     def getprojects(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT name FROM projects')

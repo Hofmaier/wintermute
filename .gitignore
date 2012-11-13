@@ -11,3 +11,4 @@ TAGS
 *.fits
 *.bak
 04_Implementation/src/extensions/build/
+*.db
