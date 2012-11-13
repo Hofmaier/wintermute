@@ -99,7 +99,7 @@ class Workspace:
         self.projectList = self.persFacade.loadprojects()
 
 def createCameraConfiguration(name, interface, project):
-    self.camerainterface = interface
+    camerainterface = interface
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
 
@@ -153,8 +153,8 @@ class PersistenceFacade:
         self.database = self.getDatabase()
         self.database.initschema()
 
-    def insertproject(self, name):
-        self.database.insertproject(name)
+    def insertproject(self, project):
+        self.database.insertproject(project.name)
 
     def insertcameraconfiguration(self, cameraconfig, project):
         self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
