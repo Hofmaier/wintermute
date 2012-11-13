@@ -1,5 +1,6 @@
 import sys, os
 from PyQt4 import QtCore, QtGui
+from astrophoto.camerainterface import ImageType
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -30,7 +31,7 @@ class SpectralColourWidget(QtGui.QWidget):
         self.imageTypeLabel.setText("Image Type:")
         self.spectralLayout.addWidget(self.imageTypeLabel, 2, 1)
         self.imageTypeComboBox = QtGui.QComboBox()
-        for imageTyp in self.session.currentProject.cameraConfiguration.camera.getImageTypes():
+        for imageTyp in self.session.currentProject.cameraConfiguration.camera.getFormats():
             self.imageTypeComboBox.addItem(ImageType.toStr[imageTyp])
         #self.imageTypeComboBox.addItems(self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr())
         self.spectralLayout.addWidget(self.imageTypeComboBox, 2, 3, 1, 7)

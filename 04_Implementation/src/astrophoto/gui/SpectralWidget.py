@@ -77,10 +77,9 @@ class SpectralWidget(QtGui.QWidget):
             nrOfShots = spectralColourWidget.numberOfImagesLineEdit.text()
             duration = spectralColourWidget.durationLineEdit.text()
             imageTypComboBoxName = spectralColourWidget.imageTypeComboBox.text()
-            for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getImageTypes:
+            for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getFormats:
                 if ImageType.toStr[imageTypCameraConfiguration] == imageTypComboBoxName:
                     imageTyp = imageTypCameraConfiguration
-            #spectralName = spectralColourWidget.spectralComboBox.currentText()
             spectralColourWidget.shotDescription.setProperties(nrOfShots, duration, imageTyp)
 
     def updateAllSpectralColourWidgets(self):

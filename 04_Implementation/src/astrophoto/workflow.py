@@ -94,6 +94,7 @@ class Workspace:
         self.projectList = []
 
 def createCameraConfiguration(name, interface, project):
+    print(interface)
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
 
