@@ -4,7 +4,7 @@ from astrophoto import camerainterface
 class TISCamera(camerainterface.Camera):
     def __init__(self):
         self.name = 'tis interface'
-        self.formats = []
+        self.formats = ['RGB Bayer']
         self.imageTypes = [camerainterface.ImageType.Bayermatrix, camerainterface.ImageType.RGB_Image]
         
     def getInterfaceName(self):
