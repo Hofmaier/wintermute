@@ -12,6 +12,7 @@ class Session:
         project = Project(name)
         self.workspace.projectList.append(project)
         self.currentProject = project
+        print("project created")
         return project
 
     def createCameraConfiguration(self, name, interface):
@@ -89,7 +90,6 @@ class Project:
 class Workspace:
 
     def __init__(self):
-        self.cameraconfigurations = []
         self.adapterList = []
         self.telescopeList = []
         self.opticalSystemList = []
@@ -98,6 +98,7 @@ class Workspace:
     def load(self):
         camerainterface.getInterfaceNames()
         self.projectList = self.persFacade.loadprojects()
+        self.cameraconfigurations = self.persFacade.cameraconfigurations
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
@@ -159,7 +160,7 @@ class PersistenceFacade:
         self.database.insertproject(project.name)
 
     def insertcameraconfiguration(self, cameraconfig, project):
-        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
+        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
 
     def getDatabase(self):
         self.database = persistence.Database()

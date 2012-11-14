@@ -113,7 +113,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 self.collectWidget.show()
 
     def closeApplication(self):
-        self.session.workspace.persFacade.insertproject(self.session.currentProject)
+        project = self.session.currentProject
+        print(self.session.currentProject.cameraconfiguration)
+        self.session.workspace.persFacade.insertproject(project)
+        self.session.workspace.persFacade.insertcameraconfiguration(project.cameraconfiguration, project)
         sys.exit()
 
     def showLoadProjectWidget(self):

@@ -30,7 +30,8 @@ class Database:
         self.connection.commit()
         cursor.close()
 
-    def insertshotdescription(self, duration, 
+    def insertshotdescription(self, duration):
+        pass 
 
     def getprojects(self):
         cursor = self.connection.cursor()
@@ -42,6 +43,7 @@ class Database:
     def getCameraconfigOf(self, project):
         cursor = self.connection.cursor()
         queryparameter = (project,)
+        print(queryparameter)
         cursor.execute("""
         SELECT cc.name, cc.interface FROM cameraconfigurations cc
         INNER JOIN projects ON cc.project = projects.ROWID

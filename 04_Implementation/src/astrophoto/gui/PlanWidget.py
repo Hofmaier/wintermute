@@ -155,6 +155,7 @@ class PlanWidget(QtGui.QWidget):
 
     def createCameraConfiguration(self, cameraName, currentItem):
         interFaceName = str(currentItem.text())
+        print(cameraName + ";" + interFaceName)
         self.session.createCameraConfiguration(cameraName, interFaceName)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
@@ -192,7 +193,8 @@ class PlanWidget(QtGui.QWidget):
         opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
         self.session.currentProject.opticalSystem = opticalSystem
         cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
-        self.session.currentProject.cameraConfiguration = cameraConfiguration
+        self.session.currentProject.cameraconfiguration = cameraConfiguration
+        print(self.session.currentProject.cameraConfiguration)
 
     def getCameraConfigurationByName(self, cameraName):
         for cameraConf in self.session.workspace.cameraconfigurations:
