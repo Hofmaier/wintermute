@@ -114,7 +114,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     def closeApplication(self):
         project = self.session.currentProject
-        print(self.session.currentProject.cameraconfiguration)
         self.session.workspace.persFacade.insertproject(project)
         self.session.workspace.persFacade.insertcameraconfiguration(project.cameraconfiguration, project)
         sys.exit()

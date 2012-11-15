@@ -157,7 +157,7 @@ class PlanWidget(QtGui.QWidget):
         interFaceName = str(currentItem.text())
         print(cameraName + ";" + interFaceName)
         camConfig = self.session.createCameraConfiguration(cameraName, interFaceName)
-        print("create" + camConfig.interface)
+        print("create" + interFaceName)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(configuration.name)

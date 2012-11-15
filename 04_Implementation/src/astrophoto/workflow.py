@@ -17,6 +17,7 @@ class Session:
 
     def createCameraConfiguration(self, name, interface):
         cameraConfiguration = createCameraConfiguration(name, interface, self.currentProject)
+        print("haaaaaalo" + interface)
         self.workspace.cameraconfigurations.append(cameraConfiguration)
         return cameraConfiguration
 
@@ -104,7 +105,7 @@ def createCameraConfiguration(name, interface, project):
     camerainterface = interface
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
-
+    cameraConfiguration.interface = interface
     project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
 
@@ -162,6 +163,9 @@ class PersistenceFacade:
     def insertcameraconfiguration(self, cameraconfig, project):
         self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
 
+    def insertOpticalSystem(self, adapter, telescope, project):
+        self.database.insertopticalsystem(adapter.name, telescope.name, project.name)
+
     def getDatabase(self):
         self.database = persistence.Database()
         return self.database
@@ -170,6 +174,7 @@ class PersistenceFacade:
         interface = tupel[1]
         camera = createCamera(interface)
         cameraconfig = CameraConfiguration(tupel[0], camera)
+        cameraconfig.interface = interface
         self.cameraconfigurations.append(cameraconfig)
         return cameraconfig
 

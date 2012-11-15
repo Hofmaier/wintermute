@@ -6,8 +6,7 @@ CREATE TABLE IF NOT EXISTS projects(
 CREATE TABLE IF NOT EXISTS cameraconfigurations(
        name text,
        project INTEGER,
-       interface text,
-       PRIMARY KEY(name)
+       interface text
 );
 
 CREATE TABLE IF NOT EXISTS imagetypes(
@@ -17,4 +16,18 @@ CREATE TABLE IF NOT EXISTS imagetypes(
 CREATE TABLE IF NOT EXISTS shotdescriptions(
        imagetype INTEGER,
        duration INTEGER	
+);
+
+CREATE TABLE IF NOT EXISTS adapters(
+       name text
+);
+
+CREATE TABLE IF NOT EXISTS telescopes(
+       name text
+);
+
+CREATE TABLE IF NOT EXISTS opticSystems(
+       adapterID INTEGER,
+       telescopeID INTEGER,
+       projectID INTEGER
 );
