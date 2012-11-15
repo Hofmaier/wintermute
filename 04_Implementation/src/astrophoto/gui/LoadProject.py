@@ -42,7 +42,7 @@ class LoadProject(QtGui.QDialog):
 
     def loadProject(self):
         for project in self.session.workspace.projectList:
-            if project.name == self.projectList.currentItem():
+            if project.name == self.projectList.currentItem().text():
                 self.session.currentProject = project
         self.close()
         self.deleteLater()
@@ -54,6 +54,7 @@ class LoadProject(QtGui.QDialog):
             self.mainWindow_ui = Ui_MainWindow()
             self.mainWindow_ui.setupUi(self.MainWindow, self.session)
             self.MainWindow.show()
+            self.mainWindow_ui.planWidget.loadProject()
             self.lastWidget.deleteLater()
 
     def showLastScreen(self):
