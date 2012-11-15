@@ -47,29 +47,30 @@ class CameraConfiguration:
         self.name = name
         self.camera = camera
         self.interface = ''
-        self.imageTypes = []
-        self.spectralchannels = []
+        self.imagetypes = []
+        self.imagingfunctions = {}
         if camera is not None:
             self.initImageTypes()
 
     def initImageTypes(self):
         for form in self.camera.formats:
             if(form == 'RGB Bayer'):
-                newImageType = ImageType()
+                rawbayer = 'Raw Bayer'
+                imagetypegroup = []
+
                 bayer_red_if = ImagingFunction()
-                bayer_red = SpectralChannel('bayer_red')
-                bayer_red_if.spectralchannel = bayer_red
-                self.spectralchannels.append(bayer_red)
-                newImageType.imagingfunctions.append(bayer_red_if)
+                bayer_red_if.spectralchannel =  SpectralChannel('bayer_red')
+                imagetypegroup.append(bayer_red_if)
 
                 bayer_green_if = ImagingFunction()
                 bayer_green_if.spectralchannel = SpectralChannel('bayer_green')
-                newImageType.imagingfunctions.append(bayer_green_if)
+                imagetypegroup.append(bayer_green_if)
 
                 bayer_blue_if = ImagingFunction()
                 bayer_blue_if.spectralchannel = SpectralChannel('bayer_blue')
+                imagetypegroup.append(bayer_blue_if)
 
-                self.imageTypes.append(newImageType)
+                self.imagetypes.append(rawbayer)
 
 class ImagingFunction:
     pass
@@ -158,7 +159,7 @@ class PersistenceFacade:
     def insertproject(self, project):
         self.database.insertproject(project.name)
 
-    def insertcameraconfiguration(self, cameraconfig, project):
+    def persistcameraconfiguration(self, cameraconfig, project):
         self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
 
     def getDatabase(self):

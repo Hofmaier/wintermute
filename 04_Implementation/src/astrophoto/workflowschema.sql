@@ -16,3 +16,9 @@ CREATE TABLE IF NOT EXISTS shotdescriptions(
        imagetype INTEGER,
        duration INTEGER	
 );
+
+CREATE TABLE IF NOT EXISTS imagingfunctions(
+       spectralchanneluuid text,
+       spatialfunction text
+);
+
