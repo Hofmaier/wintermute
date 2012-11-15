@@ -13,7 +13,7 @@ class Database:
 
     def insertproject(self, name):
         cursor = self.connection.cursor()
-        cursor.execute('INSERT INTO projects (name) VALUES (?)', (name,))
+        cursor.execute('INSERT OR IGNORE INTO projects (name) VALUES (?)', (name,))
         self.connection.commit()
         cursor.close()
 
@@ -30,6 +30,18 @@ class Database:
         self.connection.commit()
         cursor.close()
 
+    def insertshotdescription(self, duration):
+        pass 
+
+    def insertOpticalSystem(self, adapterName, telescopeName, projectName):
+        pass
+
+    def insertAdapter(self, adapterName):
+        pass
+
+    def insertTelescope(self, telescopeName):
+        pass
+
     def getprojects(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT name FROM projects')
@@ -40,6 +52,7 @@ class Database:
     def getCameraconfigOf(self, project):
         cursor = self.connection.cursor()
         queryparameter = (project,)
+        print(queryparameter)
         cursor.execute("""
         SELECT cc.name, cc.interface FROM cameraconfigurations cc
         INNER JOIN projects ON cc.project = projects.ROWID
@@ -61,6 +74,7 @@ class Database:
         camera = cursor.fetchone()
         cursor.close()
         return camera
+
 
 def createDatabase():
     database = Database()

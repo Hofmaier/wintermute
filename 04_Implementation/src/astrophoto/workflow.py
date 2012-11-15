@@ -12,10 +12,12 @@ class Session:
         project = Project(name)
         self.workspace.projectList.append(project)
         self.currentProject = project
+        print("project created")
         return project
 
     def createCameraConfiguration(self, name, interface):
         cameraConfiguration = createCameraConfiguration(name, interface, self.currentProject)
+        print("haaaaaalo" + interface)
         self.workspace.cameraconfigurations.append(cameraConfiguration)
         return cameraConfiguration
 
@@ -90,7 +92,6 @@ class Project:
 class Workspace:
 
     def __init__(self):
-        self.cameraconfigurations = []
         self.adapterList = []
         self.telescopeList = []
         self.opticalSystemList = []
@@ -99,12 +100,13 @@ class Workspace:
     def load(self):
         camerainterface.getInterfaceNames()
         self.projectList = self.persFacade.loadprojects()
+        self.cameraconfigurations = self.persFacade.cameraconfigurations
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
-
+    cameraConfiguration.interface = interface
     project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
 
@@ -159,8 +161,16 @@ class PersistenceFacade:
     def insertproject(self, project):
         self.database.insertproject(project.name)
 
+<<<<<<< HEAD
     def persistcameraconfiguration(self, cameraconfig, project):
         self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
+=======
+    def insertcameraconfiguration(self, cameraconfig, project):
+        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
+
+    def insertOpticalSystem(self, adapter, telescope, project):
+        self.database.insertopticalsystem(adapter.name, telescope.name, project.name)
+>>>>>>> 39c5820d8948670daf0b2b9e3a1155b383d52213
 
     def getDatabase(self):
         self.database = persistence.Database()
@@ -170,6 +180,7 @@ class PersistenceFacade:
         interface = tupel[1]
         camera = createCamera(interface)
         cameraconfig = CameraConfiguration(tupel[0], camera)
+        cameraconfig.interface = interface
         self.cameraconfigurations.append(cameraconfig)
         return cameraconfig
 

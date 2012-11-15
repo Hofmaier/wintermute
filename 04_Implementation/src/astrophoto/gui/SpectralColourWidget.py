@@ -48,14 +48,14 @@ class SpectralColourWidget(QtGui.QWidget):
         self.numberOfImagesLabel.setText("Number of Images:")
         self.spectralLayout.addWidget(self.numberOfImagesLabel, 3, 5)
         self.numberOfImagesLineEdit = QtGui.QLineEdit()
-        self.numberOfImagesLineEdit.setValidator(self.numberValidator)
+#        self.numberOfImagesLineEdit.setValidator(self.numberValidator)
         self.spectralLayout.addWidget(self.numberOfImagesLineEdit, 3, 7, 1, 3)
 
         self.durationLabel = QtGui.QLabel()
         self.durationLabel.setText("Duration:")
         self.spectralLayout.addWidget(self.durationLabel, 4, 1)
         self.durationLineEdit = QtGui.QLineEdit()
-        self.durationLineEdit.setValidator(self.numberValidator)
+#        self.durationLineEdit.setValidator(self.numberValidator)
         self.spectralLayout.addWidget(self.durationLineEdit, 4, 3)
 
 #        self.binningLabel = QtGui.QLabel()

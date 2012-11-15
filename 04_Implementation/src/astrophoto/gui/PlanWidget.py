@@ -155,7 +155,9 @@ class PlanWidget(QtGui.QWidget):
 
     def createCameraConfiguration(self, cameraName, currentItem):
         interFaceName = str(currentItem.text())
-        self.session.createCameraConfiguration(cameraName, interFaceName)
+        print(cameraName + ";" + interFaceName)
+        camConfig = self.session.createCameraConfiguration(cameraName, interFaceName)
+        print("create" + interFaceName)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(configuration.name)
@@ -192,7 +194,8 @@ class PlanWidget(QtGui.QWidget):
         opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
         self.session.currentProject.opticalSystem = opticalSystem
         cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
-        self.session.currentProject.cameraConfiguration = cameraConfiguration
+        self.session.currentProject.cameraconfiguration = cameraConfiguration
+        print("savePlan " + self.session.currentProject.cameraconfiguration.interface)
 
     def getCameraConfigurationByName(self, cameraName):
         for cameraConf in self.session.workspace.cameraconfigurations:
@@ -210,9 +213,10 @@ class PlanWidget(QtGui.QWidget):
                 return telescope
 
     def loadProject(self):
-        opticalSystem = self.session.currentProject.opticalSystem
-        self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
-        self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
-        cameraConfiguration = self.session.currentProject.cameraConfiguration
-        self.deviceComboBox.setCurrentIndex(self.deviceBomboBox.findText(cameraConfiguration.name))
+        #opticalSystem = self.session.currentProject.opticalSystem
+        #self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
+        #self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
+        cameraConfiguration = self.session.currentProject.cameraconfiguration
+        print("loadConfig: " + cameraConfiguration.name)
+        self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
         
