@@ -194,11 +194,16 @@ class PersistenceFacade:
         self.cameraconfigurations.append(cameraconfig)
         return cameraconfig
 
+    def loadopticalsystem(self, tupel):
+        return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
+    
     def loadproject(self, projectname):
         project = Project(projectname)
         cameraconfigtupel = self.database.getCameraconfigOf(projectname)
         cameraconfig = self.loadcameraconfig(cameraconfigtupel)
         project.cameraconfiguration = cameraconfig
+        opticalSystemTupel = self.database.getOpticalsystemOf(project)
+        project.opticalSystem = self.loadopticalsystem(opticalSystemTupel)
         return project
 
     def loadprojects(self):

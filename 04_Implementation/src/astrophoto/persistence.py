@@ -102,6 +102,18 @@ class Database:
         cursor.close()
         return camera
 
+    def getOpticalsystemOf(self, project):
+        cursor = self.connection.cursor()
+        queryparameter = (project.name,)
+        cursor.execute("""
+        SELECT adapterName, telescopeName FROM opticSystems
+        INNER JOIN projects
+        ON projects.opticalSystemID = opticSystems.ROWID
+        WHERE projects.name = ?
+        """, queryparameter)
+        opticSystemTupel = cursor.fetchone()
+        cursor.close()
+        return opticSystemTupel
 
 def createDatabase():
     database = Database()
