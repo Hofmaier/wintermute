@@ -75,8 +75,13 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.spectralWidget.hide()
         self.horizontalLayout.addWidget(self.spectralWidget)
 
-
         self.retranslateUi(MainWindow)
+
+        self.frameGeometry = MainWindow.frameGeometry()
+        desktopGeometry = QtGui.QDesktopWidget().availableGeometry().center()
+        self.frameGeometry.moveCenter(desktopGeometry)
+        MainWindow.move(self.frameGeometry.topLeft())
+
         QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL(_fromUtf8("itemClicked(QListWidgetItem*)")), self.menuEntryChanged)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
