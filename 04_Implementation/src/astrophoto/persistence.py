@@ -11,9 +11,14 @@ class Database:
             schema = f.read();
         cursor.executescript(schema)
 
-    def insertproject(self, name):
+    def insertproject(self, name, opticalSystemId):
         cursor = self.connection.cursor()
-        cursor.execute('INSERT INTO projects (name) VALUES (?)', (name,))
+        cursor.execute('SELECT * FROM projects WHERE name = ?', (name,))
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO projects (name, opticalSystemID) VALUES (?, ?)', (name, opticalSystemId, ))
+        else:
+            cursor.execute('UPDATE projects set opticalSystemID = ? WHERE name = ?', (opticalSystemId, name, ))
         self.connection.commit()
         cursor.close()
 
@@ -37,14 +42,36 @@ class Database:
     def insertshotdescription(self, duration):
         pass
 
-    def insertOpticalSystem(self, adapterName, telescopeName, projectName):
-        pass
+    def insertOpticalSystem(self, adapterName, telescopeName):
+        cursor = self.connection.cursor()
+        queryparameter = (adapterName, telescopeName, )
+        cursor.execute('SELECT ROWID FROM opticSystems WHERE adapterName = ? AND telescopeName = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO opticSystems (adapterName, telescopeName) VALUES (?,?)', queryparameter)
+            cursor.execute('SELECT last_insert_rowid()')
+            exists = cursor.fetchone()
+        self.connection.commit()
+        cursor.close()
+        return exists[0]    
 
     def insertAdapter(self, adapterName):
-        pass
+        cursor = self.connection.cursor()
+        queryparameter = (adapterName, )
+        cursor.execute('SELECT name FROM adapters WHERE name = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO adapters (name) VALUES (?)', queryparameter)
+        cursor.close()
 
     def insertTelescope(self, telescopeName):
-        pass
+        cursor = self.connection.cursor()
+        queryparameter = (telescopeName, )
+        cursor.execute('SELECT name FROM telescopes WHERE name = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO telescopes (name) VALUES (?)', queryparameter)
+        cursor.close()
 
     def getprojects(self):
         cursor = self.connection.cursor()
@@ -79,6 +106,18 @@ class Database:
         cursor.close()
         return camera
 
+    def getOpticalsystemOf(self, project):
+        cursor = self.connection.cursor()
+        queryparameter = (project.name,)
+        cursor.execute("""
+        SELECT adapterName, telescopeName FROM opticSystems
+        INNER JOIN projects
+        ON projects.opticalSystemID = opticSystems.ROWID
+        WHERE projects.name = ?
+        """, queryparameter)
+        opticSystemTupel = cursor.fetchone()
+        cursor.close()
+        return opticSystemTupel
 
 def createDatabase():
     database = Database()

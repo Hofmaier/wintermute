@@ -11,7 +11,7 @@ class SpectralColourWidget(QtGui.QWidget):
     def __init__(self, mainGui, session, shotDescription):
         super(SpectralColourWidget, self).__init__(mainGui)
         self.spectralLayout = QtGui.QGridLayout()
-        self.numberValidator = QtGui.QIntValidator(1, 100)
+#        self.numberValidator = QtGui.QIntValidator(1, 100)
         self.shotDescription = shotDescription
         self.session = session
 
@@ -31,7 +31,7 @@ class SpectralColourWidget(QtGui.QWidget):
         self.imageTypeLabel.setText("Image Type:")
         self.spectralLayout.addWidget(self.imageTypeLabel, 2, 1)
         self.imageTypeComboBox = QtGui.QComboBox()
-        for imageTyp in self.session.currentProject.cameraConfiguration.camera.getFormats():
+        for imageTyp in self.session.currentProject.cameraconfiguration.camera.getFormats():
             self.imageTypeComboBox.addItem(ImageType.toStr[imageTyp])
         #self.imageTypeComboBox.addItems(self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr())
         self.spectralLayout.addWidget(self.imageTypeComboBox, 2, 3, 1, 7)
@@ -40,8 +40,8 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLabel.setText("Spectral:")
         self.spectralLayout.addWidget(self.spectralLabel, 3, 1)
         self.spectralComboBox = QtGui.QComboBox()
-        for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
-            self.spectralComboBox.addItem(spectralChannel.name)
+#        for spectralChannel in self.session.currentProject.cameraconfiguration.spectralchannels:
+#            self.spectralComboBox.addItem(spectralChannel.name)
         self.spectralLayout.addWidget(self.spectralComboBox, 3, 3)
         
         self.numberOfImagesLabel = QtGui.QLabel()

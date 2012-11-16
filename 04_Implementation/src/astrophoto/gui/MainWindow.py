@@ -114,8 +114,12 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
     def closeApplication(self):
         project = self.session.currentProject
+        for adapter in self.session.workspace.adapterList:
+            self.session.workspace.persFacade.persistAdapter(adapter)
+        for telescope in self.session.workspace.telescopeList:
+            self.session.workspace.persFacade.persistTelescope(telescope)
         self.session.workspace.persFacade.insertproject(project)
-        self.session.workspace.persFacade.insertcameraconfiguration(project.cameraconfiguration, project)
+        self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
         sys.exit()
 
     def showLoadProjectWidget(self):

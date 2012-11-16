@@ -85,8 +85,8 @@ class SpectralWidget(QtGui.QWidget):
 
     def updateAllSpectralColourWidgets(self):
         for spectralColourWidget in self.spectralColourWidgetList:
-            if not spectralColourWidget.imageTypeComboBox.currentText() in self.session.currentProject.cameraConfiguration.camera.getImageTypesAsStr():
+            if not spectralColourWidget.imageTypeComboBox.currentText() in self.session.currentProject.cameraconfiguration.camera.getImageTypesAsStr():
                 print("Auswahl nicht mehr moeglich")
-            for spectralChannel in self.session.currentProject.cameraConfiguration.spectralchannels:
-                if not spectralColourWidget.spectralComboBox.currentText() == spectralChannel.name:
-                    print("Auswahl nicht mehr moeglich")
+#            for spectralChannel in self.session.currentProject.cameraconfiguration.spectralchannels:
+#                if not spectralColourWidget.spectralComboBox.currentText() == spectralChannel.name:
+#                    print("Auswahl nicht mehr moeglich")

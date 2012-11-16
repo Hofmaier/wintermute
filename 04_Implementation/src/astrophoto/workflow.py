@@ -33,6 +33,7 @@ class Session:
     def createAdapter(self, name):
         adapter = Adapter(name)
         self.workspace.adapterList.append(adapter)
+        print("adding Adapter: " + name)
         return adapter
 
     def createTelescope(self, name):
@@ -170,9 +171,11 @@ class PersistenceFacade:
         self.cameraconfigurations = []
 
     def insertproject(self, project):
-        self.database.insertproject(project.name)
+        rowId = self.persistOpticalSystem(project.opticalSystem.adapter, project.opticalSystem.telescope)
+        self.database.insertproject(project.name, rowId)
 
     def persistcameraconfiguration(self, cameraconfig, project):
+
         configID = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
         imagingfunctions = cameraconfig.imagingfunctions
         imagetypes = list(imagingfunctions.keys())
@@ -182,8 +185,17 @@ class PersistenceFacade:
                 spectraluuid = imgfunc.spectralchannel.uuid
                 self.database.insertimagingfunction(spectraluuid, imgfunc.spatialfunction, imagetype, configID)
 
-    def insertOpticalSystem(self, adapter, telescope, project):
-        self.database.insertopticalsystem(adapter.name, telescope.name, project.name)
+    def persistOpticalSystem(self, adapter, telescope):
+        return self.database.insertopticalsystem(adapter.name, telescope.name)
+
+    def persistAdapter(self, adapter):
+        self.database.insertAdapter(adapter.name)
+
+    def persistTelescope(self, telescope):
+        self.database.insertTelescope(telescope.name)
+
+    def persistOpticalSystem(self, adapter, telescope):
+        self.database.insertOpticalSystem(adapter.name, telescope.name)
 
     def getDatabase(self):
         self.database = persistence.Database()
@@ -197,11 +209,16 @@ class PersistenceFacade:
         self.cameraconfigurations.append(cameraconfig)
         return cameraconfig
 
+    def loadopticalsystem(self, tupel):
+        return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
+    
     def loadproject(self, projectname):
         project = Project(projectname)
         cameraconfigtupel = self.database.getCameraconfigOf(projectname)
         cameraconfig = self.loadcameraconfig(cameraconfigtupel)
         project.cameraconfiguration = cameraconfig
+        opticalSystemTupel = self.database.getOpticalsystemOf(project)
+        project.opticalSystem = self.loadopticalsystem(opticalSystemTupel)
         return project
 
     def loadprojects(self):
