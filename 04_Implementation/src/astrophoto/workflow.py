@@ -171,8 +171,7 @@ class PersistenceFacade:
         self.cameraconfigurations = []
 
     def insertproject(self, project):
-        rowId = self.persistOpticalSystem(project.opticalSystem.adapter, project.opticalSystem.telescope)
-        self.database.insertproject(project.name, rowId)
+        self.database.insertproject(project.name)
 
     def persistcameraconfiguration(self, cameraconfig, project):
 
