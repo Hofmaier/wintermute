@@ -11,13 +11,18 @@ class Database:
             schema = f.read();
         cursor.executescript(schema)
 
-    def insertproject(self, name):
+    def insertproject(self, name, opticalSystemId):
         cursor = self.connection.cursor()
-        cursor.execute('INSERT OR IGNORE INTO projects (name) VALUES (?)', (name,))
+        cursor.execute('SELECT * FROM projects WHERE name = ?', (name,))
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO projects (name, opticalSystemID) VALUES (?, ?)', (name, opticalSystemId, ))
+        else:
+            cursor.execute('UPDATE projects set opticalSystemID = ? WHERE name = ?', (opticalSystemId, name, ))
         self.connection.commit()
         cursor.close()
 
-    def insertcameraconfiguration(self, name, project, interface):
+    def persistcameraconfiguration(self, name, project, interface):
         cursor = self.connection.cursor()
         queryparameter = (project,)
         cursor.execute("""

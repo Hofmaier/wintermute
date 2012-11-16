@@ -58,7 +58,7 @@ class CameraConfiguration:
     def initImageTypes(self):
         for form in self.camera.formats:
             if(form == 'RGB Bayer'):
-                rawbayer = 'Raw Bayer'
+                rawbayer = 'RAW Bayer'
                 imagetypegroup = []
 
                 bayer_red_if = ImagingFunction()
@@ -74,6 +74,8 @@ class CameraConfiguration:
                 imagetypegroup.append(bayer_blue_if)
 
                 self.imagetypes.append(rawbayer)
+
+                self.imagingfunctions[rawbayer]=imagetypegroup
 
 class ImagingFunction:
     pass
@@ -97,6 +99,8 @@ class Workspace:
         self.telescopeList = []
         self.opticalSystemList = []
         self.persFacade = PersistenceFacade()
+        self.cameraconfigurations = []
+        self.projectList = []
 
     def load(self):
         camerainterface.getInterfaceNames()
@@ -160,10 +164,11 @@ class PersistenceFacade:
         self.cameraconfigurations = []
 
     def insertproject(self, project):
-        self.database.insertproject(project.name)
+        rowId = self.persistOpticalSystem(project.opticalSystem.adapter, project.opticalSystem.telescope)
+        self.database.insertproject(project.name, rowId)
 
     def persistcameraconfiguration(self, cameraconfig, project):
-        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
+        self.database.persistcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
 
     def persistOpticalSystem(self, adapter, telescope):
         return self.database.insertopticalsystem(adapter.name, telescope.name)
@@ -173,6 +178,9 @@ class PersistenceFacade:
 
     def persistTelescope(self, telescope):
         self.database.insertTelescope(telescope.name)
+
+    def persistOpticalSystem(self, adapter, telescope):
+        self.database.insertOpticalSystem(adapter.name, telescope.name)
 
     def getDatabase(self):
         self.database = persistence.Database()
