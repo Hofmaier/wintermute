@@ -150,9 +150,7 @@ class PlanWidget(QtGui.QWidget):
 
     def createCameraConfiguration(self, cameraName, currentItem):
         interFaceName = str(currentItem.text())
-        print(cameraName + ";" + interFaceName)
         camConfig = self.session.createCameraConfiguration(cameraName, interFaceName)
-        print("create" + interFaceName)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(configuration.name)
@@ -160,7 +158,6 @@ class PlanWidget(QtGui.QWidget):
 
     def createAdapter(self, name):
         self.session.createAdapter(name)
-        print("createAdapter: " + name)
         self.adapterComboBox.clear()
         for adapter in self.session.workspace.adapterList:
             self.adapterComboBox.addItem(adapter.name)
@@ -191,7 +188,6 @@ class PlanWidget(QtGui.QWidget):
         self.session.currentProject.opticalSystem = opticalSystem
         cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
         self.session.currentProject.cameraconfiguration = cameraConfiguration
-        print("savePlan " + self.session.currentProject.cameraconfiguration.interface)
 
     def getCameraConfigurationByName(self, cameraName):
         for cameraConf in self.session.workspace.cameraconfigurations:
@@ -213,6 +209,5 @@ class PlanWidget(QtGui.QWidget):
         #self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
         #self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
         cameraConfiguration = self.session.currentProject.cameraconfiguration
-        print("loadConfig: " + cameraConfiguration.name)
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
         

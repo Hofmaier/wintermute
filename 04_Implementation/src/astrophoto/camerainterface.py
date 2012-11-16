@@ -17,7 +17,6 @@ class Camera:
         return names
 
     def capture(self, gain, shutter):
-        print("CAPTURE!")
         pass
 
 class ImageType:
