@@ -32,6 +32,7 @@ class Session:
     def createAdapter(self, name):
         adapter = Adapter(name)
         self.workspace.adapterList.append(adapter)
+        print("adding Adapter: " + name)
         return adapter
 
     def createTelescope(self, name):
@@ -161,16 +162,17 @@ class PersistenceFacade:
     def insertproject(self, project):
         self.database.insertproject(project.name)
 
-<<<<<<< HEAD
     def persistcameraconfiguration(self, cameraconfig, project):
-        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
-=======
-    def insertcameraconfiguration(self, cameraconfig, project):
         self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.interface )
 
-    def insertOpticalSystem(self, adapter, telescope, project):
-        self.database.insertopticalsystem(adapter.name, telescope.name, project.name)
->>>>>>> 39c5820d8948670daf0b2b9e3a1155b383d52213
+    def persistOpticalSystem(self, adapter, telescope):
+        return self.database.insertopticalsystem(adapter.name, telescope.name)
+
+    def persistAdapter(self, adapter):
+        self.database.insertAdapter(adapter.name)
+
+    def persistTelescope(self, telescope):
+        self.database.insertTelescope(telescope.name)
 
     def getDatabase(self):
         self.database = persistence.Database()

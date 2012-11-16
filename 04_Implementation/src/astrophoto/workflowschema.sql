@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS projects(
        name text,
+       opticalSystemID INTEGER,
        PRIMARY KEY(name)
 );
 
@@ -34,8 +35,7 @@ CREATE TABLE IF NOT EXISTS telescopes(
 );
 
 CREATE TABLE IF NOT EXISTS opticSystems(
-       adapterID INTEGER,
-       telescopeID INTEGER,
-       projectID INTEGER
+       adapterName text,
+       telescopeName text
 );
 

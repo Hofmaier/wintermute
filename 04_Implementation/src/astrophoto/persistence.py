@@ -33,14 +33,36 @@ class Database:
     def insertshotdescription(self, duration):
         pass 
 
-    def insertOpticalSystem(self, adapterName, telescopeName, projectName):
-        pass
+    def insertOpticalSystem(self, adapterName, telescopeName):
+        cursor = self.connection.cursor()
+        queryparameter = (adapterName, telescopeName, )
+        cursor.execute('SELECT ROWID FROM opticSystems WHERE adapterName = ? AND telescopeName = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO opticSystems (adapterName, telescopeName) VALUES (?,?)', queryparameter)
+            cursor.execute('SELECT last_insert_rowid()')
+            exists = cursor.fetchone()
+        self.connection.commit()
+        cursor.close()
+        return exists[0]    
 
     def insertAdapter(self, adapterName):
-        pass
+        cursor = self.connection.cursor()
+        queryparameter = (adapterName, )
+        cursor.execute('SELECT name FROM adapters WHERE name = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO adapters (name) VALUES (?)', queryparameter)
+        cursor.close()
 
     def insertTelescope(self, telescopeName):
-        pass
+        cursor = self.connection.cursor()
+        queryparameter = (telescopeName, )
+        cursor.execute('SELECT name FROM telescopes WHERE name = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO telescopes (name) VALUES (?)', queryparameter)
+        cursor.close()
 
     def getprojects(self):
         cursor = self.connection.cursor()
