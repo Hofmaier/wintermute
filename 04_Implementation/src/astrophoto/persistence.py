@@ -11,14 +11,10 @@ class Database:
             schema = f.read();
         cursor.executescript(schema)
 
-    def insertproject(self, name, opticalSystemId):
+    def insertproject(self, name):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM projects WHERE name = ?', (name,))
-        exists = cursor.fetchone()
-        if exists is None:
-            cursor.execute('INSERT INTO projects (name, opticalSystemID) VALUES (?, ?)', (name, opticalSystemId, ))
-        else:
-            cursor.execute('UPDATE projects set opticalSystemID = ? WHERE name = ?', (opticalSystemId, name, ))
+        cursor.execute('INSERT INTO projects (name) VALUES (?)', (name, ))
+       
         self.connection.commit()
         cursor.close()
 
