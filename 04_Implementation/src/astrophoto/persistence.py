@@ -17,21 +17,25 @@ class Database:
         self.connection.commit()
         cursor.close()
 
-    def persistcameraconfiguration(self, name, project, interface):
+    def insertcameraconfiguration(self, name, interface):
         cursor = self.connection.cursor()
-        queryparameter = (project,)
-        cursor.execute("""
-        SELECT ROWID FROM projects
-        WHERE name = ?
-        """, queryparameter)
-        projectrow = cursor.fetchone()
 
-        cursor.execute('INSERT INTO cameraconfigurations (name, project, interface) VALUES (?, ?, ?)', ( name, projectrow[0], interface ))
+        cursor.execute('INSERT INTO cameraconfigurations (name, interface) VALUES (?, ?)', ( name, interface ))
         self.connection.commit()
-        cursor.close()
+        return cursor.lastrowid
+
+    def insertimagingfunction(self, spectraluuid, spatialfunc, imagetype, configid):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        INSERT INTO imagingfunctions
+        (spectralchanneluuid, spatialfunction, imagetype, cameraconfiguration)
+        VALUES (?,?,?,?)
+        """, (spectraluuid, spatialfunc, imagetype, configid))
+        self.connection.commit()
+        
 
     def insertshotdescription(self, duration):
-        pass 
+        pass
 
     def insertOpticalSystem(self, adapterName, telescopeName, projectName):
         pass

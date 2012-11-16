@@ -156,3 +156,8 @@ class TestPersistenceFacade(unittest.TestCase):
         projects = self.persistencefacade.loadprojects()
         self.assertIsNotNone(projects)
         self.assertEqual(1, len(projects))
+
+class TestSpectralChannel(unittest.TestCase):
+    def test_ctor(self):
+        spectralchannel = workflow.SpectralChannel('bayer_red')
+        self.assertIsNotNone(spectralchannel.uuid)

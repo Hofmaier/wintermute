@@ -1,5 +1,6 @@
 import os.path
 import imp
+import uuid
 from astrophoto import camerainterface
 from astrophoto import persistence
 
@@ -61,14 +62,17 @@ class CameraConfiguration:
                 imagetypegroup = []
 
                 bayer_red_if = ImagingFunction()
+                bayer_red_if.spatialfunction = 'bayer_red'
                 bayer_red_if.spectralchannel =  SpectralChannel('bayer_red')
                 imagetypegroup.append(bayer_red_if)
 
                 bayer_green_if = ImagingFunction()
+                bayer_green_if.spatialfunction = 'bayer_green'
                 bayer_green_if.spectralchannel = SpectralChannel('bayer_green')
                 imagetypegroup.append(bayer_green_if)
 
                 bayer_blue_if = ImagingFunction()
+                bayer_blue_if.spatialfunction = 'bayer_blue'
                 bayer_blue_if.spectralchannel = SpectralChannel('bayer_blue')
                 imagetypegroup.append(bayer_blue_if)
 
@@ -77,7 +81,9 @@ class CameraConfiguration:
                 self.imagingfunctions[rawbayer]=imagetypegroup
 
 class ImagingFunction:
-    pass
+    def __init__(self):
+        self.spatialfunction = ''
+        self.spectralchannel = None
 
 class ImageType:
     def __init__(self):
@@ -124,6 +130,7 @@ def createCamera(interface):
 class SpectralChannel:
     def __init__(self, name=''):
         self.identifier = name
+        self.uuid = ''
 
 class Shotdescription:
     def __init__(self):
@@ -166,7 +173,14 @@ class PersistenceFacade:
         self.database.insertproject(project.name)
 
     def persistcameraconfiguration(self, cameraconfig, project):
-        self.database.insertcameraconfiguration( cameraconfig.name, project.name, cameraconfig.camerainterface )
+        configID = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
+        imagingfunctions = cameraconfig.imagingfunctions
+        imagetypes = list(imagingfunctions.keys())
+        for imagetype in imagetypes:
+            imagingfunctionsOfimagetype = imagingfunctions[imagetype]
+            for imgfunc in imagingfunctionsOfimagetype:
+                spectraluuid = imgfunc.spectralchannel.uuid
+                self.database.insertimagingfunction(spectraluuid, imgfunc.spatialfunction, imagetype, configID)
 
     def insertOpticalSystem(self, adapter, telescope, project):
         self.database.insertopticalsystem(adapter.name, telescope.name, project.name)
