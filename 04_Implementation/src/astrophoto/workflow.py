@@ -50,8 +50,6 @@ class CameraConfiguration:
         self.interface = ''
         self.imagetypes = []
         self.imagingfunctions = {}
-        if camera is not None:
-            self.initImageTypes()
 
     def initImageTypes(self):
         for form in self.camera.formats:
@@ -114,6 +112,7 @@ def createCameraConfiguration(name, interface, project):
     camerainterface = interface
     camera = createCamera(interface)
     cameraConfiguration = CameraConfiguration(name, camera)
+    cameraConfiguration.initImageTypes()
     cameraConfiguration.interface = interface
     project.cameraConfiguration = cameraConfiguration
     return cameraConfiguration
@@ -197,14 +196,17 @@ class PersistenceFacade:
         self.database = persistence.Database()
         return self.database
 
-    def loadcameraconfig(self, tupel):
-        interface = tupel[1]
+    def loadcameraconfig(self, rowid, name, interface):
         camera = createCamera(interface)
-        cameraconfig = CameraConfiguration(tupel[0], camera)
+        cameraconfig = CameraConfiguration(name, camera)
         cameraconfig.interface = interface
-        self.cameraconfigurations.append(cameraconfig)
+        
+       
         return cameraconfig
-    
+
+    def loadopticalsystem(self, tupel):
+        return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
+
     def loadproject(self, projectname):
         project = Project(projectname)
         cameraconfigtupel = self.database.getCameraconfigOf(projectname)
@@ -214,6 +216,10 @@ class PersistenceFacade:
 
     def loadprojects(self):
         projects = []
-        projecttupels = self.database.getprojects()
-        projects = [self.loadproject(projecttupel[0]) for projecttupel in projecttupels]
+        projecttuples = self.database.getprojects()
+        projects = [self.loadproject(projecttupel[0]) for projecttupel in projecttuples]
         return projects
+
+    def loadcameraconfigurations(self):
+        configtuples = self.database.getcameraconfigurations()
+        cameraconfigs = [loadcameraconfig(*configtupel)for configtupel in configtuples]

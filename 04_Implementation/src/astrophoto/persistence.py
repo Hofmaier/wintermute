@@ -33,7 +33,7 @@ class Database:
         VALUES (?,?,?,?)
         """, (spectraluuid, spatialfunc, imagetype, configid))
         self.connection.commit()
-        
+
 
     def insertshotdescription(self, duration):
         pass
@@ -49,7 +49,7 @@ class Database:
             exists = cursor.fetchone()
         self.connection.commit()
         cursor.close()
-        return exists[0]    
+        return exists[0]
 
     def insertAdapter(self, adapterName):
         cursor = self.connection.cursor()
@@ -76,6 +76,15 @@ class Database:
         cursor.close()
         return projecttuples
 
+    def getcameraconfigurations(self):
+        cursor =self.connection.cursor()
+        cursor.execute("""
+        SELECT ROWID, name, interface FROM cameraconfigurations
+        """)
+        configtuples = cursor.fetchall()
+        cursor.close()
+        return configtuples
+
     def getCameraconfigOf(self, project):
         cursor = self.connection.cursor()
         queryparameter = (project,)
@@ -89,19 +98,6 @@ class Database:
         cursor.close()
         return cameraconfig
 
-    def getCameraOf(self, cameraconfig):
-        cursor = self.connection.cursor()
-        queryparamater = (cameraconfig,)
-        cursor.execute("""
-        SELECT interface FROM cameras
-        INNER JOIN cameraconfigurations
-        ON cameras.cameraconfig = cameraconfigurations.ROWID
-        WHERE cameraconfigurations.name = ?
-        """, queryparameter)
-        camera = cursor.fetchone()
-        cursor.close()
-        return camera
-
     def getOpticalsystemOf(self, project):
         cursor = self.connection.cursor()
         queryparameter = (project.name,)
@@ -114,6 +110,9 @@ class Database:
         opticSystemTupel = cursor.fetchone()
         cursor.close()
         return opticSystemTupel
+
+
+
 
 def createDatabase():
     database = Database()
