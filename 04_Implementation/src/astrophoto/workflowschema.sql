@@ -1,12 +1,11 @@
 CREATE TABLE IF NOT EXISTS projects(
        name text,
-       PRIMARY KEY(name)
+       cameraconfiguration INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS cameraconfigurations(
-       name text,
-       project INTEGER,
-       interface text
+      name text,
+      interface text
 );
 
 CREATE TABLE IF NOT EXISTS imagetypes(
@@ -20,8 +19,10 @@ CREATE TABLE IF NOT EXISTS shotdescriptions(
 
 
 CREATE TABLE IF NOT EXISTS imagingfunctions(
-       spectralchanneluuid text,
-       spatialfunction text
+       spectralchanneluuid TEXT,
+       spatialfunction TEXT,
+       imagetype TEXT,
+       cameraconfiguration INTEGER 
 );
 
 

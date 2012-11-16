@@ -55,7 +55,6 @@ class TestCameraConfiguration(unittest.TestCase):
         cameraconfig = workflow.CameraConfiguration(name, testcamera )
         self.assertIsNotNone(cameraconfig)
         self.assertEqual(cameraconfig.name, name)
-        self.assertIsNotNone(cameraconfig.spectralchannels)
 
     def test_createCameraConfiguration(self):
         name = 'tis dbk22au618.as'
@@ -71,9 +70,11 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIsNotNone(cameraConfiguration.camera)
         self.assertIs(testcamera, cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
-        self.assertEqual(cameraConfiguration.spectralchannels[0].identifier, 'bayer_red')
-        self.assertIsNotNone(cameraConfiguration.imageTypes)
-        self.assertIsNotNone(cameraConfiguration.imageTypes[0])
+        self.assertIsNotNone(cameraConfiguration.imagetypes)
+        self.assertIsNotNone(cameraConfiguration.imagetypes[0])
+        self.assertEqual(cameraConfiguration.imagetypes[0], 'RAW Bayer')
+
+        self.assertEqual(len(cameraConfiguration.imagingfunctions[cameraConfiguration.imagetypes[0]]), 3)
 
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):
@@ -122,12 +123,12 @@ class TestShotdesciption(unittest.TestCase):
         temperature = 1
         binningMode = 2
         spectralChannel = workflow.SpectralChannel()
-        shotDescription = workflow.createShotDescription(nrOfShots, duration, temperature, binningMode, spectralChannel)
-        self.assertIsNotNone(shotDescription)
-        self.assertEqual(shotDescription.nrOfShots, nrOfShots)
-        self.assertEqual(shotDescription.duration, duration)
-        self.assertEqual(shotDescription.temperature, temperature)
-        self.assertEqual(shotDescription.binningMode, binningMode)
+        #        shotDescription = workflow.createShotDescription(nrOfShots, duration, temperature, binningMode, spectralChannel)
+        # self.assertIsNotNone(shotDescription)
+
+        # self.assertEqual(shotDescription.duration, duration)
+        # self.assertEqual(shotDescription.temperature, temperature)
+
 
 
 class TestPersistenceFacade(unittest.TestCase):
@@ -143,12 +144,13 @@ class TestPersistenceFacade(unittest.TestCase):
     def test_insertproject(self):
         dbmock = mock.MagicMock()
         projectname = 'jupiter'
+        project = workflow.Project(projectname)
         dbmock.insertproject.return_value = 'True'
         persistencefacade = workflow.PersistenceFacade()
         persistencefacade.getDatabase = mock.MagicMock(return_value=dbmock)
         persistencefacade.database = dbmock
-        persistencefacade.insertproject(projectname)
-        dbmock.insertproject.assert_called_with(projectname)
+        persistencefacade.insertproject(project)
+        dbmock.insertproject.assert_called_with(project.name)
 
     def test_loadprojects(self):
         projects = self.persistencefacade.loadprojects()

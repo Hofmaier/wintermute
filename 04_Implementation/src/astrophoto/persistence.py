@@ -13,11 +13,11 @@ class Database:
 
     def insertproject(self, name):
         cursor = self.connection.cursor()
-        cursor.execute('INSERT OR IGNORE INTO projects (name) VALUES (?)', (name,))
+        cursor.execute('INSERT INTO projects (name) VALUES (?)', (name,))
         self.connection.commit()
         cursor.close()
 
-    def insertcameraconfiguration(self, name, project, interface):
+    def persistcameraconfiguration(self, name, project, interface):
         cursor = self.connection.cursor()
         queryparameter = (project,)
         cursor.execute("""
