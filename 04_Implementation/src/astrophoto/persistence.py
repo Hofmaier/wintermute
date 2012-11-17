@@ -14,7 +14,7 @@ class Database:
     def insertproject(self, name):
         cursor = self.connection.cursor()
         cursor.execute('INSERT INTO projects (name) VALUES (?)', (name, ))
-       
+
         self.connection.commit()
         cursor.close()
 
@@ -34,9 +34,49 @@ class Database:
         """, (spectraluuid, spatialfunc, imagetype, configid))
         self.connection.commit()
 
-
     def insertshotdescription(self, duration):
         pass
+
+    def getprojects(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT ROWID, name, cameraconfiguration FROM projects')
+        projecttuples = cursor.fetchall()
+        cursor.close()
+        return projecttuples
+
+    def getimagingfunctions(self):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        SELECT cc.ROWID, cc.name, cc.interface, if.spectralchanneluuid,
+        if.spatialfunction, if.imagetype
+        FROM cameraconfigurations cc
+        INNER JOIN imagingfunctions if ON cc.ROWID = if.cameraconfiguration
+        """)
+        return cursor.fetchall()
+
+    def addConfigToProject(self, projectname, configid):
+        cursor = self.connection.cursor()
+        t = (configid, projectname)
+        cursor.execute("""
+        UPDATE projects SET cameraconfiguration = ?
+        WHERE name = ?
+        """, t)
+        self.connection.commit()
+        cursor.close()
+
+    def getCameraconfigOf(self, project):
+        cursor = self.connection.cursor()
+        queryparameter = (project,)
+        cursor.execute("""
+        SELECT cc.name, cc.interface FROM cameraconfigurations cc
+        INNER JOIN projects ON cc.project = projects.ROWID
+        WHERE projects.name = ?
+        """, queryparameter)
+        cameraconfig = cursor.fetchone()
+        cursor.close()
+        return cameraconfig
+
+
 
     def insertOpticalSystem(self, adapterName, telescopeName):
         cursor = self.connection.cursor()
@@ -69,35 +109,6 @@ class Database:
             cursor.execute('INSERT INTO telescopes (name) VALUES (?)', queryparameter)
         cursor.close()
 
-    def getprojects(self):
-        cursor = self.connection.cursor()
-        cursor.execute('SELECT name FROM projects')
-        projecttuples = cursor.fetchall()
-        cursor.close()
-        return projecttuples
-
-    def getcameraconfigurations(self):
-        cursor =self.connection.cursor()
-        cursor.execute("""
-        SELECT ROWID, name, interface FROM cameraconfigurations
-        """)
-        configtuples = cursor.fetchall()
-        cursor.close()
-        return configtuples
-
-    def getCameraconfigOf(self, project):
-        cursor = self.connection.cursor()
-        queryparameter = (project,)
-        print(queryparameter)
-        cursor.execute("""
-        SELECT cc.name, cc.interface FROM cameraconfigurations cc
-        INNER JOIN projects ON cc.project = projects.ROWID
-        WHERE projects.name = ?
-        """, queryparameter)
-        cameraconfig = cursor.fetchone()
-        cursor.close()
-        return cameraconfig
-
     def getOpticalsystemOf(self, project):
         cursor = self.connection.cursor()
         queryparameter = (project.name,)
@@ -110,8 +121,6 @@ class Database:
         opticSystemTupel = cursor.fetchone()
         cursor.close()
         return opticSystemTupel
-
-
 
 
 def createDatabase():

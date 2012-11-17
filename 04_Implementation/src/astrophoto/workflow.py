@@ -164,21 +164,67 @@ class PersistenceFacade:
     def __init__(self):
         self.database = self.getDatabase()
         self.database.initschema()
-        self.cameraconfigurations = []
+        self.configdict = {}
+        self.projectdict = {}
 
-    def insertproject(self, project):
+    def persistproject(self, project):
         self.database.insertproject(project.name)
 
     def persistcameraconfiguration(self, cameraconfig, project):
 
-        configID = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
+        configid = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
         imagingfunctions = cameraconfig.imagingfunctions
         imagetypes = list(imagingfunctions.keys())
         for imagetype in imagetypes:
             imagingfunctionsOfimagetype = imagingfunctions[imagetype]
             for imgfunc in imagingfunctionsOfimagetype:
                 spectraluuid = imgfunc.spectralchannel.uuid
-                self.database.insertimagingfunction(spectraluuid, imgfunc.spatialfunction, imagetype, configID)
+                self.database.insertimagingfunction(spectraluuid, imgfunc.spatialfunction, imagetype, configid)
+        self.database.addConfigToProject(project.name, configid)
+
+    def getDatabase(self):
+        self.database = persistence.Database()
+        return self.database
+
+    def loadcameraconfigurations(self):
+        configtuples = self.database.getimagingfunctions()
+        cameraconfigs = [self.loadcameraconfig(*configtupel)for configtupel in configtuples]
+
+    def loadcameraconfig(self, rowid, name, interface, spectraluuid, spatialfunc, imgtype):
+        if rowid not in self.configdict:
+            camera = createCamera(interface)
+            newcameraconfig = CameraConfiguration(name, camera)
+            newcameraconfig.interface = interface
+            self.configdict[rowid] = newcameraconfig
+
+        imgfunc = ImagingFunction()
+        spectral = SpectralChannel()
+        spectral.uuid = spectraluuid
+        imgfunc.spectralchannel = spectral
+        imgfunc.spatialfunction = spatialfunc
+        camconfig = self.configdict[rowid]
+        imgfuncdict = camconfig.imagingfunctions
+        if imgtype not in imgfuncdict:
+            imgfuncdict[imgtype] = []
+
+        imgfuncdict[imgtype].append(imgfunc)
+
+        print('loadcameraconfig(): nr of config loaded ' + str(len(self.configdict.keys())))
+
+    def loadproject(self, projectid, name, camconfigrowid):
+        project = Project(name)
+        if camconfigrowid in self.configdict:
+            print('loadproject(): projconfig: ' + str(camconfigrowid))
+            project.cameraconfiguration = self.configdict[camconfigrowid]
+
+        self.projectdict[projectid] = project
+        return project
+
+    def loadprojects(self):
+        projects = []
+        projecttuples = self.database.getprojects()
+        projects = [self.loadproject(*projecttuple) for projecttuple in projecttuples]
+        return projects
 
     def persistOpticalSystem(self, adapter, telescope):
         return self.database.insertopticalsystem(adapter.name, telescope.name)
@@ -192,34 +238,5 @@ class PersistenceFacade:
     def persistOpticalSystem(self, adapter, telescope):
         self.database.insertOpticalSystem(adapter.name, telescope.name)
 
-    def getDatabase(self):
-        self.database = persistence.Database()
-        return self.database
-
-    def loadcameraconfig(self, rowid, name, interface):
-        camera = createCamera(interface)
-        cameraconfig = CameraConfiguration(name, camera)
-        cameraconfig.interface = interface
-        
-       
-        return cameraconfig
-
     def loadopticalsystem(self, tupel):
         return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
-
-    def loadproject(self, projectname):
-        project = Project(projectname)
-        cameraconfigtupel = self.database.getCameraconfigOf(projectname)
-        cameraconfig = self.loadcameraconfig(cameraconfigtupel)
-        project.cameraconfiguration = cameraconfig
-        return project
-
-    def loadprojects(self):
-        projects = []
-        projecttuples = self.database.getprojects()
-        projects = [self.loadproject(projecttupel[0]) for projecttupel in projecttuples]
-        return projects
-
-    def loadcameraconfigurations(self):
-        configtuples = self.database.getcameraconfigurations()
-        cameraconfigs = [loadcameraconfig(*configtupel)for configtupel in configtuples]
