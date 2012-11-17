@@ -103,7 +103,6 @@ class Project:
         self.opticalSystem = None
 
 class Workspace:
-
     def __init__(self):
         self.adapterList = []
         self.telescopeList = []
@@ -130,11 +129,11 @@ class SpectralChannel:
         self.uuid = ''
 
 class Shotdescription:
-    def __init__(self):
-        def.shots = []
-        def.imagetype = ''
-        def.duraton = 0
-        
+    def __init__(self, duration, imagetype):
+        self.shots = []
+        self.imagetype = imagetype
+        self.duraton = duration
+
     def setProperties(self, nrOfShots, duration, imageTyp):
         self.duration = duration
         self.imageTyp = imageTyp
@@ -143,6 +142,10 @@ class Shotdescription:
         for i in range(nrOfShots):
             shot = Shot()
             self.shotList.append(shot)
+
+def createShotdescription(nrOfShots, duration, imagetype, project):
+    return Shotdescription(duration, imagetype)
+
 
 class Shot:
     pass

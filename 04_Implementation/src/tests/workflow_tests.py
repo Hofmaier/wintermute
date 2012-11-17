@@ -114,22 +114,19 @@ class TestSpectralChannel(unittest.TestCase):
 
 class TestShotdesciption(unittest.TestCase):
     def test_ctor(self):
-        shotdescription = workflow.Shotdescription()
+        shotdescription = workflow.Shotdescription(3, 'RAW Bayer')
         self.assertIsNotNone(shotdescription)
 
     def test_createShotdescription(self):
         nrOfShots = 5
         duration = 30
-        temperature = 1
-        binningMode = 2
-        spectralChannel = workflow.SpectralChannel()
-        #        shotDescription = workflow.createShotDescription(nrOfShots, duration, temperature, binningMode, spectralChannel)
-        # self.assertIsNotNone(shotDescription)
-
+        project = workflow.Project('jupiter')
+        imagetype = 'RAW Bayer'
+        shotdescription = workflow.createShotdescription(nrOfShots, duration, project, imagetype)
+        self.assertIsNotNone(shotdescription)
+        
         # self.assertEqual(shotDescription.duration, duration)
         # self.assertEqual(shotDescription.temperature, temperature)
-
-
 
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):
@@ -141,7 +138,7 @@ class TestPersistenceFacade(unittest.TestCase):
         persistencefacade.getDatabase = mock.Mock(return_value=dbmock)
         self.assertIsNotNone(persistencefacade.database)
 
-    def test_insertproject(self):
+    def test_persistproject(self):
         dbmock = mock.MagicMock()
         projectname = 'jupiter'
         project = workflow.Project(projectname)
@@ -149,7 +146,7 @@ class TestPersistenceFacade(unittest.TestCase):
         persistencefacade = workflow.PersistenceFacade()
         persistencefacade.getDatabase = mock.MagicMock(return_value=dbmock)
         persistencefacade.database = dbmock
-        persistencefacade.insertproject(project)
+        persistencefacade.persistproject(project)
         dbmock.insertproject.assert_called_with(project.name)
 
     def test_loadprojects(self):
