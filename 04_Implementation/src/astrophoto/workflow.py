@@ -76,6 +76,15 @@ class CameraConfiguration:
 
                 self.imagingfunctions[rawbayer]=imagetypegroup
 
+def createCameraConfiguration(name, interface, project):
+    camerainterface = interface
+    camera = createCamera(interface)
+    cameraConfiguration = CameraConfiguration(name, camera)
+    cameraConfiguration.initImageTypes()
+    cameraConfiguration.interface = interface
+    project.cameraConfiguration = cameraConfiguration
+    return cameraConfiguration
+
 class ImagingFunction:
     def __init__(self):
         self.spatialfunction = ''
@@ -108,15 +117,6 @@ class Workspace:
         self.projectList = self.persFacade.loadprojects()
         self.cameraconfigurations = self.persFacade.cameraconfigurations
 
-def createCameraConfiguration(name, interface, project):
-    camerainterface = interface
-    camera = createCamera(interface)
-    cameraConfiguration = CameraConfiguration(name, camera)
-    cameraConfiguration.initImageTypes()
-    cameraConfiguration.interface = interface
-    project.cameraConfiguration = cameraConfiguration
-    return cameraConfiguration
-
 def createCamera(interface):
     """used for unittesting.
 
@@ -131,7 +131,10 @@ class SpectralChannel:
 
 class Shotdescription:
     def __init__(self):
-        pass
+        def.shots = []
+        def.imagetype = ''
+        def.duraton = 0
+        
     def setProperties(self, nrOfShots, duration, imageTyp):
         self.duration = duration
         self.imageTyp = imageTyp
