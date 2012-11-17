@@ -47,6 +47,9 @@ class SelectCameraInterface(QtGui.QDialog):
 
         self.setFixedSize(self.sizeHint())
 
+        point = QtGui.QCursor.pos()
+        self.move(point.x() - 200, point.y())
+
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.closeAndSave)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.close)
 

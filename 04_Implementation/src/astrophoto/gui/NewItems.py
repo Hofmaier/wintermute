@@ -29,6 +29,8 @@ class NewAdapter(QtGui.QDialog):
         self.adapterLayout.addWidget(self.okButton, 3, 5)
 
         self.setFixedSize(self.sizeHint())
+        point = QtGui.QCursor.pos()
+        self.move(point)
 
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.saveAndClose)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), self.close)
@@ -66,6 +68,9 @@ class NewTelescope(QtGui.QDialog):
         self.adapterLayout.addWidget(self.okButton, 3, 5)
 
         self.setFixedSize(self.sizeHint())
+
+        point = QtGui.QCursor.pos()
+        self.move(point)
 
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.saveAndClose)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), self.close)

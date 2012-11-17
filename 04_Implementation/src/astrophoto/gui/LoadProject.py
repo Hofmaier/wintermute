@@ -37,6 +37,11 @@ class LoadProject(QtGui.QDialog):
         self.cancelButton.setText("Cancel")
         self.loadProjectLayout.addWidget(self.cancelButton, 3, 1)
 
+        self.frameGeometry = self.frameGeometry()
+        desktopGeometry = QtGui.QDesktopWidget().availableGeometry().center()
+        self.frameGeometry.moveCenter(desktopGeometry)
+        self.move(self.frameGeometry.topLeft())
+
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.loadProject)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.showLastScreen)
 

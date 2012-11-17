@@ -30,6 +30,11 @@ class NewProject(QtGui.QWidget):
 
         self.setFixedSize(self.sizeHint())
 
+        self.frameGeometry = self.frameGeometry()
+        desktopGeometry = QtGui.QDesktopWidget().availableGeometry().center()
+        self.frameGeometry.moveCenter(desktopGeometry)
+        self.move(self.frameGeometry.topLeft())
+
         QtCore.QObject.connect(self.okButton, QtCore.SIGNAL("clicked()"), self.createNewProject)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), self.showLastScreen)
 

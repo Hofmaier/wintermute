@@ -30,6 +30,11 @@ class StartUpScreen(QtGui.QWidget):
 
         self.setFixedSize(self.sizeHint())
 
+        self.frameGeometry = self.frameGeometry()
+        desktopGeometry = QtGui.QDesktopWidget().availableGeometry().center()
+        self.frameGeometry.moveCenter(desktopGeometry)
+        self.move(self.frameGeometry.topLeft())
+
         QtCore.QObject.connect(self.openNewProjectButton, QtCore.SIGNAL("clicked()"), self.newProject)
         QtCore.QObject.connect(self.loadProjectButton, QtCore.SIGNAL("clicked()"), self.loadProject)
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), sys.exit)
