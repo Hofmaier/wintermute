@@ -76,6 +76,15 @@ class CameraConfiguration:
 
                 self.imagingfunctions[rawbayer]=imagetypegroup
 
+def createCameraConfiguration(name, interface, project):
+    camerainterface = interface
+    camera = createCamera(interface)
+    cameraConfiguration = CameraConfiguration(name, camera)
+    cameraConfiguration.initImageTypes()
+    cameraConfiguration.interface = interface
+    project.cameraConfiguration = cameraConfiguration
+    return cameraConfiguration
+
 class ImagingFunction:
     def __init__(self):
         self.spatialfunction = ''
@@ -94,7 +103,6 @@ class Project:
         self.opticalSystem = None
 
 class Workspace:
-
     def __init__(self):
         self.adapterList = []
         self.telescopeList = []
@@ -135,8 +143,11 @@ class SpectralChannel:
         self.uuid = ''
 
 class Shotdescription:
-    def __init__(self):
-        pass
+    def __init__(self, duration, imagetype):
+        self.shots = []
+        self.imagetype = imagetype
+        self.duraton = duration
+
     def setProperties(self, nrOfShots, duration, imageTyp):
         self.duration = duration
         self.imageTyp = imageTyp
@@ -145,6 +156,10 @@ class Shotdescription:
         for i in range(nrOfShots):
             shot = Shot()
             self.shotList.append(shot)
+
+def createShotdescription(nrOfShots, duration, imagetype, project):
+    return Shotdescription(duration, imagetype)
+
 
 class Shot:
     pass
