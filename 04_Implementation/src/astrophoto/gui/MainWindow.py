@@ -123,7 +123,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
             self.session.workspace.persFacade.persistAdapter(adapter)
         for telescope in self.session.workspace.telescopeList:
             self.session.workspace.persFacade.persistTelescope(telescope)
-        self.session.workspace.persFacade.insertproject(project)
         self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
         sys.exit()
 
