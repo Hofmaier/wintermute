@@ -204,7 +204,7 @@ class PlanWidget(QtGui.QWidget):
 
     def getOpticalSystem(self, adapter, telescope):
         for opticalSystem in self.session.workspace.opticalSystemList:
-            if opticalSystem.adapter == adapter and opticalSystem.telescope == telescope:
+            if opticalSystem.adapter is adapter and opticalSystem.telescope is telescope:
                 return opticalSystem
 
     def getCameraConfigurationByName(self, cameraName):
