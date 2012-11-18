@@ -135,7 +135,9 @@ class TestShotdesciption(unittest.TestCase):
         self.assertIsNotNone(shotdesc.cameraconfiguration)
 
     def test_capture(self):
-        shotdesc = workflow.createShotdescription(1, 30, self.project, 'RAW Bayer')
+        duration = 3
+        imagetype = 'RAW Bayer'
+        shotdesc = workflow.createShotdescription(1, duration, self.project, imagetype)
         cameramock = mock.MagicMock()
         testimage = [1,2,3,4]
         cameramock.capture = mock.MagicMock(return_value=testimage)
@@ -143,6 +145,7 @@ class TestShotdesciption(unittest.TestCase):
         shotdesc.capture()
         self.assertGreater(len(shotdesc.shots),0)
         self.assertIsNotNone(shotdesc.shots[0].images[0])
+        cameramock.capture.assert_called_with(duration, imagetype)
 
 class TestShot(unittest.TestCase):
 
