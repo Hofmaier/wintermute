@@ -48,7 +48,7 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
         self.spectralTimesLineEdit.setEnabled(False)
-        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shotList)))
+        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shots)))
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, 2, 9)
 
         self.spectralTakeButton = QtGui.QPushButton()

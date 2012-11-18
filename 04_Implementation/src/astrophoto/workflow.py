@@ -39,9 +39,8 @@ class Session:
         return telescope
 
 
-    def createShotDescription(self):
-        shotDescription = Shotdescription()
-        self.currentProject.shotDescriptionList.append(shotDescription)
+    def createShotDescription(self, nrOfShots, duration, project, imagetype):
+        shotDescription = createShotdescription(nrOfShots, duration, project, imagetype)
         return shotDescription
 
 class CameraConfiguration:

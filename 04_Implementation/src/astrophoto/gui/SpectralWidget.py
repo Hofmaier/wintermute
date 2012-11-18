@@ -31,7 +31,7 @@ class SpectralWidget(QtGui.QWidget):
         self.scrollAreaWidgetContents.setLayout(self.horizontalLayout_2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-#        shotDescription = self.session.createShotDescription(0, 0, 0, 1, None)
+#        shotDescription = self.session.createShotDescription(0, 0, self.session.currentProject, "")
 #        spectralColourWidget = SpectralColourWidget(self, self.session, shotDescription)
         self.spectralAddButtonWidget = SpectralAddButtonWidget(self)
 
@@ -43,7 +43,7 @@ class SpectralWidget(QtGui.QWidget):
     def addSpectralColourWidget(self):
         self.horizontalLayout_2.removeItem(self.spacerItem)
         self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
-        shotDescription = self.session.createShotDescription()
+        shotDescription = self.session.createShotDescription(0, 0, self.session.currentProject, "")
         spectralColourWidget = SpectralColourWidget(self, self.session, shotDescription)
         self.spectralColourWidgetList.append(spectralColourWidget)
         self.horizontalLayout_2.addWidget(spectralColourWidget)
@@ -75,15 +75,11 @@ class SpectralWidget(QtGui.QWidget):
         print("saveAllSpectralColourWidgets")
         for spectralColourWidget in self.spectralColourWidgetList:
             nrOfShots = int(spectralColourWidget.numberOfImagesLineEdit.text())
-            duration = spectralColourWidget.durationLineEdit.text()
-            imageTypComboBoxName = spectralColourWidget.imageTypeComboBox.currentText()
-            imageTyp = None
-            for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getFormats():
-                if ImageType.toStr[imageTypCameraConfiguration] == imageTypComboBoxName:
-                    imageTyp = imageTypCameraConfiguration
+            duration = int(spectralColourWidget.durationLineEdit.text())
+            imageTyp = spectralColourWidget.imageTypeComboBox.currentText()
             spectralColourWidget.shotDescription.duration =  duration
             spectralColourWidget.shotDescription.imagetype = imageTyp
-#            nrOfShots
+            spectralColourWidget.shotDescription.setNrOfShots(nrOfShots)
 
     def updateAllSpectralColourWidgets(self):
         for spectralColourWidget in self.spectralColourWidgetList:

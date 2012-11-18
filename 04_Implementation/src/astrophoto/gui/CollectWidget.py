@@ -17,7 +17,7 @@ class CollectWidget(QtGui.QWidget):
         self.verticalLayoutWidget.deleteLater()
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
-        for shotDescription in self.session.currentProject.shotDescriptionList:
+        for shotDescription in self.session.currentProject.shotdescriptions:
             collectSpectralWidget = CollectSpectralWidget(shotDescription, self.session)
             self.verticalLayout.addWidget(collectSpectralWidget)
 
