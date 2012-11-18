@@ -202,6 +202,10 @@ class PersistenceFacade:
                 self.database.insertimagingfunction(spectraluuid, imgfunc.spatialfunction, imagetype, configid)
         self.database.addConfigToProject(project.name, configid)
 
+    def persistshotdescription(self, shotdesc, project):
+        projid = self.database.getProjectIdFor(project.name)
+        self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
+
     def getDatabase(self):
         self.database = persistence.Database()
         return self.database
@@ -238,7 +242,12 @@ class PersistenceFacade:
             project.cameraconfiguration = self.configdict[camconfigrowid]
 
         self.projectdict[projectid] = project
+        project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
         return project
+        
+
+    def loadshotdesc(self, shotdescid, duration, imgtype, poject):
+        return Shotdescription(duration, imgtype)
 
     def loadprojects(self):
         projects = []

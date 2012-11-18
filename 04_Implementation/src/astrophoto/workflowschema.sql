@@ -14,8 +14,9 @@ CREATE TABLE IF NOT EXISTS imagetypes(
 );
 
 CREATE TABLE IF NOT EXISTS shotdescriptions(
-       imagetype INTEGER,
-       duration INTEGER	
+       imagetype TEXT,
+       duration INTEGER,	
+       project INTEGER
 );
 
 
