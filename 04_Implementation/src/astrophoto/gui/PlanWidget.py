@@ -26,12 +26,12 @@ class PlanWidget(QtGui.QWidget):
 
         self.opticalSystemLayout = QtGui.QGridLayout(self.opticalSystemWidget)
         self.opticalSystemLayout.setColumnMinimumWidth(0, 10)
-        self.opticalSystemLayout.setColumnMinimumWidth(2, 310)
+        self.opticalSystemLayout.setColumnMinimumWidth(4, 10)
 
         self.opticalSystemLayout.setRowMinimumHeight(1, 7)
 
         self.opticalSystemLayout.addWidget(self.opticalSystemLabel, 0, 1)
-        self.opticalSystemLayout.addWidget(self.opticalSystemFrame, 1, 0, 11, 8)
+        self.opticalSystemLayout.addWidget(self.opticalSystemFrame, 1, 0, 7, 5)
 
 #        self.confNameLabel = QtGui.QLabel()
 #        self.confNameLabel.setText("Configuration Name:")
@@ -46,7 +46,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.addWidget(self.deviceComboBox, 2, 2)
         self.addDeviceButton = QtGui.QPushButton()
         self.addDeviceButton.setText("Add Device")
-        self.addDeviceButton.setMinimumWidth(185)
+        self.addDeviceButton.setMaximumWidth(180)
         self.opticalSystemLayout.addWidget(self.addDeviceButton, 2, 3)
     
         self.telescopeLabel = QtGui.QLabel()
@@ -56,7 +56,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.addWidget(self.telescopeComboBox, 3, 2)
         self.addTelescopeButton = QtGui.QPushButton()
         self.addTelescopeButton.setText("Add Telescope")
-        self.addTelescopeButton.setMinimumWidth(185)
+        self.addDeviceButton.setMaximumWidth(180)
         self.opticalSystemLayout.addWidget(self.addTelescopeButton, 3, 3)
 
         self.adapterLabel = QtGui.QLabel()
@@ -66,14 +66,14 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.addWidget(self.adapterComboBox, 4, 2)
         self.addAdapterButton = QtGui.QPushButton()
         self.addAdapterButton.setText("Add Adapter")
-        self.addAdapterButton.setMinimumWidth(185)
+        self.addDeviceButton.setMaximumWidth(180)
         self.opticalSystemLayout.addWidget(self.addAdapterButton, 4, 3)
 
 #        self.tempLabel = QtGui.QLabel()
 #        self.tempLabel.setText("Chip Temperatur:")
 #        self.opticalSystemLayout.addWidget(self.tempLabel, 5, 1)
 #        self.tempLineEdit = QtGui.QLineEdit()
-#        self.opticalSystemLayout.addWidget(self.tempLineEdit, 5, 3)
+#        self.opticalSystemLayout.addWidget(self.tempLineEdit, 5, 2, 1, 2)
 
         self.configImagesWidget = QtGui.QWidget()
         self.configImagesWidget.setMinimumWidth(640)
@@ -89,7 +89,7 @@ class PlanWidget(QtGui.QWidget):
         self.configImagesLayout.setColumnMinimumWidth(2, 10)
         self.configImagesLayout.setColumnMinimumWidth(4, 10)
         self.configImagesLayout.setColumnMinimumWidth(6, 10)
-	
+
         self.configImagesLayout.addWidget(self.configImagesFrame, 1, 0, 6, 7)
 
         self.configImagesLabel = QtGui.QLabel()
@@ -116,25 +116,25 @@ class PlanWidget(QtGui.QWidget):
         self.takeDarkFrameButton = QtGui.QPushButton()
         self.takeDarkFrameButton.setText("Collect")
         self.configImagesLayout.addWidget(self.takeDarkFrameButton, 3, 5)
-	
+
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
-		
+
         self.fillComboBoxes()
 
         QtCore.QObject.connect(self.addDeviceButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
-		
+
     def fillComboBoxes(self):
         for adapter in self.session.workspace.adapterList:
-            self.adapterComboBox.addItem(adapter.name)
-			
+            self.adapterComboBox.addItem(adapter.name, adapter)
+
         for telescope in self.session.workspace.telescopeList:
-            self.telescopeComboBox.addItem(telescope.name)
+            self.telescopeComboBox.addItem(telescope.name, telescope)
 
         for cameraConfiguration in self.session.workspace.cameraconfigurations:
-            self.deviceComboBox.addItem(cameraConfiguration.name)
+            self.deviceComboBox.addItem(cameraConfiguration.name, cameraConfiguration)
 
     def addNewAdapter(self):
         self.newAdapterDialog = NewAdapter(self)
@@ -151,10 +151,12 @@ class PlanWidget(QtGui.QWidget):
     def createCameraConfiguration(self, cameraName, currentItem):
         interFaceName = str(currentItem.text())
         camConfig = self.session.createCameraConfiguration(cameraName, interFaceName)
+        print(self.session.currentProject.cameraconfiguration.name)
         self.deviceComboBox.clear()
         for configuration in self.session.workspace.cameraconfigurations:
-            self.deviceComboBox.addItem(configuration.name)
+            self.deviceComboBox.addItem(configuration.name, configuration)
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraName))
+
 
     def createAdapter(self, name):
         self.session.createAdapter(name)
@@ -208,6 +210,6 @@ class PlanWidget(QtGui.QWidget):
         #opticalSystem = self.session.currentProject.opticalSystem
         #self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
         #self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
+
         cameraConfiguration = self.session.currentProject.cameraconfiguration
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
-        

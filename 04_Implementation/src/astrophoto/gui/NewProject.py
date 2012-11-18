@@ -40,6 +40,7 @@ class NewProject(QtGui.QWidget):
 
     def createNewProject(self):
         newProject = self.session.createProject(self.projectNameLineEdit.text())
+        self.session.workspace.persFacade.persistproject(newProject)
         self.MainWindow = QtGui.QMainWindow()
         self.mainWindow_ui = Ui_MainWindow()
         self.mainWindow_ui.setupUi(self.MainWindow, self.session)

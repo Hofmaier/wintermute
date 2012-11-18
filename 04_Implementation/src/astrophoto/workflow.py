@@ -106,8 +106,22 @@ class Workspace:
 
     def load(self):
         camerainterface.getInterfaceNames()
-        self.projectList = self.persFacade.loadprojects()
-        self.cameraconfigurations = self.persFacade.cameraconfigurations
+        self.persFacade.loadcameraconfigurations()
+        self.persFacade.loadprojects()
+        for cameraconfiguration in self.persFacade.configdict.values():
+            self.cameraconfigurations.append(cameraconfiguration)
+        for project in self.persFacade.projectdict.values():
+            self.projectList.append(project)
+
+def createCameraConfiguration(name, interface, project):
+    camerainterface = interface
+    camera = createCamera(interface)
+    cameraConfiguration = CameraConfiguration(name, camera)
+    cameraConfiguration.initImageTypes()
+    cameraConfiguration.interface = interface
+    project.cameraconfiguration = cameraConfiguration
+    print("createCamera Config: " + cameraConfiguration.name)
+    return cameraConfiguration
 
 def createCamera(interface):
     """used for unittesting.
@@ -174,7 +188,6 @@ class PersistenceFacade:
         self.database.insertproject(project.name)
 
     def persistcameraconfiguration(self, cameraconfig, project):
-
         configid = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
         imagingfunctions = cameraconfig.imagingfunctions
         imagetypes = list(imagingfunctions.keys())
