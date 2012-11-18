@@ -81,7 +81,9 @@ class SpectralWidget(QtGui.QWidget):
             for imageTypCameraConfiguration in self.session.currentProject.cameraConfiguration.camera.getFormats():
                 if ImageType.toStr[imageTypCameraConfiguration] == imageTypComboBoxName:
                     imageTyp = imageTypCameraConfiguration
-            spectralColourWidget.shotDescription.setProperties(nrOfShots, duration, imageTyp)
+            spectralColourWidget.shotDescription.duration =  duration
+            spectralColourWidget.shotDescription.imagetype = imageTyp
+#            nrOfShots
 
     def updateAllSpectralColourWidgets(self):
         for spectralColourWidget in self.spectralColourWidgetList:

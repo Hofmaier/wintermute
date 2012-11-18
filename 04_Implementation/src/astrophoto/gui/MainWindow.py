@@ -104,7 +104,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
             self.collectWidget.hide()
         elif item.text() == "Spectrals":
             if self.planWidget.checkAllVariablesSet():
-                self.planWidget.savePlanWidget()
+                self.planWidget.saveOpticalSystem()
                 self.spectralWidget.updateAllSpectralColourWidgets()
                 self.spectralWidget.show()
                 self.planWidget.hide()
