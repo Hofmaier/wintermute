@@ -50,6 +50,7 @@ class CameraConfiguration:
         self.camera = camera
         self.interface = ''
         self.imagingfunctions = {}
+        self.hasFilterWheel = False
 
     def initImageTypes(self):
         for form in self.camera.formats:
@@ -244,7 +245,7 @@ class PersistenceFacade:
         self.projectdict[projectid] = project
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
         return project
-        
+
 
     def loadshotdesc(self, shotdescid, duration, imgtype, poject):
         return Shotdescription(duration, imgtype)
