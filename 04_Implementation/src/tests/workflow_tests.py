@@ -48,16 +48,17 @@ class TestSession(unittest.TestCase):
 
 
 class TestCameraConfiguration(unittest.TestCase):
+    def setUp(self):
+        self.name = 'TIS dbk22au618.as 2012'
+
     def test_ctor(self):
-        name = 'imaging source 2012'
         testcamera = camerainterface.Camera()
         testcamera.formats = ['RGB Bayer']
-        cameraconfig = workflow.CameraConfiguration(name, testcamera )
+        cameraconfig = workflow.CameraConfiguration(self.name, testcamera )
         self.assertIsNotNone(cameraconfig)
-        self.assertEqual(cameraconfig.name, name)
+        self.assertEqual(cameraconfig.name, self.name)
 
     def test_createCameraConfiguration(self):
-        name = 'tis dbk22au618.as'
         interface = 'tis'
         project = workflow.Project('jupiter')
         testcamera = camerainterface.Camera()
@@ -65,16 +66,14 @@ class TestCameraConfiguration(unittest.TestCase):
         createCameraMock = mock.MagicMock(return_value = testcamera)
         workflow.createCamera = createCameraMock
 
-        cameraConfiguration = workflow.createCameraConfiguration(name, interface, project)
+        cameraConfiguration = workflow.createCameraConfiguration(self.name, interface, project)
         self.assertIsNotNone(cameraConfiguration)
         self.assertIsNotNone(cameraConfiguration.camera)
         self.assertIs(testcamera, cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
-        self.assertIsNotNone(cameraConfiguration.imagetypes)
-        self.assertIsNotNone(cameraConfiguration.imagetypes[0])
-        self.assertEqual(cameraConfiguration.imagetypes[0], 'RAW Bayer')
-
-        self.assertEqual(len(cameraConfiguration.imagingfunctions[cameraConfiguration.imagetypes[0]]), 3)
+        self.assertIsNotNone(cameraConfiguration.imagingfunctions)
+        self.assertEqual(cameraConfiguration.imagingfunctions.keys()[0], 'RAW Bayer')
+        self.assertEqual(len(cameraConfiguration.imagingfunctions['RAW Bayer']), 3)
 
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):
@@ -113,6 +112,11 @@ class TestSpectralChannel(unittest.TestCase):
         self.assertIsNotNone(spectralchannel)
 
 class TestShotdesciption(unittest.TestCase):
+    def setUp(self):
+        self.project = workflow.Project('jupiter')
+        self.cameraconfiguration = workflow.CameraConfiguration('TIS dbk22au618.as 2012')
+        self.project.cameraconfiguration = self.cameraconfiguration
+
     def test_ctor(self):
         shotdescription = workflow.Shotdescription(3, 'RAW Bayer')
         self.assertIsNotNone(shotdescription)
@@ -120,13 +124,32 @@ class TestShotdesciption(unittest.TestCase):
     def test_createShotdescription(self):
         nrOfShots = 5
         duration = 30
-        project = workflow.Project('jupiter')
+
         imagetype = 'RAW Bayer'
-        shotdescription = workflow.createShotdescription(nrOfShots, duration, project, imagetype)
-        self.assertIsNotNone(shotdescription)
-        
-        # self.assertEqual(shotDescription.duration, duration)
-        # self.assertEqual(shotDescription.temperature, temperature)
+        shotdesc = workflow.createShotdescription(nrOfShots, duration, self.project, imagetype)
+        self.assertIsNotNone(shotdesc)
+        self.assertEqual(shotdesc.duration, duration)
+        self.assertEqual(shotdesc.imagetype, imagetype)
+        self.assertEqual(len(shotdesc.shots), nrOfShots)
+        self.assertGreater(len(project.shotdescriptions), 0)
+        self.assertIsNotNone(shotdesc.cameraconfiguration)
+
+    def test_capture(self):
+        shotdesc = workflow.createShotdescription(1, 30, self.project, 'RAW Bayer')
+        cameramock = mock.MagicMock()
+        testimage = [1,2,3,4]
+        cameramock.capture = mock.MagicMock(return_value=testimage)
+        self.cameraconfiguration.camera = mock.MagicMock()
+
+        shotdesc.capture()
+        self.assertIsNotNone(shotdesc.shots[0].images[0])
+
+
+class TestShot(unittest.TestCase):
+
+    def test_ctor(self):
+        shot = workflow.Shot()
+        self.assertIsNotNone(shot)
 
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):

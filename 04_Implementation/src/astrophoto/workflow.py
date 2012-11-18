@@ -38,6 +38,7 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
+
     def createShotDescription(self):
         shotDescription = Shotdescription()
         self.currentProject.shotDescriptionList.append(shotDescription)
@@ -48,7 +49,6 @@ class CameraConfiguration:
         self.name = name
         self.camera = camera
         self.interface = ''
-        self.imagetypes = []
         self.imagingfunctions = {}
 
     def initImageTypes(self):
@@ -72,8 +72,6 @@ class CameraConfiguration:
                 bayer_blue_if.spectralchannel = SpectralChannel('bayer_blue')
                 imagetypegroup.append(bayer_blue_if)
 
-                self.imagetypes.append(rawbayer)
-
                 self.imagingfunctions[rawbayer]=imagetypegroup
 
 def createCameraConfiguration(name, interface, project):
@@ -90,16 +88,11 @@ class ImagingFunction:
         self.spatialfunction = ''
         self.spectralchannel = None
 
-class ImageType:
-    def __init__(self):
-        self.imagingfunctions = []
-        self.isSpectralVariable = 'False'
-
 class Project:
     def __init__(self, name):
         self.name = name
         self.cameraconfiguration = None
-        self.shotDescriptionList = []
+        self.shotdescriptions = []
         self.opticalSystem = None
 
 class Workspace:
@@ -132,22 +125,26 @@ class Shotdescription:
     def __init__(self, duration, imagetype):
         self.shots = []
         self.imagetype = imagetype
-        self.duraton = duration
-
-    def setProperties(self, nrOfShots, duration, imageTyp):
         self.duration = duration
-        self.imageTyp = imageTyp
-        self.shotList = []
-        i = 0
-        for i in range(nrOfShots):
-            shot = Shot()
-            self.shotList.append(shot)
+        self.cameraconfiguration = None
 
-def createShotdescription(nrOfShots, duration, imagetype, project):
-    return Shotdescription(duration, imagetype)
+    def capture(self):
+        if self.imagetype is 'RAW Bayer':
+            for i in shots:
+                image = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+                self.shots[i].images[0] = image
 
+def createShotdescription(nrOfShots, duration, project, imagetype):
+    shotdesc = Shotdescription(duration, imagetype)
+    shotdesc.cameraconfiguration = project.cameraconfiguration
+    shotdesc.shots = [Shot() for i in range(nrOfShots)]
+    project.shotdescriptions.append(shotdesc)
+    return shotdesc
 
 class Shot:
+    pass
+
+class Image:
     pass
 
 class Telescope:
