@@ -143,20 +143,24 @@ class Shotdescription:
         self.cameraconfiguration = None
 
     def capture(self):
-        if self.imagetype is 'RAW Bayer':
-            for i in shots:
+        if self.imagetype == 'RAW Bayer':
+            for shot in self.shots:
                 image = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
-                self.shots[i].images[0] = image
+                shot.images.append(image)
+
+    def setNrOfShots(self, nrOfShots):
+        self.shots = [Shot() for i in range(nrOfShots)]
 
 def createShotdescription(nrOfShots, duration, project, imagetype):
     shotdesc = Shotdescription(duration, imagetype)
     shotdesc.cameraconfiguration = project.cameraconfiguration
-    shotdesc.shots = [Shot() for i in range(nrOfShots)]
+    shotdesc.setNrOfShots(nrOfShots)
     project.shotdescriptions.append(shotdesc)
     return shotdesc
 
 class Shot:
-    pass
+    def __init__(self):
+        self.images = []
 
 class Image:
     pass
