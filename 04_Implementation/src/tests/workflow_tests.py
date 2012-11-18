@@ -131,7 +131,7 @@ class TestShotdesciption(unittest.TestCase):
         self.assertEqual(shotdesc.duration, duration)
         self.assertEqual(shotdesc.imagetype, imagetype)
         self.assertEqual(len(shotdesc.shots), nrOfShots)
-        self.assertGreater(len(project.shotdescriptions), 0)
+        self.assertGreater(len(self.project.shotdescriptions), 0)
         self.assertIsNotNone(shotdesc.cameraconfiguration)
 
     def test_capture(self):
@@ -139,11 +139,10 @@ class TestShotdesciption(unittest.TestCase):
         cameramock = mock.MagicMock()
         testimage = [1,2,3,4]
         cameramock.capture = mock.MagicMock(return_value=testimage)
-        self.cameraconfiguration.camera = mock.MagicMock()
-
+        self.cameraconfiguration.camera = cameramock
         shotdesc.capture()
+        self.assertGreater(len(shotdesc.shots),0)
         self.assertIsNotNone(shotdesc.shots[0].images[0])
-
 
 class TestShot(unittest.TestCase):
 
