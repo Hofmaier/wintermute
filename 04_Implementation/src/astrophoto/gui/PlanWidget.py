@@ -120,11 +120,14 @@ class PlanWidget(QtGui.QWidget):
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
 
+
         self.fillComboBoxes()
 
         QtCore.QObject.connect(self.addDeviceButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
+
+        QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("activated(QString)"), self.saveCameraConfiguration)
 
     def fillComboBoxes(self):
         for adapter in self.session.workspace.adapterList:
@@ -135,6 +138,8 @@ class PlanWidget(QtGui.QWidget):
 
         for cameraConfiguration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(cameraConfiguration.name, cameraConfiguration)
+
+        self.deviceComboBox.setCurrentIndex(-1)
 
     def addNewAdapter(self):
         self.newAdapterDialog = NewAdapter(self)
@@ -183,13 +188,24 @@ class PlanWidget(QtGui.QWidget):
 #            return False
         return True
 
-    def savePlanWidget(self):
-        adapter = self.getAdapterByName(self.adapterComboBox.currentText())
-        telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
-        opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
-        self.session.currentProject.opticalSystem = opticalSystem
+    def saveCameraConfiguration(self):
+        print("Saving CameraConfiguration")
         cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
         self.session.currentProject.cameraconfiguration = cameraConfiguration
+
+    def saveOpticalSystem(self):
+        print("Saving OpticalSystem")
+        adapter = self.getAdapterByName(self.adapterComboBox.currentText())
+        telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
+        opticalSystem = self.getOpticalSystem(adapter, telescope)
+        if opticalSystem == None:
+            opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
+        self.session.currentProject.opticalSystem = opticalSystem
+
+    def getOpticalSystem(self, adapter, telescope):
+        for opticalSystem in self.session.workspace.opticalSystemList:
+            if opticalSystem.adapter == adapter and opticalSystem.telescope == telescope:
+                return opticalSystem
 
     def getCameraConfigurationByName(self, cameraName):
         for cameraConf in self.session.workspace.cameraconfigurations:
