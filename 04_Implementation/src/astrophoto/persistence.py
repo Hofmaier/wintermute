@@ -34,8 +34,14 @@ class Database:
         """, (spectraluuid, spatialfunc, imagetype, configid))
         self.connection.commit()
 
-    def insertshotdescription(self, duration):
-        pass
+    def insertshotdescription(self, duration, imagetype, projid):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        INSERT INTO shotdescriptions
+        ( imagetype, duration, project)
+        VALUES (?, ?, ?)
+        """, ( imagetype, duration, projid))
+        self.connection.commit()
 
     def getprojects(self):
         cursor = self.connection.cursor()
@@ -43,6 +49,21 @@ class Database:
         projecttuples = cursor.fetchall()
         cursor.close()
         return projecttuples
+
+    def getProjectIdFor(self, name):
+        cursor = self.connection.cursor()
+        t = (name,)
+        cursor.execute('SELECT ROWID FROM projects WHERE name=?', t)
+        return cursor.fetchone()
+
+    def getShotDescFor(self, projectid):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        SELECT ROWID, duration, imagetype, project
+        FROM shotdescriptions
+        WHERE project=?
+        """, (projectid,))
+        return cursor.fetchall()
 
     def getimagingfunctions(self):
         cursor = self.connection.cursor()

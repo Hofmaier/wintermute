@@ -21,8 +21,10 @@ config.interface = 'The Imaging Source'
 config.initImageTypes()
 project.cameraconfiguration = config
 
-
 pf.persistcameraconfiguration(config, project)
+
+shotdesc = workflow.createShotdescription(1,3, project, 'RAW Bayer')
+pf.persistshotdescription(shotdesc, project)
 
 pf.configdict = {}
 pf.projectdict = {}
@@ -36,3 +38,6 @@ for proj in projlist:
     print('Cameraconfiguration: ' + proj.cameraconfiguration.name)
     imgfuncdict = proj.cameraconfiguration.imagingfunctions
     print('Nr of Image types: ' + str(len(imgfuncdict)))
+    for shotdesc in proj.shotdescriptions:
+        print('Shotdesciption: Duration ' + str(shotdesc.duration) + ' ImageType: ' + shotdesc.imagetype )
+        
