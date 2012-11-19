@@ -39,9 +39,9 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
-    def createShotDescription(self):
-        shotDescription = Shotdescription()
-        self.currentProject.shotDescriptionList.append(shotDescription)
+
+    def createShotDescription(self, nrOfShots, duration, project, imagetype):
+        shotDescription = createShotdescription(nrOfShots, duration, project, imagetype)
         return shotDescription
 
     def capture(shotdesc):
@@ -269,17 +269,15 @@ class PersistenceFacade:
         projects = [self.loadproject(*projecttuple) for projecttuple in projecttuples]
         return projects
 
-    def persistOpticalSystem(self, adapter, telescope):
-        return self.database.insertopticalsystem(adapter.name, telescope.name)
+    def persistOpticalSystem(self, opticalSystem, project):
+        rowId = self.database.insertopticalsystem(opticalSystem)
+        self.database.addOpticalSystemToProject(rowId, project.name)
 
     def persistAdapter(self, adapter):
         self.database.insertAdapter(adapter.name)
 
     def persistTelescope(self, telescope):
         self.database.insertTelescope(telescope.name)
-
-    def persistOpticalSystem(self, adapter, telescope):
-        self.database.insertOpticalSystem(adapter.name, telescope.name)
 
     def loadopticalsystem(self, tupel):
         return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))

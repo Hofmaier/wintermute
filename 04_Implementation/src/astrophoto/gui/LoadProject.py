@@ -60,6 +60,7 @@ class LoadProject(QtGui.QDialog):
             self.mainWindow_ui.setupUi(self.MainWindow, self.session)
             self.MainWindow.show()
             self.mainWindow_ui.planWidget.loadProject()
+            self.mainWindow_ui.spectralWidget.loadAllSpectralColourWidgets()
             self.lastWidget.deleteLater()
 
     def showLastScreen(self):

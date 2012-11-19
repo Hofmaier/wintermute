@@ -16,18 +16,18 @@ class SelectCameraInterface(QtGui.QDialog):
         self.session = session
         self.selectCameraLayout = QtGui.QGridLayout()
         self.setLayout(self.selectCameraLayout)
-		
+
         self.nameLabel = QtGui.QLabel()
         self.nameLabel.setText("Camera Name:")
         self.selectCameraLayout.addWidget(self.nameLabel, 1, 1)
-		
+
         self.cameraNameLineEdit = QtGui.QLineEdit()
         self.selectCameraLayout.addWidget(self.cameraNameLineEdit, 1, 2)
-		
+
         self.availPlugin = QtGui.QLabel()
         self.availPlugin.setText("Available Plugins:")
         self.selectCameraLayout.addWidget(self.availPlugin, 2, 1)
-		
+
         self.interfaceList = QtGui.QListWidget()
         self.selectCameraLayout.setColumnMinimumWidth(0, 10)
         self.selectCameraLayout.setColumnMinimumWidth(3, 10)

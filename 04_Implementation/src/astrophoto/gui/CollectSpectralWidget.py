@@ -48,7 +48,7 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
         self.spectralTimesLineEdit.setEnabled(False)
-        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shotList)))
+        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shots)))
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, 2, 9)
 
         self.spectralTakeButton = QtGui.QPushButton()
@@ -58,4 +58,4 @@ class CollectSpectralWidget(QtGui.QWidget):
         QtCore.QObject.connect(self.spectralTakeButton, QtCore.SIGNAL("clicked()"), self.captureClicked)
 
     def captureClicked(self):
-        self.session.currentProject.cameraConfiguration.camera.capture(0, 0)
+        self.shotDescription.capture()

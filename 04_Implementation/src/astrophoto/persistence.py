@@ -110,7 +110,9 @@ class Database:
 
 
 
-    def insertOpticalSystem(self, adapterName, telescopeName):
+    def insertOpticalSystem(self, opticalSystem):
+        if not opticalSystem.adapter is None:
+            pass
         cursor = self.connection.cursor()
         queryparameter = (adapterName, telescopeName, )
         cursor.execute('SELECT ROWID FROM opticSystems WHERE adapterName = ? AND telescopeName = ?', queryparameter)
