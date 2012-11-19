@@ -152,7 +152,7 @@ class Shotdescription:
             for shotnr, shot in enumerate(self.shots):
                 image = Image()
                 image.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
-                identifier = str(self.duration) + self.imagetype + self(shotnr)
+                identifier = str(self.duration) + self.imagetype + str(shotnr)
                 identifier.replace(' ','')
                 image.identfier = identifier
                 shot.images.append(image)
@@ -164,6 +164,7 @@ class Shotdescription:
 def createShotdescription(nrOfShots, duration, project, imagetype):
     shotdesc = Shotdescription(duration, imagetype)
     shotdesc.cameraconfiguration = project.cameraconfiguration
+    print('createShotdescription(): config: ' + shotdesc.cameraconfiguration.name)
     shotdesc.setNrOfShots(nrOfShots)
     project.shotdescriptions.append(shotdesc)
     return shotdesc
@@ -197,6 +198,7 @@ class PersistenceFacade:
         self.database.initschema()
         self.configdict = {}
         self.projectdict = {}
+        self.fitsmanager = persistence.FITSManager()
 
     def persistproject(self, project):
         self.database.insertproject(project.name)
@@ -220,7 +222,7 @@ class PersistenceFacade:
             self.database.insertshot(shotdescid)
 
     def writefits(self, image, project):
-        filepath = project.name +'/'+ project.name + image.identifier + '.fits'
+        filepath = project.name +'/'+ project.name +  '.fits'
         self.fitsmanager.writefits(image.signal, filepath)
 
     def getDatabase(self):

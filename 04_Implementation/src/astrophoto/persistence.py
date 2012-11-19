@@ -158,15 +158,15 @@ class Database:
 
 class FITSManager():
 
-    def writefits(image, filename):
+    def writefits(self, image, filename):
         """save image in fitsformat.
         
         image is a list of 640 x 480  integers. it contains intensity values of an image.
         """
         n = numpy.array(image)
         matrix = n.reshape(480, 640)
-        int8matrix = numpy.int8(matrix)
-        hdu = pyfits.PrimaryHDU(int32matrix)
+        int8matrix = numpy.int32(matrix)
+        hdu = pyfits.PrimaryHDU(int8matrix)
         hdu.writeto(filename)
 
 def createDatabase():
