@@ -1,3 +1,4 @@
+import os
 import os.path
 import imp
 import uuid
@@ -38,11 +39,14 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
-
     def createShotDescription(self):
         shotDescription = Shotdescription()
         self.currentProject.shotDescriptionList.append(shotDescription)
         return shotDescription
+
+    def capture(shotdesc):
+        img = shotdesc.capture()
+        workspace.persFacade.writefits(img, project)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -145,8 +149,11 @@ class Shotdescription:
 
     def capture(self):
         if self.imagetype == 'RAW Bayer':
-            for shot in self.shots:
-                image = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+            for shotnr, shot in enumerate(self.shots):
+                image.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+                identifier = str(self.duration) + self.imagetype + self(shotnr)
+                identifier.replace(' ','')
+                image.identfier = identifier
                 shot.images.append(image)
 
     def setNrOfShots(self, nrOfShots):
@@ -191,6 +198,7 @@ class PersistenceFacade:
 
     def persistproject(self, project):
         self.database.insertproject(project.name)
+        os.mkdir(project.name)
 
     def persistcameraconfiguration(self, cameraconfig, project):
         configid = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
@@ -205,7 +213,13 @@ class PersistenceFacade:
 
     def persistshotdescription(self, shotdesc, project):
         projid = self.database.getProjectIdFor(project.name)
-        self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
+        shotdescid = self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
+        for shot in shotdesc.shots:
+            self.database.insertshot(shotdescid)
+
+    def writefits(self, image, project):
+        filepath = project.name +'/'+ project.name + image.identifier + '.fits'
+        self.fitsmanager.writefits(image.signal, filepath)
 
     def getDatabase(self):
         self.database = persistence.Database()
@@ -245,7 +259,6 @@ class PersistenceFacade:
         self.projectdict[projectid] = project
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
         return project
-
 
     def loadshotdesc(self, shotdescid, duration, imgtype, poject):
         return Shotdescription(duration, imgtype)

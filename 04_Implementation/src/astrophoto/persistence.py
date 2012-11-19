@@ -1,3 +1,5 @@
+import numpy
+import pyfits
 import sqlite3
 
 class Database:
@@ -41,6 +43,15 @@ class Database:
         ( imagetype, duration, project)
         VALUES (?, ?, ?)
         """, ( imagetype, duration, projid))
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def insertshot(self, shotdescid):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        INSERT INTO shots
+        ( shotdescription )
+        VALUES (?)""", (shotdescid,))
         self.connection.commit()
 
     def getprojects(self):
@@ -143,6 +154,18 @@ class Database:
         cursor.close()
         return opticSystemTupel
 
+class FITSManager():
+
+    def writefits(image, filename):
+        """save image in fitsformat.
+        
+        image is a list of 640 x 480  integers. it contains intensity values of an image.
+        """
+        n = numpy.array(image)
+        matrix = n.reshape(480, 640)
+        int8matrix = numpy.int8(matrix)
+        hdu = pyfits.PrimaryHDU(int32matrix)
+        hdu.writeto(filename)
 
 def createDatabase():
     database = Database()

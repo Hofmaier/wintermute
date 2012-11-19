@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS shotdescriptions(
        project INTEGER
 );
 
+CREATE TABLE IF NOT EXISTS shots(
+       shotdescription INTEGER
+);
 
 CREATE TABLE IF NOT EXISTS imagingfunctions(
        spectralchanneluuid TEXT,
