@@ -10,23 +10,34 @@ import sys
 class StartUpScreen(QtGui.QWidget):
     def __init__(self):
         super(StartUpScreen, self).__init__()
-        self.horizontalLayout = QtGui.QVBoxLayout()
-        self.setLayout(self.horizontalLayout)
-        self.setWindowTitle("StartUp")
-        self.openNewProjectButton = QtGui.QPushButton()
-        self.openNewProjectButton.setText("New Project")
-        self.horizontalLayout.addWidget(self.openNewProjectButton)
+        self.startUpScreenLayout = QtGui.QGridLayout()
+        self.setLayout(self.startUpScreenLayout)
+        self.setWindowTitle("AstroPhoto")
 
         self.session = workflow.Session()
         self.session.workspace.load()
 
+        self.loadProjectLabel = QtGui.QLabel()
+        self.loadProjectLabel.setText("Load Project")
+        self.startUpScreenLayout.addWidget(self.loadProjectLabel, 1, 1)
+
+        self.projectList = QtGui.QListWidget()
+        self.startUpScreenLayout.addWidget(self.projectList, 2, 1, 1, 3)
+
+        for project in self.session.workspace.projectList:
+            self.projectList.addItem(project.name)
+
         self.loadProjectButton = QtGui.QPushButton()
         self.loadProjectButton.setText("Load Project")
-        self.horizontalLayout.addWidget(self.loadProjectButton)
+        self.startUpScreenLayout.addWidget(self.loadProjectButton, 3, 3)
+
+        self.openNewProjectButton = QtGui.QPushButton()
+        self.openNewProjectButton.setText("New Project")
+        self.startUpScreenLayout.addWidget(self.openNewProjectButton, 4, 3)
 
         self.cancelButton = QtGui.QPushButton()
         self.cancelButton.setText("Cancel")
-        self.horizontalLayout.addWidget(self.cancelButton)
+        self.startUpScreenLayout.addWidget(self.cancelButton, 4, 2)
 
         self.setFixedSize(self.sizeHint())
 

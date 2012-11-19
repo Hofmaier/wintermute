@@ -58,4 +58,4 @@ class CollectSpectralWidget(QtGui.QWidget):
         QtCore.QObject.connect(self.spectralTakeButton, QtCore.SIGNAL("clicked()"), self.captureClicked)
 
     def captureClicked(self):
-        self.shotDescription.capture()
+        self.session.capture(self.shotDescription)

@@ -44,9 +44,9 @@ class Session:
         shotDescription = createShotdescription(nrOfShots, duration, project, imagetype)
         return shotDescription
 
-    def capture(shotdesc):
+    def capture(self, shotdesc):
         img = shotdesc.capture()
-        workspace.persFacade.writefits(img, project)
+        self.workspace.persFacade.writefits(img, self.currentProject)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -150,11 +150,13 @@ class Shotdescription:
     def capture(self):
         if self.imagetype == 'RAW Bayer':
             for shotnr, shot in enumerate(self.shots):
+                image = Image()
                 image.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
                 identifier = str(self.duration) + self.imagetype + self(shotnr)
                 identifier.replace(' ','')
                 image.identfier = identifier
                 shot.images.append(image)
+                return image
 
     def setNrOfShots(self, nrOfShots):
         self.shots = [Shot() for i in range(nrOfShots)]
