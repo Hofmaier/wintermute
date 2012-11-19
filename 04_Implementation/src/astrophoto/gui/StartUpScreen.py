@@ -4,6 +4,7 @@ from astrophoto.gui.NewProject import NewProject
 from astrophoto import workflow
 from astrophoto.gui.MainWindow import Ui_MainWindow
 from astrophoto.gui.LoadProject import LoadProject
+from astrophoto.gui.MainFrame import MainFrame
 import sys
 
 
@@ -56,9 +57,18 @@ class StartUpScreen(QtGui.QWidget):
         self.newProject.show()
 
     def loadProject(self):
-        self.loadProject = LoadProject(self.session, self)
+        for project in self.session.workspace.projectList:
+            if project.name == self.projectList.currentItem().text():
+                self.session.currentProject = project
+        from astrophoto.gui.MainWindow import Ui_MainWindow
+        self.MainWindow = MainFrame(self.session)
+        self.mainWindow_ui = Ui_MainWindow()
+        self.mainWindow_ui.setupUi(self.MainWindow, self.session)
+        self.MainWindow.show()
+        self.mainWindow_ui.planWidget.loadProject()
+        self.mainWindow_ui.spectralWidget.loadAllSpectralColourWidgets()
         self.hide()
-        self.loadProject.show()
+        self.deleteLater()
 
 app = QtGui.QApplication(sys.argv)
 startUp = StartUpScreen()
