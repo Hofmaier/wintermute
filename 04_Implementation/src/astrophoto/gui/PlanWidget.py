@@ -29,6 +29,7 @@ class PlanWidget(QtGui.QWidget):
         self.opticalSystemLayout.setColumnMinimumWidth(4, 10)
 
         self.opticalSystemLayout.setRowMinimumHeight(1, 7)
+        self.opticalSystemLayout.setRowMinimumHeight(5, 7)
 
         self.opticalSystemLayout.addWidget(self.opticalSystemLabel, 0, 1)
         self.opticalSystemLayout.addWidget(self.opticalSystemFrame, 1, 0, 7, 5)

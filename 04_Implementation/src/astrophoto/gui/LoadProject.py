@@ -51,17 +51,7 @@ class LoadProject(QtGui.QDialog):
                 self.session.currentProject = project
         self.close()
         self.deleteLater()
-        if isinstance( self.lastWidget, QtGui.QMainWindow ):
-            self.lastWidget.loadProject()
-        else:
-            from astrophoto.gui.MainWindow import Ui_MainWindow
-            self.MainWindow = QtGui.QMainWindow()
-            self.mainWindow_ui = Ui_MainWindow()
-            self.mainWindow_ui.setupUi(self.MainWindow, self.session)
-            self.MainWindow.show()
-            self.mainWindow_ui.planWidget.loadProject()
-            self.mainWindow_ui.spectralWidget.loadAllSpectralColourWidgets()
-            self.lastWidget.deleteLater()
+        self.lastWidget.loadProject()
 
     def showLastScreen(self):
         if isinstance( self.lastWidget, QtGui.QMainWindow ):
