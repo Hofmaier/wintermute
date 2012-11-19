@@ -1,4 +1,4 @@
-import glob, os
+import glob, os, shutil
 from astrophoto import persistence
 from astrophoto import workflow
 from astrophoto import camerainterface
@@ -7,6 +7,8 @@ filelist = glob.glob("*.db")
 for f in filelist:
     os.remove(f)
 
+shutil.rmtree('jupiter')
+    
 pf = workflow.PersistenceFacade()
 
 project = workflow.Project('jupiter')

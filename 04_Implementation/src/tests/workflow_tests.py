@@ -72,7 +72,7 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIs(testcamera, cameraConfiguration.camera)
         createCameraMock.assert_called_with(interface)
         self.assertIsNotNone(cameraConfiguration.imagingfunctions)
-        self.assertEqual(cameraConfiguration.imagingfunctions.keys()[0], 'RAW Bayer')
+        self.assertEqual(list(cameraConfiguration.imagingfunctions.keys())[0], 'RAW Bayer')
         self.assertEqual(len(cameraConfiguration.imagingfunctions['RAW Bayer']), 3)
 
 class TestTelescope(unittest.TestCase):
@@ -130,7 +130,7 @@ class TestShotdesciption(unittest.TestCase):
         self.assertIsNotNone(shotdesc)
         self.assertEqual(shotdesc.duration, duration)
         self.assertEqual(shotdesc.imagetype, imagetype)
-        self.assertEqual(len(shotdesc.shots), nrOfShots)
+        self.assertEqual(len(shotdesc.images), nrOfShots)
         self.assertGreater(len(self.project.shotdescriptions), 0)
         self.assertIsNotNone(shotdesc.cameraconfiguration)
 
@@ -143,15 +143,9 @@ class TestShotdesciption(unittest.TestCase):
         cameramock.capture = mock.MagicMock(return_value=testimage)
         self.cameraconfiguration.camera = cameramock
         shotdesc.capture()
-        self.assertGreater(len(shotdesc.shots),0)
-        self.assertIsNotNone(shotdesc.shots[0].images[0])
+        self.assertGreater(len(shotdesc.images),0)
+        self.assertIsNotNone(shotdesc.images[0])
         cameramock.capture.assert_called_with(duration, imagetype)
-
-class TestShot(unittest.TestCase):
-
-    def test_ctor(self):
-        shot = workflow.Shot()
-        self.assertIsNotNone(shot)
 
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):

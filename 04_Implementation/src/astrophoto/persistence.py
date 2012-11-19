@@ -49,7 +49,7 @@ class Database:
     def insertshot(self, shotdescid):
         cursor = self.connection.cursor()
         cursor.execute("""
-        INSERT INTO shots
+        INSERT INTO images
         ( shotdescription )
         VALUES (?)""", (shotdescid,))
         self.connection.commit()
