@@ -51,7 +51,7 @@ class SpectralWidget(QtGui.QWidget):
         self.horizontalLayout_2.addItem(self.spacerItem)
 
     def deleteSpectralColourWidget(self):
-        self.session.currentProject.shotDescriptionList.remove(self.sender().parent().shotDescription)
+        self.session.currentProject.shotdescriptions.remove(self.sender().parent().shotDescription)
         self.horizontalLayout_2.removeWidget(self.sender().parent())
         self.spectralColourWidgetList.pop(self.spectralColourWidgetList.index(self.sender().parent()))
         self.sender().parent().deleteLater()
@@ -81,10 +81,12 @@ class SpectralWidget(QtGui.QWidget):
             spectralColourWidget.shotDescription.imagetype = imageTyp
             spectralColourWidget.shotDescription.setNrOfShots(nrOfShots)
 
-    def updateAllSpectralColourWidgets(self):
-        for spectralColourWidget in self.spectralColourWidgetList:
-            if not spectralColourWidget.imageTypeComboBox.currentText() in self.session.currentProject.cameraconfiguration.camera.getImageTypesAsStr():
-                print("Auswahl nicht mehr moeglich")
-#            for spectralChannel in self.session.currentProject.cameraconfiguration.spectralchannels:
-#                if not spectralColourWidget.spectralComboBox.currentText() == spectralChannel.name:
-#                    print("Auswahl nicht mehr moeglich")
+    def loadAllSpectralColourWidgets(self):
+        self.horizontalLayout_2.removeItem(self.spacerItem)
+        self.horizontalLayout_2.removeWidget(self.spectralAddButtonWidget)
+        for shotdesc in self.session.currentProject.shotdescriptions:
+            spectralColourWidget = SpectralColourWidget(self, self.session, shotdesc)
+            self.spectralColourWidgetList.append(spectralColourWidget)
+            self.horizontalLayout_2.addWidget(spectralColourWidget)
+        self.horizontalLayout_2.addWidget(self.spectralAddButtonWidget)
+        self.horizontalLayout_2.addItem(self.spacerItem)

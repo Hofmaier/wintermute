@@ -105,7 +105,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
         elif item.text() == "Spectrals":
             if self.planWidget.checkAllVariablesSet():
                 self.planWidget.saveOpticalSystem()
-                self.spectralWidget.updateAllSpectralColourWidgets()
                 self.spectralWidget.show()
                 self.planWidget.hide()
                 self.collectWidget.hide()
@@ -124,6 +123,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
         for telescope in self.session.workspace.telescopeList:
             self.session.workspace.persFacade.persistTelescope(telescope)
         self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
+        for shotdesc in project.shotdescriptions:
+            self.session.workspace.persFacade.persistshotdescription(shotdesc, project)
         sys.exit()
 
     def showLoadProjectWidget(self):
@@ -133,3 +134,4 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def loadProject(self):
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.planWidget.loadProject()
+        self.spectralWidget.loadAllSpectralColourWidgets()

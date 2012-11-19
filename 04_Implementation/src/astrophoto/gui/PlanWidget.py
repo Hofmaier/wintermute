@@ -127,7 +127,7 @@ class PlanWidget(QtGui.QWidget):
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
 
-        QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("activated(QString)"), self.saveCameraConfiguration)
+        QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveCameraConfiguration)
 
     def fillComboBoxes(self):
         for adapter in self.session.workspace.adapterList:
@@ -161,7 +161,6 @@ class PlanWidget(QtGui.QWidget):
         for configuration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(configuration.name, configuration)
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraName))
-
 
     def createAdapter(self, name):
         self.session.createAdapter(name)
