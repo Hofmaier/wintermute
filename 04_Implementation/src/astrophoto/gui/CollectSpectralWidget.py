@@ -21,12 +21,11 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralConfigFrame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.spectralConfigFrame.setFrameShadow(QtGui.QFrame.Raised)
 
-        self.spectralConfigLayout.addWidget(self.spectralConfigFrame, 0, 0, 4, 13)
         self.spectralConfigLayout.setRowMinimumHeight(1, 7)
-
-        self.spectralStatusLabel = QtGui.QLabel()
-        self.spectralStatusLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
-        self.spectralConfigLayout.addWidget(self.spectralStatusLabel, 1, 0)
+        self.spectralConfigLayout.setColumnMinimumWidth(0, 7)
+        self.spectralConfigLayout.setColumnMinimumWidth(2, 7)
+        self.spectralConfigLayout.setColumnMinimumWidth(4, 7)
+        self.spectralConfigLayout.setColumnMinimumWidth(6, 7)
 
         self.imageTypeLabel = QtGui.QLabel()
         self.imageTypeLabel.setText("Image Type:")
@@ -75,13 +74,20 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, self.actualRow, self.actualColumn)
         self.calculateActualPosition()
 
+        self.calculateNewRow()
+        self.spectralStatusLabel = QtGui.QLabel()
+        self.spectralStatusLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
+        self.spectralConfigLayout.addWidget(self.spectralStatusLabel, self.actualRow, self.actualColumn)
+        self.calculateActualPosition()
+
         self.spectralTakeButton = QtGui.QPushButton()
         self.spectralTakeButton.setText("Take All")
         self.spectralConfigLayout.addWidget(self.spectralTakeButton, self.actualRow, self.actualColumn)
         self.calculateActualPosition()
 
-
         self.spectralConfigLayout.setRowMinimumHeight(self.actualRow + 1, 7)
+        self.spectralConfigLayout.setColumnMinimumWidth(8, 8)
+        self.spectralConfigLayout.addWidget(self.spectralConfigFrame, 0, 0, 20, 20)
 
         QtCore.QObject.connect(self.spectralTakeButton, QtCore.SIGNAL("clicked()"), self.captureClicked)
 
@@ -89,8 +95,12 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.session.capture(self.shotDescription)
 
     def calculateActualPosition(self):
-        if self.actualColumn == 4:
+        if self.actualColumn == 7 :
             self.actualRow = self.actualRow + 1
             self.actualColumn = 1
         else:
-            self.actualColumn = self.actualColumn + 1
+            self.actualColumn = self.actualColumn + 2
+
+    def calculateNewRow(self):
+        self.actualRow = self.actualRow + 1
+        self.actualColumn = 5
