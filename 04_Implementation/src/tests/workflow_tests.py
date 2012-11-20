@@ -11,6 +11,9 @@ class TestProject(unittest.TestCase):
 class TestSession(unittest.TestCase):
 
     def setUp(self):
+        mockdb = mock.MagicMock()
+        mockdb.initschema = mock.MagicMock()
+        workflow.getDatabase = mock.MagicMock(return_value=mockdb)
         self.session = workflow.Session()
         self.projectname = 'jupiter'
 
@@ -46,6 +49,16 @@ class TestSession(unittest.TestCase):
     def test_getInterfaceNames(self):
         session = workflow.Session()
 
+    def test_capture(self):
+        shotdesc = workflow.Shotdescription(3, 'RAW Bayer')
+        testImg = [1]
+        self.currentProject = workflow.Project('jupiter')
+        shotdesc.capture = mock.MagicMock(return_value = testImg)
+        writefitsmock = mock.MagicMock()
+        self.session.workspace.persFacade.writefits = writefitsmock
+        self.session.capture(shotdesc)
+        shotdesc.capture.assert_called_with()
+        writefitsmock.assert_called_with(testImg, shotdesc, self.session.currentProject)
 
 class TestCameraConfiguration(unittest.TestCase):
     def setUp(self):
@@ -124,7 +137,6 @@ class TestShotdesciption(unittest.TestCase):
     def test_createShotdescription(self):
         nrOfShots = 5
         duration = 30
-
         imagetype = 'RAW Bayer'
         shotdesc = workflow.createShotdescription(nrOfShots, duration, self.project, imagetype)
         self.assertIsNotNone(shotdesc)
@@ -133,6 +145,7 @@ class TestShotdesciption(unittest.TestCase):
         self.assertEqual(len(shotdesc.images), nrOfShots)
         self.assertGreater(len(self.project.shotdescriptions), 0)
         self.assertIsNotNone(shotdesc.cameraconfiguration)
+        self.assertEqual(shotdesc.images[0].order, 1)
 
     def test_capture(self):
         duration = 3
@@ -142,36 +155,51 @@ class TestShotdesciption(unittest.TestCase):
         testimage = [1,2,3,4]
         cameramock.capture = mock.MagicMock(return_value=testimage)
         self.cameraconfiguration.camera = cameramock
-        shotdesc.capture()
+        capturedImg = shotdesc.capture()
+        self.assertIsNotNone(capturedImg)
         self.assertGreater(len(shotdesc.images),0)
         self.assertIsNotNone(shotdesc.images[0])
         cameramock.capture.assert_called_with(duration, imagetype)
 
+
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):
+        self.dbmock = mock.Mock()
+        workflow.getDatabase = mock.Mock(return_value=self.dbmock)
         self.persistencefacade = workflow.PersistenceFacade()
 
     def test_ctor(self):
-        persistencefacade = workflow.PersistenceFacade()
-        dbmock = mock.Mock()
-        persistencefacade.getDatabase = mock.Mock(return_value=dbmock)
-        self.assertIsNotNone(persistencefacade.database)
+        self.assertIsNotNone(self.persistencefacade.database)
 
     def test_persistproject(self):
         dbmock = mock.MagicMock()
         projectname = 'jupiter'
         project = workflow.Project(projectname)
         dbmock.insertproject.return_value = 'True'
-        persistencefacade = workflow.PersistenceFacade()
-        persistencefacade.getDatabase = mock.MagicMock(return_value=dbmock)
-        persistencefacade.database = dbmock
-        persistencefacade.persistproject(project)
-        dbmock.insertproject.assert_called_with(project.name)
+
+        self.persistencefacade.persistproject(project)
+        self.persistencefacade.database.insertproject.assert_called_with(project.name)
 
     def test_loadprojects(self):
+        t = (1, 'jupiter', 1)
+        l = [t]
+        self.dbmock.getprojects = mock.MagicMock(return_value=l)
+        sdtl = [(1,3,'RAW Bayer', 1)]
+        self.dbmock.getShotDescFor = mock.MagicMock(return_value=sdtl)
+        self.dbmock.getImagesOf = mock.MagicMock(return_value=[1])
         projects = self.persistencefacade.loadprojects()
         self.assertIsNotNone(projects)
         self.assertEqual(1, len(projects))
+
+    def test_writefits(self):
+        proj = workflow.Project('jupiter')
+        duration = 3
+        imagetype = 'RAW Bayer'
+        shotdesc = workflow.Shotdescription(duration, imagetype)
+        shotdesc.setNrOfShots(1)
+        img = shotdesc.images[0]
+        self.persistencefacade.writefits(img, shotdesc, proj)
+        self.assertEqual(img.filename, 'jupiter3RAWBayer1')
 
 class TestSpectralChannel(unittest.TestCase):
     def test_ctor(self):

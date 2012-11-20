@@ -39,14 +39,13 @@ class Session:
         self.workspace.telescopeList.append(telescope)
         return telescope
 
-
     def createShotDescription(self, nrOfShots, duration, project, imagetype):
         shotDescription = createShotdescription(nrOfShots, duration, project, imagetype)
         return shotDescription
 
     def capture(self, shotdesc):
         img = shotdesc.capture()
-        self.workspace.persFacade.writefits(img, self.currentProject)
+        self.workspace.persFacade.writefits(img, shotdesc, self.currentProject)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -151,13 +150,12 @@ class Shotdescription:
         if self.imagetype == 'RAW Bayer':
             for imgnr, img in enumerate(self.images):
                 img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
-                identifier = str(self.duration) + self.imagetype + str(imgnr)
-                img.identfier = identifier
+
                 self.images.append(img)
                 return img
 
     def setNrOfShots(self, nrOfShots):
-        self.images = [Image() for i in range(nrOfShots)]
+        self.images = [Image(i+1) for i in range(nrOfShots)]
 
 def createShotdescription(nrOfShots, duration, project, imagetype):
     shotdesc = Shotdescription(duration, imagetype)
@@ -168,9 +166,10 @@ def createShotdescription(nrOfShots, duration, project, imagetype):
     return shotdesc
 
 class Image:
-    def __init__(self):
+    def __init__(self, order=0):
         self.signal = []
-        self.identifier = ''
+        self.filenameb = ''
+        self.order = order
 
 class Telescope:
     def __init__(self, name):
@@ -188,13 +187,12 @@ class Opticalsystem:
 
 
 class PersistenceFacade:
-
     def __init__(self):
-        self.database = self.getDatabase()
+        self.database = getDatabase()
         self.database.initschema()
         self.configdict = {}
         self.projectdict = {}
-        self.fitsmanager = persistence.FITSManager()
+        self.fitsmanager = getFITSManager()
 
     def persistproject(self, project):
         self.database.insertproject(project.name)
@@ -220,13 +218,15 @@ class PersistenceFacade:
         for img in shotdesc.images:
             self.database.insertimage(shotdescid)
 
-    def writefits(self, image, project):
-        filepath = project.name +'/'+ project.name +  '.fits'
-        self.fitsmanager.writefits(image.signal, filepath)
+    def writefits(self, image, shotdesc, project):
+        filepath = project.name +'/'
+        filename = project.name + str(shotdesc.duration)
+        filename = filename + shotdesc.imagetype
+        filename = filename + str(image.order)
+        filename = filename.replace(' ','')
+        image.filename = filename
+        #self.fitsmanager.writefits(image.signal, filepath)
 
-    def getDatabase(self):
-        self.database = persistence.Database()
-        return self.database
 
     def loadcameraconfigurations(self):
         configtuples = self.database.getimagingfunctions()
@@ -286,3 +286,15 @@ class PersistenceFacade:
 
     def loadopticalsystem(self, tupel):
         return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
+
+def getDatabase():
+    """used for unittesting.
+
+    This function will be replace with a mock. Get rid of heavy database initialisation stuff.
+    """
+    return persistence.Database()
+
+def getFITSManager():
+    """used for unittesting
+    """
+    return persistence.FITSManager()
