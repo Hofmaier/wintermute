@@ -142,24 +142,22 @@ class SpectralChannel:
 
 class Shotdescription:
     def __init__(self, duration, imagetype):
-        self.shots = []
+        self.images = []
         self.imagetype = imagetype
         self.duration = duration
         self.cameraconfiguration = None
 
     def capture(self):
         if self.imagetype == 'RAW Bayer':
-            for shotnr, shot in enumerate(self.shots):
-                image = Image()
-                image.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
-                identifier = str(self.duration) + self.imagetype + str(shotnr)
-                identifier.replace(' ','')
-                image.identfier = identifier
-                shot.images.append(image)
-                return image
+            for imgnr, img in enumerate(self.images):
+                img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+                identifier = str(self.duration) + self.imagetype + str(imgnr)
+                img.identfier = identifier
+                self.images.append(img)
+                return img
 
     def setNrOfShots(self, nrOfShots):
-        self.shots = [Shot() for i in range(nrOfShots)]
+        self.images = [Image() for i in range(nrOfShots)]
 
 def createShotdescription(nrOfShots, duration, project, imagetype):
     shotdesc = Shotdescription(duration, imagetype)
@@ -169,12 +167,10 @@ def createShotdescription(nrOfShots, duration, project, imagetype):
     project.shotdescriptions.append(shotdesc)
     return shotdesc
 
-class Shot:
-    def __init__(self):
-        self.images = []
-
 class Image:
-    pass
+    def __init__(self):
+        self.signal = []
+        self.identifier = ''
 
 class Telescope:
     def __init__(self, name):
@@ -202,7 +198,10 @@ class PersistenceFacade:
 
     def persistproject(self, project):
         self.database.insertproject(project.name)
-        os.mkdir(project.name)
+        try:
+            os.mkdir(project.name)
+        except OSError:
+            pass
 
     def persistcameraconfiguration(self, cameraconfig, project):
         configid = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
@@ -218,7 +217,7 @@ class PersistenceFacade:
     def persistshotdescription(self, shotdesc, project):
         projid = self.database.getProjectIdFor(project.name)
         shotdescid = self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
-        for shot in shotdesc.shots:
+        for img in shotdesc.images:
             self.database.insertshot(shotdescid)
 
     def writefits(self, image, project):

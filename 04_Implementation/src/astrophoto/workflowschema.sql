@@ -19,12 +19,14 @@ CREATE TABLE IF NOT EXISTS shotdescriptions(
        project INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS shots(
-       shotdescription INTEGER
+CREATE TABLE IF NOT EXISTS images(
+       shotdescription INTEGER,
+       filename TEXT
 );
 
 CREATE TABLE IF NOT EXISTS imagingfunctions(
        spectralchanneluuid TEXT,
+       spectraltag TEXT,
        spatialfunction TEXT,
        imagetype TEXT,
        cameraconfiguration INTEGER 
