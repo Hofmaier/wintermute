@@ -136,5 +136,3 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.planWidget.loadProject()
         self.spectralWidget.loadAllSpectralColourWidgets()
 
-    def closeEvent(self, event):
-        print("closing")
