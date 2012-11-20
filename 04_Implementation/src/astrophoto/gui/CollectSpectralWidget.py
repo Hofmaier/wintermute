@@ -9,7 +9,7 @@ except AttributeError:
 class CollectSpectralWidget(QtGui.QWidget):
     def __init__(self, shotDescription, session):
         super(CollectSpectralWidget, self).__init__()
-        self.setMinimumWidth(640)
+        self.setMinimumWidth(630)
         self.shotDescription = shotDescription
         self.session = session
 
@@ -70,14 +70,14 @@ class CollectSpectralWidget(QtGui.QWidget):
 
         self.spectralTimesLineEdit = QtGui.QLineEdit()
         self.spectralTimesLineEdit.setEnabled(False)
-        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.shots)))
+        self.spectralTimesLineEdit.setText(str(len(self.shotDescription.images)))
         self.spectralConfigLayout.addWidget(self.spectralTimesLineEdit, self.actualRow, self.actualColumn)
         self.calculateActualPosition()
 
         self.calculateNewRow()
         self.spectralStatusLabel = QtGui.QLabel()
         self.spectralStatusLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
-        self.spectralConfigLayout.addWidget(self.spectralStatusLabel, self.actualRow, self.actualColumn)
+        self.spectralConfigLayout.addWidget(self.spectralStatusLabel, self.actualRow, 1)
         self.calculateActualPosition()
 
         self.spectralTakeButton = QtGui.QPushButton()

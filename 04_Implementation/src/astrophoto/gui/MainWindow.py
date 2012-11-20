@@ -117,6 +117,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 self.collectWidget.show()
 
     def closeApplication(self):
+        print("Saving MainWindow")
         project = self.session.currentProject
         for adapter in self.session.workspace.adapterList:
             self.session.workspace.persFacade.persistAdapter(adapter)

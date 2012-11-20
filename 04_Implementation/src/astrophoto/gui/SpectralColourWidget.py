@@ -56,11 +56,10 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLayout.addWidget(self.numberOfImagesLabel, self.actualRow, self.actualColumn)
         self.calculatePosition()
 
-        print("ShotList length: " + str(len(self.shotDescription.shots)))
         self.numberOfImagesLineEdit = QtGui.QLineEdit()
 #        self.numberOfImagesLineEdit.setValidator(self.numberValidator)
         self.spectralLayout.addWidget(self.numberOfImagesLineEdit, self.actualRow, self.actualColumn)
-        self.numberOfImagesLineEdit.setText(str(len(self.shotDescription.shots)))
+        self.numberOfImagesLineEdit.setText(str(len(self.shotDescription.images)))
         self.calculatePosition()
 
         self.durationLabel = QtGui.QLabel()
