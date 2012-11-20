@@ -4,6 +4,7 @@ import os
 from PyQt4 import QtCore, QtGui
 from astrophoto.gui.NewItems import *
 from astrophoto.gui.SelectCameraInterface import SelectCameraInterface
+from astrophoto.gui.BiasCollect import BiasCollect
 
 class PlanWidget(QtGui.QWidget):
     def __init__(self, session):
@@ -127,6 +128,7 @@ class PlanWidget(QtGui.QWidget):
         QtCore.QObject.connect(self.addDeviceButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
+        QtCore.QObject.connect(self.takeBiasButton, QtCore.SIGNAL("clicked()"), self.takeBias)
 
         QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveCameraConfiguration)
 
@@ -229,3 +231,7 @@ class PlanWidget(QtGui.QWidget):
 
         cameraConfiguration = self.session.currentProject.cameraconfiguration
         self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
+
+    def takeBias(self):
+        self.biasCollect = BiasCollect(self.session)
+        self.biasCollect.show()

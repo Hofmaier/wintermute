@@ -135,3 +135,4 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.planWidget.loadProject()
         self.spectralWidget.loadAllSpectralColourWidgets()
+
