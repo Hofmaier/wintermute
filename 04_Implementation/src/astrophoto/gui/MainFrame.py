@@ -12,6 +12,7 @@ class MainFrame(QtGui.QMainWindow):
         self.session = session
 
     def closeEvent(self, event):
+        print("Savin in MainFrame")
         project = self.session.currentProject
         for adapter in self.session.workspace.adapterList:
             self.session.workspace.persFacade.persistAdapter(adapter)

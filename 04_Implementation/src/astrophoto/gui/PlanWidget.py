@@ -122,26 +122,21 @@ class PlanWidget(QtGui.QWidget):
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
 
-
         self.fillComboBoxes()
 
         QtCore.QObject.connect(self.addDeviceButton, QtCore.SIGNAL("clicked()"), self.addNewCamera)
         QtCore.QObject.connect(self.addAdapterButton, QtCore.SIGNAL("clicked()"), self.addNewAdapter)
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
         QtCore.QObject.connect(self.takeBiasButton, QtCore.SIGNAL("clicked()"), self.takeBias)
-
         QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveCameraConfiguration)
 
     def fillComboBoxes(self):
         for adapter in self.session.workspace.adapterList:
             self.adapterComboBox.addItem(adapter.name, adapter)
-
         for telescope in self.session.workspace.telescopeList:
             self.telescopeComboBox.addItem(telescope.name, telescope)
-
         for cameraConfiguration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(cameraConfiguration.name, cameraConfiguration)
-
         self.deviceComboBox.setCurrentIndex(-1)
 
     def addNewAdapter(self):
