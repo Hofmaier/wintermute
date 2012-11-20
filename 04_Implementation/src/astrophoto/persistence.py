@@ -46,7 +46,7 @@ class Database:
         self.connection.commit()
         return cursor.lastrowid
 
-    def insertshot(self, shotdescid):
+    def insertimage(self, shotdescid):
         cursor = self.connection.cursor()
         cursor.execute("""
         INSERT INTO images
@@ -108,7 +108,15 @@ class Database:
         cursor.close()
         return cameraconfig
 
-
+    def getImagesOf(self, shotdesc):
+        cursor = self.connection.cursor()
+        cursor.execute("""
+        SELECT * FROM images
+        WHERE shotdescription = ?
+        """, (shotdesc,))
+        images = cursor.fetchall()
+        cursor.close()
+        return images
 
     def insertOpticalSystem(self, opticalSystem):
         if not opticalSystem.adapter is None:
@@ -160,7 +168,7 @@ class FITSManager():
 
     def writefits(self, image, filename):
         """save image in fitsformat.
-        
+
         image is a list of 640 x 480  integers. it contains intensity values of an image.
         """
         n = numpy.array(image)

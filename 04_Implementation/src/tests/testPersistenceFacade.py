@@ -8,7 +8,7 @@ for f in filelist:
     os.remove(f)
 
 shutil.rmtree('jupiter')
-    
+
 pf = workflow.PersistenceFacade()
 
 project = workflow.Project('jupiter')
@@ -25,7 +25,9 @@ project.cameraconfiguration = config
 
 pf.persistcameraconfiguration(config, project)
 
-shotdesc = workflow.createShotdescription(1,3, project, 'RAW Bayer')
+nrOfShots = 3
+duration = 3
+shotdesc = workflow.createShotdescription(nrOfShots, duration, project, 'RAW Bayer')
 pf.persistshotdescription(shotdesc, project)
 
 pf.configdict = {}
@@ -42,4 +44,5 @@ for proj in projlist:
     print('Nr of Image types: ' + str(len(imgfuncdict)))
     for shotdesc in proj.shotdescriptions:
         print('Shotdesciption: Duration ' + str(shotdesc.duration) + ' ImageType: ' + shotdesc.imagetype )
+        print('NrOfImgages in Shotsdescription: ' + str(len(shotdesc.images)))
         

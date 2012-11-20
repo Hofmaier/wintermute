@@ -218,7 +218,7 @@ class PersistenceFacade:
         projid = self.database.getProjectIdFor(project.name)
         shotdescid = self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
         for img in shotdesc.images:
-            self.database.insertshot(shotdescid)
+            self.database.insertimage(shotdescid)
 
     def writefits(self, image, project):
         filepath = project.name +'/'+ project.name +  '.fits'
@@ -263,8 +263,10 @@ class PersistenceFacade:
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
         return project
 
-    def loadshotdesc(self, shotdescid, duration, imgtype, poject):
-        return Shotdescription(duration, imgtype)
+    def loadshotdesc(self, shotdescid, duration, imgtype, project):
+        shotdesc = Shotdescription(duration, imgtype)
+        shotdesc.images = [Image() for img in self.database.getImagesOf(shotdescid)]
+        return shotdesc
 
     def loadprojects(self):
         projects = []
