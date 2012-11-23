@@ -51,14 +51,18 @@ class TestSession(unittest.TestCase):
 
     def test_capture(self):
         shotdesc = workflow.Shotdescription(3, 'RAW Bayer')
-        testImg = [1]
+        img1 = workflow.Image()
+        img1.order = 1
+        img2 = workflow.Image()
+        img2.order = 2
+        imageserie = [img1, img2]
         self.currentProject = workflow.Project('jupiter')
-        shotdesc.capture = mock.MagicMock(return_value = testImg)
+        shotdesc.capture = mock.MagicMock(return_value = imageserie)
         writefitsmock = mock.MagicMock()
         self.session.workspace.persFacade.writefits = writefitsmock
         self.session.capture(shotdesc)
         shotdesc.capture.assert_called_with()
-        writefitsmock.assert_called_with(testImg, shotdesc, self.session.currentProject)
+        self.assertEqual(writefitsmock.call_count, 2)
 
 class TestCameraConfiguration(unittest.TestCase):
     def setUp(self):
@@ -124,11 +128,13 @@ class TestSpectralChannel(unittest.TestCase):
         spectralchannel = workflow.SpectralChannel()
         self.assertIsNotNone(spectralchannel)
 
-class TestShotdesciption(unittest.TestCase):
+class TestShotdescription(unittest.TestCase):
     def setUp(self):
         self.project = workflow.Project('jupiter')
         self.cameraconfiguration = workflow.CameraConfiguration('TIS dbk22au618.as 2012')
         self.project.cameraconfiguration = self.cameraconfiguration
+        self.imagetype = 'RAW Bayer'
+        self.duration = 3
 
     def test_ctor(self):
         shotdescription = workflow.Shotdescription(3, 'RAW Bayer')
@@ -136,30 +142,29 @@ class TestShotdesciption(unittest.TestCase):
 
     def test_createShotdescription(self):
         nrOfShots = 5
-        duration = 30
-        imagetype = 'RAW Bayer'
-        shotdesc = workflow.createShotdescription(nrOfShots, duration, self.project, imagetype)
+        shotdesc = workflow.createShotdescription(nrOfShots, self.duration, self.project, self.imagetype)
         self.assertIsNotNone(shotdesc)
-        self.assertEqual(shotdesc.duration, duration)
-        self.assertEqual(shotdesc.imagetype, imagetype)
+        self.assertEqual(shotdesc.duration, self.duration)
+        self.assertEqual(shotdesc.imagetype, self.imagetype)
         self.assertEqual(len(shotdesc.images), nrOfShots)
         self.assertGreater(len(self.project.shotdescriptions), 0)
         self.assertIsNotNone(shotdesc.cameraconfiguration)
         self.assertEqual(shotdesc.images[0].order, 1)
 
     def test_capture(self):
-        duration = 3
-        imagetype = 'RAW Bayer'
-        shotdesc = workflow.createShotdescription(1, duration, self.project, imagetype)
+
         cameramock = mock.MagicMock()
         testimage = [1,2,3,4]
         cameramock.capture = mock.MagicMock(return_value=testimage)
         self.cameraconfiguration.camera = cameramock
+        shotdesc = workflow.createShotdescription(1, self.duration, self.project, self.imagetype)
+        shotdesc.cameraconfiguration = self.cameraconfiguration
+        print('test_capture: before capture ')
         capturedImg = shotdesc.capture()
         self.assertIsNotNone(capturedImg)
         self.assertGreater(len(shotdesc.images),0)
         self.assertIsNotNone(shotdesc.images[0])
-        cameramock.capture.assert_called_with(duration, imagetype)
+        cameramock.capture.assert_called_with(self.duration, self.imagetype)
 
 
 class TestPersistenceFacade(unittest.TestCase):

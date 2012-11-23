@@ -44,8 +44,9 @@ class Session:
         return shotDescription
 
     def capture(self, shotdesc):
-        img = shotdesc.capture()
-        self.workspace.persFacade.writefits(img, shotdesc, self.currentProject)
+        imagelist = shotdesc.capture()
+        for img in imagelist:
+            self.workspace.persFacade.writefits(img, shotdesc, self.currentProject)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -151,8 +152,7 @@ class Shotdescription:
             for imgnr, img in enumerate(self.images):
                 img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
 
-                self.images.append(img)
-                return img
+        return self.images
 
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(i+1) for i in range(nrOfShots)]
