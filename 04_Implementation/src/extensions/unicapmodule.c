@@ -1,6 +1,8 @@
 #include <Python.h>
 #include <unicap/unicap.h>
 
+#define MAX_PROPERTIES 64
+
 unsigned char *buf = NULL;
 int nrOfPixel = 0;
 
@@ -12,7 +14,11 @@ getHandle (void)
   unicap_enumerate_devices(NULL, &imaging_source_dev, dev_count);
   printf("Open %s\n", imaging_source_dev.identifier); 
   unicap_handle_t handle;
-  unicap_open (&handle, &imaging_source_dev);
+  if(!SUCCESS(unicap_open (&handle, &imaging_source_dev)))
+    {
+      fprintf(stderr, "could not open device");
+      return NULL;
+    }
   return handle;
 }
 
@@ -35,26 +41,66 @@ new_frame_cb(unicap_event_t event,
   printf("copied %d pixels\n", nrOfPixel);
 }
 
-int	
-capture(unicap_handle_t handle) {
-  printf("capture \n");
+unicap_format_t
+getformat(unicap_handle_t handle)
+{
   unicap_format_t format;
-  volatile int framecounter = 1;
-
   if (!SUCCESS(unicap_get_format(handle, &format))) 
     {
       fprintf(stderr, "cannot get format\n");
-      return -1;
+      return format;
     }
+  return format;
+}
 
-  printf("format is %s \n", format.identifier);
+void 
+setformat(unicap_handle_t handle, unicap_format_t format)
+{
   format.buffer_type = UNICAP_BUFFER_TYPE_SYSTEM;
-
   if (!SUCCESS(unicap_set_format(handle, &format))) 
     {
       fprintf(stderr, "cannot set format\n");
-      return -1;
     }
+}
+
+void
+setformat_fromstr(unicap_handle_t handle, const char *formatstr)
+{
+  unicap_format_t format;
+  int i;
+  for(i=0;SUCCESS(unicap_enumerate_formats(handle, NULL, &format, i)); i++)
+    {
+      if(strcmp(formatstr, format.identifier) == 0)
+	{
+	  break;
+	}
+    }
+  setformat(handle, format);
+}
+
+double
+getduration(unicap_handle_t handle)
+{
+  unicap_property_t prop;
+  int i;
+  char * propidentifier;
+  for(i = 0; SUCCESS(unicap_enumerate_properties(handle, NULL, &prop,i)); i++)
+    {
+      propidentifier = prop.identifier;
+      if(strcmp("shutter", propidentifier) == 0)
+	{
+	  break;
+	}
+    }
+  
+  return prop.value;
+}
+
+int	
+capture(unicap_handle_t handle) 
+{
+  unicap_format_t format = getformat(handle);
+  volatile int framecounter = 1;
 
   int imagewidth;
   int imageheight;
@@ -97,8 +143,35 @@ unicap_capture(PyObject *self, PyObject *args)
   return imgarray;
 }
 
+static PyObject *
+unicap_getadjustments(PyObject *self, PyObject *args)
+{
+  unicap_handle_t handle = getHandle();
+  unicap_format_t format = getformat(handle);
+  const char * formatstr = format.identifier;
+  char adjstr[1024];
+  double duration = getduration(handle);
+  snprintf(adjstr, 1024, "Format:%s;Shutter:%f",formatstr, duration );
+  PyObject * pystr = PyUnicode_FromString(adjstr);
+  return pystr;
+}
+
+static PyObject *
+unicap_setformat(PyObject *self, PyObject *args)
+{
+  const char *formatstr;
+  if(!PyArg_ParseTuple(args, "s", &formatstr))
+    {
+      return NULL;
+    }
+  setformat_fromstr(getHandle(),formatstr);
+  return PyLong_FromLong(1);
+}
+
 static PyMethodDef UnicapMethods[] = {
-  {"capture", unicap_capture, METH_VARARGS, "capture a image with defined gain and shutter"},
+  {"capture", unicap_capture, METH_VARARGS, "capture a image with defined gain and shutter. Return a list with intensity values"},
+  {"getadjustments", unicap_getadjustments, METH_VARARGS, "get current adjuments(formats, duration) of the connected camera as a string" },
+  {"setformat", unicap_setformat, METH_VARARGS, "sets the format (e.g RAW Bayer, YUV) of camera"},
   {NULL, NULL, 0, NULL}
 };
 
