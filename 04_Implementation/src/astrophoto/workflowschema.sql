@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS telescopes(
 );
 
 CREATE TABLE IF NOT EXISTS opticSystems(
-       adapterName text,
-       telescopeName text
+       adapterRowId INTEGER,
+       telescopeRowId INTEGER
 );
 

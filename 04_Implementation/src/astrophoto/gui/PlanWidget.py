@@ -129,6 +129,8 @@ class PlanWidget(QtGui.QWidget):
         QtCore.QObject.connect(self.addTelescopeButton, QtCore.SIGNAL("clicked()"), self.addNewTelescope)
         QtCore.QObject.connect(self.takeBiasButton, QtCore.SIGNAL("clicked()"), self.takeBias)
         QtCore.QObject.connect(self.deviceComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveCameraConfiguration)
+        QtCore.QObject.connect(self.adapterComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveOpticalSystem)
+        QtCore.QObject.connect(self.telescopeComboBox, QtCore.SIGNAL("currentIndexChanged(QString)"), self.saveOpticalSystem)
 
     def fillComboBoxes(self):
         for adapter in self.session.workspace.adapterList:
@@ -138,6 +140,8 @@ class PlanWidget(QtGui.QWidget):
         for cameraConfiguration in self.session.workspace.cameraconfigurations:
             self.deviceComboBox.addItem(cameraConfiguration.name, cameraConfiguration)
         self.deviceComboBox.setCurrentIndex(-1)
+        self.adapterComboBox.setCurrentIndex(-1)
+        self.telescopeComboBox.setCurrentIndex(-1)
 
     def addNewAdapter(self):
         self.newAdapterDialog = NewAdapter(self)
@@ -194,10 +198,12 @@ class PlanWidget(QtGui.QWidget):
         print("Saving OpticalSystem")
         adapter = self.getAdapterByName(self.adapterComboBox.currentText())
         telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
-        opticalSystem = self.getOpticalSystem(adapter, telescope)
+        opticalSystem = self.session.currentProject.opticalSystem
         if opticalSystem == None:
             opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
-        self.session.currentProject.opticalSystem = opticalSystem
+        else:
+            opticalSystem.adapter = adapter
+            opticalSystem.telescope = telescope
 
     def getOpticalSystem(self, adapter, telescope):
         for opticalSystem in self.session.workspace.opticalSystemList:
@@ -220,12 +226,14 @@ class PlanWidget(QtGui.QWidget):
                 return telescope
 
     def loadProject(self):
-        #opticalSystem = self.session.currentProject.opticalSystem
-        #self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
-        #self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
-
+        opticalSystem = self.session.currentProject.opticalSystem
+        if not opticalSystem.adapter is None:
+            self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
+        if not opticalSystem.telescope is None:
+            self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
         cameraConfiguration = self.session.currentProject.cameraconfiguration
-        self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
+        if not cameraConfiguration is None:
+            self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
 
     def takeBias(self):
         self.biasCollect = BiasCollect(self.session)

@@ -112,11 +112,18 @@ class Workspace:
     def load(self):
         camerainterface.getInterfaceNames()
         self.persFacade.loadcameraconfigurations()
+        self.persFacade.loadAdapters()
+        self.persFacade.loadTelescopes()
+        self.persFacade.loadopticalsystems()
         self.persFacade.loadprojects()
         for cameraconfiguration in self.persFacade.configdict.values():
             self.cameraconfigurations.append(cameraconfiguration)
         for project in self.persFacade.projectdict.values():
             self.projectList.append(project)
+        for adapter in self.persFacade.adapterdict.values():
+            self.adapterList.append(adapter)
+        for telescope in self.persFacade.telescopedict.values():
+            self.telescopeList.append(telescope)
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
@@ -192,6 +199,9 @@ class PersistenceFacade:
         self.database.initschema()
         self.configdict = {}
         self.projectdict = {}
+        self.adapterdict = {}
+        self.telescopedict = {}
+        self.optsystemdict = {}
         self.fitsmanager = getFITSManager()
 
     def persistproject(self, project):
@@ -253,7 +263,7 @@ class PersistenceFacade:
 
         print('loadcameraconfig(): nr of config loaded ' + str(len(self.configdict.keys())))
 
-    def loadproject(self, projectid, name, camconfigrowid):
+    def loadproject(self, projectid, name, camconfigrowid, opticalSystemId):
         project = Project(name)
         if camconfigrowid in self.configdict:
             print('loadproject(): projconfig: ' + str(camconfigrowid))
@@ -261,6 +271,7 @@ class PersistenceFacade:
 
         self.projectdict[projectid] = project
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
+        project.opticalSystem = self.optsystemdict[opticalSystemId]
         return project
 
     def loadshotdesc(self, shotdescid, duration, imgtype, project):
@@ -275,17 +286,45 @@ class PersistenceFacade:
         return projects
 
     def persistOpticalSystem(self, opticalSystem, project):
-        rowId = self.database.insertopticalsystem(opticalSystem)
-        self.database.addOpticalSystemToProject(rowId, project.name)
+        adapterId = -1
+        telescopeId = -1
+        for rowId, adapter in self.adapterdict.items():
+            if adapter is opticalSystem.adapter:
+                adapterId = rowId
+        for rowId, telescope in self.telescopedict.items():
+            if telescope is opticalSystem.telescope:
+                telescopeId = rowId
+        self.database.persistopticalsystem(adapterId, telescopeId, project)
 
     def persistAdapter(self, adapter):
-        self.database.insertAdapter(adapter.name)
+        rowId = self.database.persistAdapter(adapter.name)
+        self.adapterdict[rowId] = adapter
 
     def persistTelescope(self, telescope):
-        self.database.insertTelescope(telescope.name)
+        rowId = self.database.persistTelescope(telescope.name)
+        self.telescopedict[rowId] = telescope
 
-    def loadopticalsystem(self, tupel):
-        return Opticalsystem("", Adapter(tupel[0]), Telescope(tupel[1]))
+    def loadAdapters(self):
+        adaptertuples = self.database.getAdapters()
+        for adaptertuple in adaptertuples:
+            self.adapterdict[adaptertuple[0]] = Adapter(adaptertuple[1])
+
+    def loadTelescopes(self):
+        telescopetuples = self.database.getTelescopes()
+        for telescopetuple in telescopetuples:
+            self.telescopedict[telescopetuple[0]] = Telescope(telescopetuple[1])
+
+    def loadopticalsystems(self):
+        optsystemtuples = self.database.getOptSystems()
+        for optsystemtuple in optsystemtuples:
+            adapter = None
+            telescope = None
+            if not optsystemtuple[1] == -1:
+                adapter = self.adapterdict[optsystemtuple[1]]
+            if not optsystemtuple[2] == -1:
+                telescope = self.telescopedict[optsystemtuple[2]]
+            optSystem = Opticalsystem('testing', adapter, telescope)
+            self.optsystemdict[optsystemtuple[0]] = optSystem
 
 def getDatabase():
     """used for unittesting.
