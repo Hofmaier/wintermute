@@ -12,7 +12,6 @@ getHandle (void)
   unicap_device_t imaging_source_dev;
   int dev_count = 0;
   unicap_enumerate_devices(NULL, &imaging_source_dev, dev_count);
-  printf("Open %s\n", imaging_source_dev.identifier); 
   unicap_handle_t handle;
   if(!SUCCESS(unicap_open (&handle, &imaging_source_dev)))
     {
@@ -28,17 +27,12 @@ new_frame_cb(unicap_event_t event,
 	     unicap_data_buffer_t *buffer, 
 	     void *user_data) 
 {
-
   volatile int * framecounter = (volatile int *)user_data;
   *framecounter = *framecounter - 1;
-  printf("framecounter is now %d \n", *framecounter);
-  int datasize = buffer->buffer_size;
-  printf("buffersize: %d malloc \n", datasize);
   
   buf = malloc(nrOfPixel);
   unsigned char *unicapmem = buffer->data;
   memcpy(buf, unicapmem, nrOfPixel);
-  printf("copied %d pixels\n", nrOfPixel);
 }
 
 unicap_format_t
@@ -78,21 +72,40 @@ setformat_fromstr(unicap_handle_t handle, const char *formatstr)
   setformat(handle, format);
 }
 
+void
+getproperty(unicap_handle_t handle, unicap_property_t *prop, char *propid)
+{
+  int i;
+  for(i = 0; SUCCESS(unicap_enumerate_properties(handle, NULL, prop,i)); i++)
+    {
+      unicap_property_t p = *prop;
+      if(strcmp(propid, p.identifier) == 0)
+	{
+	  unicap_get_property(handle, prop);
+	  break;
+	}
+    }
+}
+
+void 
+setshutter(unicap_handle_t handle, double shutter)
+{
+  unicap_property_t exautoprop;
+  getproperty(handle, &exautoprop, "Exposure, Auto");
+  exautoprop.value = 1;
+  unicap_set_property(handle, &exautoprop);
+  unicap_property_t shutterprop;
+  getproperty(handle, &shutterprop, "shutter");
+  shutterprop.value = shutter;
+  unicap_set_property_manual(handle, "shutter");
+  unicap_set_property(handle, &shutterprop);
+}
+
 double
 getduration(unicap_handle_t handle)
 {
   unicap_property_t prop;
-  int i;
-  char * propidentifier;
-  for(i = 0; SUCCESS(unicap_enumerate_properties(handle, NULL, &prop,i)); i++)
-    {
-      propidentifier = prop.identifier;
-      if(strcmp("shutter", propidentifier) == 0)
-	{
-	  break;
-	}
-    }
-  
+  getproperty(handle, &prop, "shutter");
   return prop.value;
 }
 
@@ -115,10 +128,7 @@ capture(unicap_handle_t handle)
     {
       usleep(100000);
     }
-
   unicap_stop_capture(handle);
-  
-  printf("capture exit\n");
   return 0;
 }
 
@@ -168,10 +178,36 @@ unicap_setformat(PyObject *self, PyObject *args)
   return PyLong_FromLong(1);
 }
 
+static PyObject *
+unicap_setshutter(PyObject *self, PyObject *args)
+{
+  unicap_handle_t handle = getHandle();
+  double shutter;
+  if(!PyArg_ParseTuple(args, "d", &shutter))
+    {
+      return NULL;
+    }
+  printf("arg was: %f\n", shutter);
+  setshutter(handle, shutter);
+  unicap_close(handle);
+  return PyLong_FromLong(1);
+}
+
+static PyObject *
+unicap_getshutter(PyObject *self, PyObject *args)
+{
+  unicap_handle_t handle = getHandle();
+  double dur = getduration(handle);
+  unicap_close(handle);
+  return  PyFloat_FromDouble(dur);
+}
+
 static PyMethodDef UnicapMethods[] = {
   {"capture", unicap_capture, METH_VARARGS, "capture a image with defined gain and shutter. Return a list with intensity values"},
   {"getadjustments", unicap_getadjustments, METH_VARARGS, "get current adjuments(formats, duration) of the connected camera as a string" },
   {"setformat", unicap_setformat, METH_VARARGS, "sets the format (e.g RAW Bayer, YUV) of camera"},
+  {"setshutter", unicap_setshutter, METH_VARARGS, "sets the exposure time of a single shot"},
+  {"getshutter", unicap_getshutter, METH_VARARGS, "get the exposure time"},
   {NULL, NULL, 0, NULL}
 };
 
