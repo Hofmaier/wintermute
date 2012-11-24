@@ -173,8 +173,15 @@ class FITSManager():
         """
         n = numpy.array(image)
         matrix = n.reshape(480, 640)
-        int8matrix = numpy.int32(matrix)
-        hdu = pyfits.PrimaryHDU(int8matrix)
+
+        m = numpy.zeros((480,640))
+        m = numpy.int16(m)
+        for i in range(480):
+            r = i+1
+            m[-r] = matrix[i]
+
+        mint16 = numpy.int16(m)
+        hdu = pyfits.PrimaryHDU(mint16)
         hdu.writeto(filename)
 
 def createDatabase():
