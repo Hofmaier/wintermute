@@ -56,7 +56,7 @@ class Database:
 
     def getprojects(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT ROWID, name, cameraconfiguration FROM projects')
+        cursor.execute('SELECT ROWID, name, cameraconfiguration, opticalSystemID FROM projects')
         projecttuples = cursor.fetchall()
         cursor.close()
         return projecttuples
@@ -118,51 +118,65 @@ class Database:
         cursor.close()
         return images
 
-    def insertOpticalSystem(self, opticalSystem):
-        if not opticalSystem.adapter is None:
-            pass
+    def persistopticalsystem(self, adapterId, telescopeId, project):
         cursor = self.connection.cursor()
-        queryparameter = (adapterName, telescopeName, )
-        cursor.execute('SELECT ROWID FROM opticSystems WHERE adapterName = ? AND telescopeName = ?', queryparameter)
+        queryparameter = (adapterId, telescopeId, )
+        cursor.execute('SELECT ROWID FROM opticSystems WHERE adapterRowId = ? AND telescopeRowId = ?', queryparameter)
         exists = cursor.fetchone()
         if exists is None:
-            cursor.execute('INSERT INTO opticSystems (adapterName, telescopeName) VALUES (?,?)', queryparameter)
+            cursor.execute('INSERT INTO opticSystems (adapterRowId, telescopeRowId) VALUES (?,?)', queryparameter)
+            cursor.execute('SELECT last_insert_rowid()')
+            exists = cursor.fetchone()
+        cursor.execute('UPDATE projects SET opticalSystemID = ? WHERE name = ?', (exists[0], project.name, ))
+        self.connection.commit()
+        cursor.close()
+
+    def persistAdapter(self, adapterName):
+        cursor = self.connection.cursor()
+        queryparameter = (adapterName, )
+        cursor.execute('SELECT ROWID FROM adapters WHERE name = ?', queryparameter)
+        exists = cursor.fetchone()
+        if exists is None:
+            cursor.execute('INSERT INTO adapters (name) VALUES (?)', queryparameter)
             cursor.execute('SELECT last_insert_rowid()')
             exists = cursor.fetchone()
         self.connection.commit()
         cursor.close()
         return exists[0]
 
-    def insertAdapter(self, adapterName):
-        cursor = self.connection.cursor()
-        queryparameter = (adapterName, )
-        cursor.execute('SELECT name FROM adapters WHERE name = ?', queryparameter)
-        exists = cursor.fetchone()
-        if exists is None:
-            cursor.execute('INSERT INTO adapters (name) VALUES (?)', queryparameter)
-        cursor.close()
-
-    def insertTelescope(self, telescopeName):
+    def persistTelescope(self, telescopeName):
         cursor = self.connection.cursor()
         queryparameter = (telescopeName, )
-        cursor.execute('SELECT name FROM telescopes WHERE name = ?', queryparameter)
+        cursor.execute('SELECT ROWID FROM telescopes WHERE name = ?', queryparameter)
         exists = cursor.fetchone()
         if exists is None:
             cursor.execute('INSERT INTO telescopes (name) VALUES (?)', queryparameter)
+            cursor.execute('SELECT last_insert_rowid()')
+            exists = cursor.fetchone()
+        self.connection.commit()
         cursor.close()
+        return exists[0]
 
-    def getOpticalsystemOf(self, project):
+    def getAdapters(self):
         cursor = self.connection.cursor()
-        queryparameter = (project.name,)
-        cursor.execute("""
-        SELECT adapterName, telescopeName FROM opticSystems
-        INNER JOIN projects
-        ON projects.opticalSystemID = opticSystems.ROWID
-        WHERE projects.name = ?
-        """, queryparameter)
-        opticSystemTupel = cursor.fetchone()
+        cursor.execute('SELECT ROWID, name FROM adapters')
+        adaptertuples = cursor.fetchall()
         cursor.close()
-        return opticSystemTupel
+        return adaptertuples
+
+    def getTelescopes(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT ROWID, name FROM telescopes')
+        telescopetuples = cursor.fetchall()
+        cursor.close()
+        return telescopetuples
+
+    def getOptSystems(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT ROWID, adapterRowId, telescopeRowId FROM opticSystems')
+        optSystemtuples = cursor.fetchall()
+        cursor.close()
+        return optSystemtuples
 
 class FITSManager():
 
