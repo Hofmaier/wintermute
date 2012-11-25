@@ -162,7 +162,7 @@ class Shotdescription:
         return self.images
 
     def setNrOfShots(self, nrOfShots):
-        self.images = [Image(i+1) for i in range(nrOfShots)]
+        self.images = [Image(order=i+1) for i in range(nrOfShots)]
 
 def createShotdescription(nrOfShots, duration, project, imagetype):
     shotdesc = Shotdescription(duration, imagetype)
@@ -173,9 +173,9 @@ def createShotdescription(nrOfShots, duration, project, imagetype):
     return shotdesc
 
 class Image:
-    def __init__(self, order=0):
+    def __init__(self, img='', order=-1):
         self.signal = []
-        self.filenameb = ''
+        self.filename = img
         self.order = order
 
 class Telescope:
@@ -278,7 +278,7 @@ class PersistenceFacade:
 
     def loadshotdesc(self, shotdescid, duration, imgtype, project):
         shotdesc = Shotdescription(duration, imgtype)
-        shotdesc.images = [Image() for img in self.database.getImagesOf(shotdescid)]
+        shotdesc.images = [Image(t[0]) for t in self.database.getImagesOf(shotdescid)]
         return shotdesc
 
     def loadprojects(self):

@@ -111,10 +111,11 @@ class Database:
     def getImagesOf(self, shotdesc):
         cursor = self.connection.cursor()
         cursor.execute("""
-        SELECT * FROM images
+        SELECT filename FROM images
         WHERE shotdescription = ?
         """, (shotdesc,))
         images = cursor.fetchall()
+        print('images: ' + images)
         cursor.close()
         return images
 

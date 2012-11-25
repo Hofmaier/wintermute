@@ -171,6 +171,11 @@ class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):
         self.dbmock = mock.Mock()
         workflow.getDatabase = mock.Mock(return_value=self.dbmock)
+
+        self.filename = 'jupiter3RAWBayer1.fits'
+        t = (self.filename,)
+        l = [t]
+        self.dbmock.getImagesOf = mock.MagicMock(return_value=l)
         self.persistencefacade = workflow.PersistenceFacade()
 
     def test_ctor(self):
@@ -191,10 +196,18 @@ class TestPersistenceFacade(unittest.TestCase):
         self.dbmock.getprojects = mock.MagicMock(return_value=l)
         sdtl = [(1,3,'RAW Bayer', 1)]
         self.dbmock.getShotDescFor = mock.MagicMock(return_value=sdtl)
-        self.dbmock.getImagesOf = mock.MagicMock(return_value=[1])
+
         projects = self.persistencefacade.loadprojects()
         self.assertIsNotNone(projects)
         self.assertEqual(1, len(projects))
+
+    def test_loadshotdesc(self):
+        dur = 1
+        imgt = 'RAW Bayer'
+
+        shotdesc = self.persistencefacade.loadshotdesc(1, dur, imgt, None)
+        self.assertEqual(len(shotdesc.images), 1)
+        self.assertEqual(shotdesc.images[0].filename, self.filename)
 
     def test_writefits(self):
         proj = workflow.Project('jupiter')
