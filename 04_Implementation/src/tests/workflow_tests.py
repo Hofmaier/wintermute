@@ -186,7 +186,7 @@ class TestPersistenceFacade(unittest.TestCase):
         self.persistencefacade.database.insertproject.assert_called_with(project.name)
 
     def test_loadprojects(self):
-        t = (1, 'jupiter', 1)
+        t = (1, 'jupiter', 1, 1)
         l = [t]
         self.dbmock.getprojects = mock.MagicMock(return_value=l)
         sdtl = [(1,3,'RAW Bayer', 1)]
@@ -204,7 +204,7 @@ class TestPersistenceFacade(unittest.TestCase):
         shotdesc.setNrOfShots(1)
         img = shotdesc.images[0]
         self.persistencefacade.writefits(img, shotdesc, proj)
-        self.assertEqual(img.filename, 'jupiter3RAWBayer1')
+        self.assertEqual(img.filename, 'jupiter3RAWBayer1.fits')
 
 class TestSpectralChannel(unittest.TestCase):
     def test_ctor(self):

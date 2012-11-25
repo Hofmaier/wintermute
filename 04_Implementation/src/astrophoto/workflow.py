@@ -271,7 +271,8 @@ class PersistenceFacade:
 
         self.projectdict[projectid] = project
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
-        project.opticalSystem = self.optsystemdict[opticalSystemId]
+        if opticalSystemId in self.optsystemdict:
+            project.opticalSystem = self.optsystemdict[opticalSystemId]
         return project
 
     def loadshotdesc(self, shotdescid, duration, imgtype, project):
