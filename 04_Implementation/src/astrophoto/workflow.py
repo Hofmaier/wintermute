@@ -234,6 +234,7 @@ class PersistenceFacade:
         filename = filename + shotdesc.imagetype
         filename = filename + str(image.order)
         filename = filename.replace(' ','')
+        filename += ('.fits')
         image.filename = filename
         #self.fitsmanager.writefits(image.signal, filepath)
 
