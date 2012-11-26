@@ -115,7 +115,6 @@ class Database:
         WHERE shotdescription = ?
         """, (shotdesc,))
         images = cursor.fetchall()
-        print('images: ' + images)
         cursor.close()
         return images
 
