@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS imagetypes(
 
 CREATE TABLE IF NOT EXISTS shotdescriptions(
        imagetype TEXT,
-       duration INTEGER,	
+       duration FLOAT,	
        project INTEGER,
        kind TEXT
 );
