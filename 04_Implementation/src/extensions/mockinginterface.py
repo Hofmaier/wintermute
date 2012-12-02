@@ -1,3 +1,4 @@
+import astrophoto
 from astrophoto import camerainterface
 
 class Camerainterfacemock(camerainterface.Camera):

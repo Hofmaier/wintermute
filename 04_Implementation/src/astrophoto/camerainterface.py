@@ -25,40 +25,21 @@ class ImageType:
     toStr = {Bayermatrix:'Bayer-Matrix', RGB_Image:'RGB-Image'}
     
 def createCamera(interface):
-    print("CreateCamera:")
-    print(interface)
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
     return camera
 
-def getInterfaceImplFiles():
-    extensionlist = []
-    for root, dirs, files in os.walk('extensions/'):
-        for file in files:
-            if file.endswith('tis.py'):
-                extensionlist.append(file)
-    return extensionlist
-
-def getExtensionModule(file):
-    print('getExtionsionModules')
-    filestr = str(file)
-    path = 'extensions/' + filestr
-    fin = open(path, 'rb')
-    module = imp.load_source(filestr, path, fin)
-    return module
-
-def getInterfaceImplModules():
-    sourcefiles = getInterfaceImplFiles()
-    interfaceModules = []
-    for sourcefile in sourcefiles:
-        module = getExtensionModule(sourcefile)
-        interfaceModules.append(module)
-        concreteModuleName = module.getInterfaceName()
-        moduledict[concreteModuleName] = module
-    return interfaceModules
-
 def getInterfaceNames():
     print('getInterfaceNames')
-    imModules = getInterfaceImplModules()
+  #  imModules = getInterfaceImplModules()
     names = moduledict.keys()
     return names
+
+def load():
+    moduletuple = imp.find_module('mockinginterface', ['extensions'])
+    modulemock = imp.load_module('mockinginterface', *moduletuple)
+    moduledict['CamerainterfaceMock'] = modulemock
+    moduletuple = imp.find_module('tis', ['extensions'])
+    modulemock = imp.load_module('tis', *moduletuple)
+    moduledict['The Imaging Source'] = modulemock
+    

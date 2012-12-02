@@ -152,7 +152,7 @@ class TestShotdescription(unittest.TestCase):
         self.cameraconfiguration = workflow.CameraConfiguration('TIS dbk22au618.as 2012')
         self.project.cameraconfiguration = self.cameraconfiguration
         self.imagetype = 'RAW Bayer'
-        self.duration = 3
+        self.duration = 0.03
 
     def test_ctor(self):
         shotdescription = workflow.Shotdescription(3, 'RAW Bayer')
@@ -194,18 +194,27 @@ class TestPersistenceFacade(unittest.TestCase):
         l = [t]
         self.dbmock.getImagesOf = mock.MagicMock(return_value=l)
         self.persistencefacade = workflow.PersistenceFacade()
+        projectname = 'jupiter'
+        self.project = workflow.Project(projectname)
 
     def test_ctor(self):
         self.assertIsNotNone(self.persistencefacade.database)
 
     def test_persistproject(self):
         dbmock = mock.MagicMock()
-        projectname = 'jupiter'
-        project = workflow.Project(projectname)
         dbmock.insertproject.return_value = 'True'
+        self.persistencefacade.persistproject(self.project)
+        self.persistencefacade.database.insertproject.assert_called_with(self.project.name)
 
-        self.persistencefacade.persistproject(project)
-        self.persistencefacade.database.insertproject.assert_called_with(project.name)
+    def test_persistshotdescription(self):
+        self.dbmock.insertshotdescription = mock.MagicMock(return_value=1)
+        projid = (1,)
+        self.dbmock.getProjectIdFor = mock.MagicMock(return_value=projid)
+        duration = 0.03
+        shotdesc = workflow.createShotdescription(5, duration, self.project)
+        
+        self.persistencefacade.persistshotdescription( shotdesc, self.project)
+        self.dbmock.insertshotdescription.assert_called_with(duration, 'RAW Bayer', projid[0])
 
     def test_loadprojects(self):
         t = (1, 'jupiter', 1, 1)
