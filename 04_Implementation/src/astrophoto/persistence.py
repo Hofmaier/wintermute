@@ -22,7 +22,6 @@ class Database:
 
     def insertcameraconfiguration(self, name, interface):
         cursor = self.connection.cursor()
-
         cursor.execute('INSERT INTO cameraconfigurations (name, interface) VALUES (?, ?)', ( name, interface ))
         self.connection.commit()
         return cursor.lastrowid
