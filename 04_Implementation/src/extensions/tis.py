@@ -16,6 +16,8 @@ class TISCamera(camerainterface.Camera):
         return self.imageTypes
 
     def capture(self, duration, imagetype):
+        unicap.setformat('RGB Bayer ( BA81 )')
+        unicap.setshutter(duration)
         return unicap.capture()
 
 def getInterfaceName():

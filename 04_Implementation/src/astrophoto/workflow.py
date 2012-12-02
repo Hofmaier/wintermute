@@ -79,6 +79,15 @@ class CameraConfiguration:
 
                 self.imagingfunctions[rawbayer]=imagetypegroup
 
+    def capturebias(self):
+        duration = 0
+        shotdesc = createShotdescription(1, duration)
+        shotdesc.cameraconfiguration = self
+        img = Image()
+        img.signal = shotdesc.capture()
+        
+        return shotdesc
+
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
     camera = createCamera(interface)
@@ -164,12 +173,12 @@ class Shotdescription:
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(order=i+1) for i in range(nrOfShots)]
 
-def createShotdescription(nrOfShots, duration, project, imagetype):
+def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer'):
     shotdesc = Shotdescription(duration, imagetype)
-    shotdesc.cameraconfiguration = project.cameraconfiguration
-    print('createShotdescription(): config: ' + shotdesc.cameraconfiguration.name)
+    if project is not None:
+        shotdesc.cameraconfiguration = project.cameraconfiguration
+        project.shotdescriptions.append(shotdesc)
     shotdesc.setNrOfShots(nrOfShots)
-    project.shotdescriptions.append(shotdesc)
     return shotdesc
 
 class Image:

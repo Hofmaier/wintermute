@@ -67,6 +67,15 @@ class TestSession(unittest.TestCase):
 class TestCameraConfiguration(unittest.TestCase):
     def setUp(self):
         self.name = 'TIS dbk22au618.as 2012'
+        self.project = workflow.Project('jupiter')
+        self.testcamera = camerainterface.Camera()
+        self.testcamera.formats = ['RGB Bayer']
+        self.testimg = [1,2,3,4]
+        self.capture = mock.MagicMock(return_value = self.testimg)
+        self.testcamera.capture = self.capture
+        createCameraMock = mock.MagicMock(return_value = self.testcamera)
+
+        workflow.createCamera = createCameraMock
 
     def test_ctor(self):
         testcamera = camerainterface.Camera()
@@ -77,20 +86,29 @@ class TestCameraConfiguration(unittest.TestCase):
 
     def test_createCameraConfiguration(self):
         interface = 'tis'
-        project = workflow.Project('jupiter')
-        testcamera = camerainterface.Camera()
-        testcamera.formats = ['RGB Bayer']
-        createCameraMock = mock.MagicMock(return_value = testcamera)
-        workflow.createCamera = createCameraMock
 
-        cameraConfiguration = workflow.createCameraConfiguration(self.name, interface, project)
+        cameraConfiguration = workflow.createCameraConfiguration(self.name, interface, self.project)
         self.assertIsNotNone(cameraConfiguration)
         self.assertIsNotNone(cameraConfiguration.camera)
-        self.assertIs(testcamera, cameraConfiguration.camera)
-        createCameraMock.assert_called_with(interface)
+        self.assertIs(self.testcamera, cameraConfiguration.camera)
+        workflow.createCamera.assert_called_with(interface)
         self.assertIsNotNone(cameraConfiguration.imagingfunctions)
         self.assertEqual(list(cameraConfiguration.imagingfunctions.keys())[0], 'RAW Bayer')
         self.assertEqual(len(cameraConfiguration.imagingfunctions['RAW Bayer']), 3)
+
+    def test_capturebias(self):
+        camconfig = workflow.createCameraConfiguration(self.name,  'tis', self.project)
+        self.assertIs(camconfig.camera, self.testcamera)
+        shotdesc = camconfig.capturebias()
+        self.capture.assert_called_with(0, 'RAW Bayer')
+        self.assertIsNotNone(shotdesc)
+        self.assertEqual(len(shotdesc.images), 1)
+        for img in shotdesc.images:
+            self.assertIsNotNone(img)
+            self.assertIs(img.signal, self.testimg)
+        self.assertIs(shotdesc.cameraconfiguration, camconfig)
+        camconfig.camera.capture.assert_called_with(0, 'RAW Bayer')
+
 
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):
@@ -165,7 +183,6 @@ class TestShotdescription(unittest.TestCase):
         self.assertGreater(len(shotdesc.images),0)
         self.assertIsNotNone(shotdesc.images[0])
         cameramock.capture.assert_called_with(self.duration, self.imagetype)
-
 
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):
