@@ -27,6 +27,8 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralConfigLayout.setColumnMinimumWidth(4, 7)
         self.spectralConfigLayout.setColumnMinimumWidth(6, 7)
 
+        self.spectralConfigLayout.addWidget(self.spectralConfigFrame, 0, 0, 20, 20)
+
         self.imageTypeLabel = QtGui.QLabel()
         self.imageTypeLabel.setText("Image Type:")
         self.spectralConfigLayout.addWidget(self.imageTypeLabel, self.actualRow, self.actualColumn)
@@ -83,11 +85,11 @@ class CollectSpectralWidget(QtGui.QWidget):
         self.spectralTakeButton = QtGui.QPushButton()
         self.spectralTakeButton.setText("Take All")
         self.spectralConfigLayout.addWidget(self.spectralTakeButton, self.actualRow, self.actualColumn)
+
         self.calculateActualPosition()
 
         self.spectralConfigLayout.setRowMinimumHeight(self.actualRow + 1, 7)
         self.spectralConfigLayout.setColumnMinimumWidth(8, 8)
-        self.spectralConfigLayout.addWidget(self.spectralConfigFrame, 0, 0, 20, 20)
 
         QtCore.QObject.connect(self.spectralTakeButton, QtCore.SIGNAL("clicked()"), self.captureClicked)
 

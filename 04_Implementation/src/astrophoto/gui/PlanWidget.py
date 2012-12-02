@@ -201,6 +201,7 @@ class PlanWidget(QtGui.QWidget):
         opticalSystem = self.session.currentProject.opticalSystem
         if opticalSystem == None:
             opticalSystem = self.session.createOpticalSystem("testing", adapter, telescope)
+            self.session.currentProject.opticalSystem = opticalSystem
         else:
             opticalSystem.adapter = adapter
             opticalSystem.telescope = telescope
