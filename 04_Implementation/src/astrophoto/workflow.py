@@ -119,6 +119,7 @@ class Workspace:
         self.projectList = []
 
     def load(self):
+        camerainterface.load()
         camerainterface.getInterfaceNames()
         self.persFacade.loadcameraconfigurations()
         self.persFacade.loadAdapters()
@@ -141,7 +142,6 @@ def createCameraConfiguration(name, interface, project):
     cameraConfiguration.initImageTypes()
     cameraConfiguration.interface = interface
     project.cameraconfiguration = cameraConfiguration
-    print("createCamera Config: " + cameraConfiguration.name)
     return cameraConfiguration
 
 def createCamera(interface):
@@ -208,6 +208,7 @@ class PersistenceFacade:
         self.database.initschema()
         self.configdict = {}
         self.projectdict = {}
+        self.loadedshotdescriptions = []
         self.adapterdict = {}
         self.telescopedict = {}
         self.optsystemdict = {}
@@ -232,6 +233,8 @@ class PersistenceFacade:
         self.database.addConfigToProject(project.name, configid)
 
     def persistshotdescription(self, shotdesc, project):
+        if shotdesc in self.loadedshotdescriptions:
+            return
         projid = self.database.getProjectIdFor(project.name)
         shotdescid = self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
         for img in shotdesc.images:
@@ -271,16 +274,17 @@ class PersistenceFacade:
 
         imgfuncdict[imgtype].append(imgfunc)
 
-        print('loadcameraconfig(): nr of config loaded ' + str(len(self.configdict.keys())))
 
     def loadproject(self, projectid, name, camconfigrowid, opticalSystemId):
         project = Project(name)
         if camconfigrowid in self.configdict:
-            print('loadproject(): projconfig: ' + str(camconfigrowid))
             project.cameraconfiguration = self.configdict[camconfigrowid]
 
         self.projectdict[projectid] = project
         project.shotdescriptions = [self.loadshotdesc(*t) for t in self.database.getShotDescFor(projectid)]
+        for shotdesc in project.shotdescriptions:
+            shotdesc.cameraconfiguration = project.cameraconfiguration
+
         if opticalSystemId in self.optsystemdict:
             project.opticalSystem = self.optsystemdict[opticalSystemId]
         return project
@@ -288,6 +292,7 @@ class PersistenceFacade:
     def loadshotdesc(self, shotdescid, duration, imgtype, project):
         shotdesc = Shotdescription(duration, imgtype)
         shotdesc.images = [Image(t[0]) for t in self.database.getImagesOf(shotdescid)]
+        self.loadedshotdescriptions.append(shotdesc)
         return shotdesc
 
     def loadprojects(self):
