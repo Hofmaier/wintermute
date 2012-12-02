@@ -75,7 +75,7 @@ class SpectralWidget(QtGui.QWidget):
         print("saveAllSpectralColourWidgets")
         for spectralColourWidget in self.spectralColourWidgetList:
             nrOfShots = int(spectralColourWidget.numberOfImagesLineEdit.text())
-            duration = int(spectralColourWidget.durationLineEdit.text())
+            duration = float(spectralColourWidget.durationLineEdit.text())
             imageTyp = spectralColourWidget.imageTypeComboBox.currentText()
             spectralColourWidget.shotDescription.duration =  duration
             spectralColourWidget.shotDescription.imagetype = imageTyp
