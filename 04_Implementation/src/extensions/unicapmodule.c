@@ -28,11 +28,13 @@ new_frame_cb(unicap_event_t event,
 	     void *user_data) 
 {
   volatile int * framecounter = (volatile int *)user_data;
-  *framecounter = *framecounter - 1;
-  
-  buf = malloc(nrOfPixel);
-  unsigned char *unicapmem = buffer->data;
-  memcpy(buf, unicapmem, nrOfPixel);
+  if(buf != NULL)
+    {
+      buf = malloc(nrOfPixel);
+      unsigned char *unicapmem = buffer->data;
+      memcpy(buf, unicapmem, nrOfPixel);
+      *framecounter = *framecounter - 1;
+    }
 }
 
 unicap_format_t
