@@ -47,6 +47,15 @@ class Session:
         shotdesc.capture()
         self.workspace.persFacade.writefits(shotdesc, self.currentProject)
 
+    def capturebias(self, cameraconfiguration):
+        pass
+
+    def capturedark(self, shotdescription):
+        pass
+
+    def captureflat(self, shotdescription):
+        pass
+
 class CameraConfiguration:
     def __init__(self, name, camera=None):
         self.name = name
