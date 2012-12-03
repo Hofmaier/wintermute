@@ -45,12 +45,12 @@ class Database:
         self.connection.commit()
         return cursor.lastrowid
 
-    def insertimage(self, shotdescid):
+    def insertimage(self, shotdescid, filename):
         cursor = self.connection.cursor()
         cursor.execute("""
         INSERT INTO images
-        ( shotdescription )
-        VALUES (?)""", (shotdescid,))
+        ( shotdescription, filename )
+        VALUES (?, ?)""", (shotdescid, filename))
         self.connection.commit()
 
     def getprojects(self):
