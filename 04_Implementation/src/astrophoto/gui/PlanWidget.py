@@ -181,12 +181,10 @@ class PlanWidget(QtGui.QWidget):
         return True
 
     def saveCameraConfiguration(self):
-        print("Saving CameraConfiguration")
         cameraConfiguration = self.getCameraConfigurationByName(self.deviceComboBox.currentText())
         self.session.currentProject.cameraconfiguration = cameraConfiguration
 
     def saveOpticalSystem(self):
-        print("Saving OpticalSystem")
         adapter = self.getAdapterByName(self.adapterComboBox.currentText())
         telescope = self.getTelescopeByName(self.telescopeComboBox.currentText())
         opticalSystem = self.session.currentProject.opticalSystem
