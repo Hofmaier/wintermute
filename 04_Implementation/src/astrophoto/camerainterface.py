@@ -27,6 +27,7 @@ class ImageType:
 def createCamera(interface):
     interfacemodule = getModule(interface)
     camera = interfacemodule.createCameraControl()
+    print('createCamera ' + interface)
     return camera
 
 def getInterfaceNames():

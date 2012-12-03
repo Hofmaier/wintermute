@@ -44,9 +44,8 @@ class Session:
         return shotDescription
 
     def capture(self, shotdesc):
-        imagelist = shotdesc.capture()
-        for img in imagelist:
-            self.workspace.persFacade.writefits(img, shotdesc, self.currentProject)
+        shotdesc.capture()
+        self.workspace.persFacade.writefits(shotdesc, self.currentProject)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -166,10 +165,11 @@ class Shotdescription:
     def capture(self):
         if self.imagetype == 'RAW Bayer':
             for imgnr, img in enumerate(self.images):
-                img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+                print('fn ' + img.filename)
+                if img.filename is '':
+                       img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
 
-        return self.images
-
+       
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(order=i+1) for i in range(nrOfShots)]
 
@@ -222,6 +222,9 @@ class PersistenceFacade:
             pass
 
     def persistcameraconfiguration(self, cameraconfig, project):
+        loadedconfigs = list(self.configdict.values())
+        if cameraconfig in loadedconfigs:
+            return
         configid = self.database.insertcameraconfiguration( cameraconfig.name, cameraconfig.interface )
         imagingfunctions = cameraconfig.imagingfunctions
         imagetypes = list(imagingfunctions.keys())
@@ -238,18 +241,21 @@ class PersistenceFacade:
         projid = self.database.getProjectIdFor(project.name)
         shotdescid = self.database.insertshotdescription(shotdesc.duration, shotdesc.imagetype, projid[0])
         for img in shotdesc.images:
-            self.database.insertimage(shotdescid)
+            self.database.insertimage(shotdescid, img.filename)
 
-    def writefits(self, image, shotdesc, project):
+    def writefits(self, shotdesc, project):
         filepath = project.name +'/'
         filename = project.name + str(shotdesc.duration)
         filename = filename + shotdesc.imagetype
-        filename = filename + str(image.order)
-        filename = filename.replace(' ','')
-        filename += ('.fits')
-        image.filename = filename
-        #self.fitsmanager.writefits(image.signal, filepath)
-
+        filename = filepath + filename
+        for image in shotdesc.images:
+            if image.signal is not None:
+                fn = filename + str(image.order)
+                fn = fn.replace(' ','')
+                fn + fn.replace('.','')
+                fn += ('.fits')
+                image.filename = fn
+                self.fitsmanager.writefits(image.signal, fn)
 
     def loadcameraconfigurations(self):
         configtuples = self.database.getimagingfunctions()
