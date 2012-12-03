@@ -7,12 +7,13 @@ from astrophoto.gui.SelectCameraInterface import SelectCameraInterface
 from astrophoto.gui.BiasCollect import BiasCollect
 
 class PlanWidget(QtGui.QWidget):
-    def __init__(self, session):
+    def __init__(self, session, mainWindow):
         super(PlanWidget, self).__init__()
         self.setMinimumHeight(560)
         self.setMinimumWidth(640)
         self.session = session
-        
+        self.mainWindow = mainWindow
+
         self.verticalLayoutWidget = QtGui.QWidget(self)
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
 
@@ -108,16 +109,6 @@ class PlanWidget(QtGui.QWidget):
         self.takeBiasButton = QtGui.QPushButton()
         self.takeBiasButton.setText("Collect")
         self.configImagesLayout.addWidget(self.takeBiasButton, 2, 5)
-
-        self.darkFrameLabel = QtGui.QLabel()
-        self.darkFrameLabel.setText("Dark Frame:")
-        self.configImagesLayout.addWidget(self.darkFrameLabel, 3,1)
-        self.darkFrameResult = QtGui.QLabel()
-        self.darkFrameResult.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
-        self.configImagesLayout.addWidget(self.darkFrameResult, 3,3)
-        self.takeDarkFrameButton = QtGui.QPushButton()
-        self.takeDarkFrameButton.setText("Collect")
-        self.configImagesLayout.addWidget(self.takeDarkFrameButton, 3, 5)
 
         self.verticalLayout.addWidget(self.opticalSystemWidget)
         self.verticalLayout.addWidget(self.configImagesWidget)
@@ -228,14 +219,22 @@ class PlanWidget(QtGui.QWidget):
 
     def loadProject(self):
         opticalSystem = self.session.currentProject.opticalSystem
-        if not opticalSystem.adapter is None:
-            self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(opticalSystem.adapter.name))
-        if not opticalSystem.telescope is None:
-            self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(opticalSystem.telescope.name))
+        if not opticalSystem is None:
+            if opticalSystem.telescope is not None:
+                telescopeName = opticalSystem.telescope.name
+            if opticalSystem.adapter is not None:
+                adapterName = opticalSystem.adapter.name
+        self.adapterComboBox.setCurrentIndex(self.adapterComboBox.findText(adapterName))
+        self.telescopeComboBox.setCurrentIndex(self.telescopeComboBox.findText(telescopeName))
         cameraConfiguration = self.session.currentProject.cameraconfiguration
         if not cameraConfiguration is None:
             self.deviceComboBox.setCurrentIndex(self.deviceComboBox.findText(cameraConfiguration.name))
 
     def takeBias(self):
-        self.biasCollect = BiasCollect(self.session)
-        self.biasCollect.show()
+        if self.session.currentProject.cameraconfiguration is None:
+            self.mainWindow.statusBar.showMessage("No Camera selected! Please select a camera before taking a bias!")
+        else:
+            self.mainWindow.statusBar.showMessage("")
+            self.biasCollect = BiasCollect(self.session)
+            self.biasCollect.show()
+

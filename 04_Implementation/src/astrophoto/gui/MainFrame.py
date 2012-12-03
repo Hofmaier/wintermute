@@ -18,7 +18,8 @@ class MainFrame(QtGui.QMainWindow):
             self.session.workspace.persFacade.persistAdapter(adapter)
         for telescope in self.session.workspace.telescopeList:
             self.session.workspace.persFacade.persistTelescope(telescope)
-        self.session.workspace.persFacade.persistOpticalSystem(project.opticalSystem, project)
+        if not self.session.currentProject.opticalSystem is None:
+            self.session.workspace.persFacade.persistOpticalSystem(project.opticalSystem, project)
         self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
         for shotdesc in project.shotdescriptions:
             self.session.workspace.persFacade.persistshotdescription(shotdesc, project)

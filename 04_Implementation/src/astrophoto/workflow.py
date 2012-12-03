@@ -48,12 +48,15 @@ class Session:
         self.workspace.persFacade.writefits(shotdesc, self.currentProject)
 
     def capturebias(self, cameraconfiguration):
+        print("Collect Bias")
         pass
 
     def capturedark(self, shotdescription):
+        print("Collect Dark")
         pass
 
     def captureflat(self, shotdescription):
+        print("Collect Flat")
         pass
 
 class CameraConfiguration:

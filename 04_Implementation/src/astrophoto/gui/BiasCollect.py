@@ -24,7 +24,7 @@ class BiasCollect(QtGui.QWidget):
         self.collectButton = QtGui.QPushButton()
         self.collectButton.setText("Collect")
         self.collectButton.setDefault(True)
-        self.widgetLayout.addWidget(self.okButton, 3, 5)
+        self.widgetLayout.addWidget(self.collectButton, 3, 5)
 
         self.setFixedSize(self.sizeHint())
 
@@ -36,7 +36,7 @@ class BiasCollect(QtGui.QWidget):
         QtCore.QObject.connect(self.cancelButton, QtCore.SIGNAL("clicked()"), self.showLastScreen)
 
     def saveAndQuit(self):
-        self.session.currentProject.cameraconfiguration.capturebias()
+        self.session.capturebias(self.session.currentProject.cameraconfiguration)
         self.hide()
         self.deleteLater()
 

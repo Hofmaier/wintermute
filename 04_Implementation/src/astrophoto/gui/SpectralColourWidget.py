@@ -84,14 +84,14 @@ class SpectralColourWidget(QtGui.QWidget):
 #        self.spectralLayout.addWidget(self.binning4Radio, 4, 9)
 
         self.generateNewLine()
-        self.flatFieldLabel = QtGui.QLabel()
-        self.flatFieldLabel.setText("Flat Field:")
-        self.spectralLayout.addWidget(self.flatFieldLabel, self.actualRow, self.actualColumn)
-        self.calculatePosition()
-
         self.flatFieldResultLabel = QtGui.QLabel()
         self.flatFieldResultLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
         self.spectralLayout.addWidget(self.flatFieldResultLabel, self.actualRow, self.actualColumn)
+        self.calculatePosition()
+
+        self.flatFieldLabel = QtGui.QLabel()
+        self.flatFieldLabel.setText("Flat Field:")
+        self.spectralLayout.addWidget(self.flatFieldLabel, self.actualRow, self.actualColumn)
         self.calculatePosition()
 
         self.collectFlatFieldButton = QtGui.QPushButton()
@@ -99,12 +99,25 @@ class SpectralColourWidget(QtGui.QWidget):
         self.spectralLayout.addWidget(self.collectFlatFieldButton, self.actualRow, self.actualColumn)
         self.calculatePosition()
 
-        self.useFlatForAllButton = QtGui.QPushButton()
-        self.useFlatForAllButton.setText("Use for all")
-        self.spectralLayout.addWidget(self.useFlatForAllButton, self.actualRow, self.actualColumn)
+        self.generateNewLine()
+        self.darkFrameResult = QtGui.QLabel()
+        self.darkFrameResult.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
+        self.spectralLayout.addWidget(self.darkFrameResult, self.actualRow, self.actualColumn)
+        self.calculatePosition()
+
+        self.darkFrameLabel = QtGui.QLabel()
+        self.darkFrameLabel.setText("Dark Frame:")
+        self.spectralLayout.addWidget(self.darkFrameLabel, self.actualRow, self.actualColumn)
+        self.calculatePosition()
+
+        self.collectDarkFrameButton = QtGui.QPushButton()
+        self.collectDarkFrameButton.setText("Collect")
+        self.spectralLayout.addWidget(self.collectDarkFrameButton, self.actualRow, self.actualColumn)
         self.calculatePosition()
 
         QtCore.QObject.connect(self.deleteSpectralColourButton, QtCore.SIGNAL(_fromUtf8("clicked()")),  mainGui.deleteSpectralColourWidget)
+        QtCore.QObject.connect(self.collectDarkFrameButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.collectDarkFrame)
+        QtCore.QObject.connect(self.collectFlatFieldButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.collectFlatField)
 
     def calculatePosition(self):
         if self.actualColumn == 7:
@@ -116,3 +129,9 @@ class SpectralColourWidget(QtGui.QWidget):
     def generateNewLine(self):
         self.actualColumn = 1
         self.actualRow = self.actualRow + 1
+
+    def collectDarkFrame(self):
+        self.session.capturedark(self.shotDescription)
+
+    def collectFlatField(self):
+        self.session.captureflat(self.shotDescription)

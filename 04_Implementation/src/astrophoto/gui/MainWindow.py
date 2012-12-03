@@ -64,7 +64,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         MainWindow.setCentralWidget(self.centralWidget)
 
-        self.planWidget = PlanWidget(self.session)
+        self.planWidget = PlanWidget(self.session, self)
         self.planWidget.show()
         self.listWidget.setCurrentItem(self.listWidget.item(0))
         self.horizontalLayout.addWidget(self.planWidget)
@@ -117,13 +117,13 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 self.collectWidget.show()
 
     def closeApplication(self):
-        print("Saving MainWindow")
         project = self.session.currentProject
         for adapter in self.session.workspace.adapterList:
             self.session.workspace.persFacade.persistAdapter(adapter)
         for telescope in self.session.workspace.telescopeList:
             self.session.workspace.persFacade.persistTelescope(telescope)
-        self.session.workspace.persFacade.persistOpticalSystem(project.opticalSystem, project)
+        if not self.session.currentProject.opticalSystem is None:
+            self.session.workspace.persFacade.persistOpticalSystem(project.opticalSystem, project)
         self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
         for shotdesc in project.shotdescriptions:
             self.session.workspace.persFacade.persistshotdescription(shotdesc, project)
@@ -132,6 +132,18 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def showLoadProjectWidget(self):
         self.loadProjectDialog = LoadProject(self.session, self)
         self.loadProjectDialog.show()
+
+    def saveProject(self):
+        project = self.session.currentProject
+        for adapter in self.session.workspace.adapterList:
+            self.session.workspace.persFacade.persistAdapter(adapter)
+        for telescope in self.session.workspace.telescopeList:
+            self.session.workspace.persFacade.persistTelescope(telescope)
+        if not self.session.currentProject.opticalSystem is None:
+            self.session.workspace.persFacade.persistOpticalSystem(project.opticalSystem, project)
+        self.session.workspace.persFacade.persistcameraconfiguration(project.cameraconfiguration, project)
+        for shotdesc in project.shotdescriptions:
+            self.session.workspace.persFacade.persistshotdescription(shotdesc, project)
 
     def loadProject(self):
         self.listWidget.setCurrentItem(self.listWidget.item(0))
