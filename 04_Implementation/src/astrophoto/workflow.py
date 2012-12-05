@@ -4,6 +4,7 @@ import imp
 import uuid
 from astrophoto import camerainterface
 from astrophoto import persistence
+import copy
 
 class Session:
     def __init__(self):
@@ -54,7 +55,7 @@ class Session:
         pass
 
     def captureflat(self, shotdescription):
-        pass
+        self.workspace.captureflat(shotdescription)
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -125,6 +126,7 @@ class Workspace:
         self.persFacade = PersistenceFacade()
         self.cameraconfigurations = []
         self.projectList = []
+        self.flats = []
 
     def load(self):
         camerainterface.load()
@@ -142,6 +144,10 @@ class Workspace:
             self.adapterList.append(adapter)
         for telescope in self.persFacade.telescopedict.values():
             self.telescopeList.append(telescope)
+
+    def captureflat(self, lightshotdesc):
+        flatshotdesc = copy.copy(lightshotdesc)
+        self.flats.append(flatshotdesc)
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
@@ -170,22 +176,39 @@ class Shotdescription:
         self.imagetype = imagetype
         self.duration = duration
         self.cameraconfiguration = None
+        self.imagingfunctions = []
 
     def capture(self):
         if self.imagetype == 'RAW Bayer':
             for imgnr, img in enumerate(self.images):
-                print('fn ' + img.filename)
                 if img.filename is '':
                        img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
 
-       
+    def captureflat(self):
+        pass
+
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(order=i+1) for i in range(nrOfShots)]
 
-def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer'):
+    def compareflat(self, shotdesc):
+        if self.duration != shotdesc.duration:
+            return False
+        if self.cameraconfiguration is not shotdesc.cameraconfiguration:
+            return False
+        if self.imagetype != shotdesc.imagetype:
+            return False
+        if self.imagingfunctions != shotdesc.imagingfunctions:
+            return False
+        return True
+
+def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer', imagingfunction=None):
     shotdesc = Shotdescription(duration, imagetype)
+
     if project is not None:
         shotdesc.cameraconfiguration = project.cameraconfiguration
+        
+        shotdesc.imagingfunctions.extend(shotdesc.cameraconfiguration.imagingfunctions[imagetype])
+
         project.shotdescriptions.append(shotdesc)
     shotdesc.setNrOfShots(nrOfShots)
     return shotdesc
