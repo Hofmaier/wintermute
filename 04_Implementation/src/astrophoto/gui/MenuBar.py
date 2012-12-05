@@ -15,10 +15,15 @@ class MenuBar(QtGui.QMenuBar):
         loadAction.setText("Load Project")
         loadAction.triggered.connect(mainWindow.showLoadProjectWidget)
 
+        saveAction = QtGui.QAction('&saveProject', self)
+        saveAction.setText("Save Project")
+        saveAction.triggered.connect(mainWindow.saveProject)
+
         exitAction = QtGui.QAction('&Exit', self)
         exitAction.setText("Exit")
         exitAction.triggered.connect(mainWindow.closeApplication)
 
         self.fileMenu.addAction(loadAction)
+        self.fileMenu.addAction(saveAction)
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(exitAction)

@@ -29,17 +29,28 @@ class CollectWidget(QtGui.QWidget):
         self.calibrateButtonLayout.setColumnMinimumWidth(4, 8)
         self.verticalLayout.addLayout(self.calibrateButtonLayout)
 
+        self.calibrateButtonLayout.setColumnMinimumWidth(0, 8)
+        self.calibrateButtonLayout.setColumnMinimumWidth(1, 8)
+        self.calibrateButtonLayout.setColumnMinimumWidth(5, 8)
+        self.calibrateButtonLayout.setColumnMinimumWidth(6, 8)
+
+        self.calibrateFrame = QtGui.QFrame()
+        self.calibrateFrame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.calibrateFrame.setFrameShadow(QtGui.QFrame.Raised)
+        self.calibrateButtonLayout.addWidget(self.calibrateFrame, 0, 1, 3, 5)
+
         self.calibrationButton = QtGui.QPushButton()
         self.calibrationButton.setText("Calibrate")
-        self.calibrationButton.setMaximumWidth(200)
-        self.calibrateButtonLayout.addWidget(self.calibrationButton, 0, 3)
+        self.calibrationButton.setMinimumWidth(194)
+        self.calibrateButtonLayout.addWidget(self.calibrationButton, 1, 4)
 
         self.calibrateStatusLabel = QtGui.QLabel()
         self.calibrateStatusLabel.setPixmap(QtGui.QPixmap(os.getcwd() + "/astrophoto/gui/icons/delete-icon.png"))
-        self.calibrateButtonLayout.addWidget(self.calibrateStatusLabel, 0, 1)
+        self.calibrateButtonLayout.addWidget(self.calibrateStatusLabel, 1, 2)
 
         spacerItem = QtGui.QSpacerItem(0, 0, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.calibrateButtonLayout.addItem(spacerItem, 0, 2)
+        self.calibrateButtonLayout.addItem(spacerItem, 1, 3)
+
         QtCore.QObject.connect(self.calibrationButton, QtCore.SIGNAL("clicked()"), self.calibrate)
 
     def calibrate(self):
