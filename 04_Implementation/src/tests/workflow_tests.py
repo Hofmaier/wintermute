@@ -154,9 +154,22 @@ class TestWorkspace(unittest.TestCase):
     def test_captureflat(self):
         workspace = workflow.Workspace()
         workspace.flats = []
-        shotdesc = workflow.Shotdescription(3, 'RAW Bayer')
-        workspace.captureflat(shotdesc)
+        shotdesc1 = workflow.Shotdescription(3, 'RAW Bayer')
+        cameraconfig = workflow.CameraConfiguration('TIS dbk22au618.as 2012')
+        cameraconfig.camera = mock.MagicMock()
+        cameraconfig.camera.capture = mock.MagicMock(return_value=[1,2,3,4])
+        shotdesc1.cameraconfiguration = cameraconfig
+        workspace.captureflat(shotdesc1)
         self.assertEqual(len(workspace.flats), 1)
+        self.assertEqual(len(workspace.flats[0].images), 1)
+        shotdesc2 = workflow.Shotdescription(3, 'RAW Bayer')
+        shotdesc2.cameraconfiguration = cameraconfig
+        workspace.captureflat(shotdesc2)
+        self.assertEqual(len(workspace.flats), 1)
+        shotdesc3 = workflow.Shotdescription(2, 'RAW Bayer')
+        shotdesc3.cameraconfiguration = cameraconfig
+        workspace.captureflat(shotdesc3)
+        self.assertEqual(len(workspace.flats), 2)
 
 class TestSpectralChannel(unittest.TestCase):
     def test_ctor(self):

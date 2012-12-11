@@ -149,8 +149,17 @@ class Workspace:
             self.telescopeList.append(telescope)
 
     def captureflat(self, lightshotdesc):
-        flatshotdesc = copy.copy(lightshotdesc)
-        self.flats.append(flatshotdesc)
+        flatshotdesc = None
+        for flat in self.flats:
+            if flat.compareflat(lightshotdesc):
+                flatshotdesc = flat
+            
+        if flatshotdesc is None:
+            flatshotdesc = copy.copy(lightshotdesc)
+            self.flats.append(flatshotdesc)
+
+        flatshotdesc.captureflat()
+
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
@@ -188,7 +197,9 @@ class Shotdescription:
                        img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
 
     def captureflat(self):
-        pass
+        img = Image()
+        img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+        self.images.append(img)
 
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(order=i+1) for i in range(nrOfShots)]
