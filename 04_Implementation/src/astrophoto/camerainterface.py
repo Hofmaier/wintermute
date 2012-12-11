@@ -36,11 +36,13 @@ def getInterfaceNames():
     names = moduledict.keys()
     return names
 
+extensionmodule = [('tis','The Imaging Source'),('mockinterface','CamerainterfaceMock')]
+
 def load():
-    moduletuple = imp.find_module('mockinginterface', ['extensions'])
-    modulemock = imp.load_module('mockinginterface', *moduletuple)
-    moduledict['CamerainterfaceMock'] = modulemock
-    moduletuple = imp.find_module('tis', ['extensions'])
-    modulemock = imp.load_module('tis', *moduletuple)
-    moduledict['The Imaging Source'] = modulemock
-    
+    for module in extensionmodule:
+        modulefilename = module[0]
+        displayname = module[1]
+        moduletuple = imp.find_module(modulefilename, ['extensions'])
+        modulemock = imp.load_module(modulefilename, *moduletuple)
+        moduledict[displayname] = modulemock
+
