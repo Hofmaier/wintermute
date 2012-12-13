@@ -70,6 +70,7 @@ class CameraConfiguration:
 
     def initImageTypes(self):
         for form in self.camera.formats:
+           
             if(form == 'RGB Bayer'):
                 rawbayer = 'RAW Bayer'
                 imagetypegroup = []
@@ -156,10 +157,11 @@ class Workspace:
             
         if flatshotdesc is None:
             flatshotdesc = copy.copy(lightshotdesc)
+            flatshotdesc.kind = 'flat'
             self.flats.append(flatshotdesc)
 
         flatshotdesc.captureflat()
-
+        self.persFacade.writefits(flatshotdesc)
 
 def createCameraConfiguration(name, interface, project):
     camerainterface = interface
@@ -183,12 +185,13 @@ class SpectralChannel:
         self.uuid = ''
 
 class Shotdescription:
-    def __init__(self, duration, imagetype):
+    def __init__(self, duration, imagetype, kind='light'):
         self.images = []
         self.imagetype = imagetype
         self.duration = duration
         self.cameraconfiguration = None
         self.imagingfunctions = []
+        self.kind = kind
 
     def capture(self):
         if self.imagetype == 'RAW Bayer':
@@ -199,6 +202,7 @@ class Shotdescription:
     def captureflat(self):
         img = Image()
         img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+        img.order = len(self.images)+1
         self.images.append(img)
 
     def setNrOfShots(self, nrOfShots):
@@ -216,12 +220,13 @@ class Shotdescription:
         return True
 
 def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer', imagingfunction=None):
+    print('imagetype' + imagetype)
     shotdesc = Shotdescription(duration, imagetype)
 
     if project is not None:
         shotdesc.cameraconfiguration = project.cameraconfiguration
         
-        shotdesc.imagingfunctions.extend(shotdesc.cameraconfiguration.imagingfunctions[imagetype])
+        shotdesc.imagingfunctions.extend(shotdesc.cameraconfiguration.imagingfunctions['RAW Bayer'])
 
         project.shotdescriptions.append(shotdesc)
     shotdesc.setNrOfShots(nrOfShots)
@@ -289,18 +294,19 @@ class PersistenceFacade:
         for img in shotdesc.images:
             self.database.insertimage(shotdescid, img.filename)
 
-    def writefits(self, shotdesc, project):
-        filepath = project.name +'/'
-        filename = project.name + str(shotdesc.duration)
-        filename = filename + shotdesc.imagetype
-        filename = filepath + filename
+    def writefits(self, shotdesc, project=None):
+        desckind = shotdesc.kind
+        if desckind == 'light':
+            basedir = project.name
+            duritstr = project.name + str(shotdesc.duration) + shotdesc.imagetype
+        elif desckind == 'flat':
+            basedir = 'calibrationframes/flats'
+            duritstr = 'flat' + str(shotdesc.duration) + shotdesc.imagetype
         for image in shotdesc.images:
             if image.signal is not None:
-                fn = filename + str(image.order)
+                fn = duritstr + str(image.order) + '.fits'
                 fn = fn.replace(' ','')
-                fn + fn.replace('.','')
-                fn += ('.fits')
-                image.filename = fn
+                image.filename = os.path.join(basedir, fn)
                 self.fitsmanager.writefits(image.signal, fn)
 
     def loadcameraconfigurations(self):

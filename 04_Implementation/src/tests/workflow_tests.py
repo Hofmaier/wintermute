@@ -119,7 +119,6 @@ class TestCameraConfiguration(unittest.TestCase):
         self.assertIs(shotdesc.cameraconfiguration, camconfig)
         camconfig.camera.capture.assert_called_with(0, 'RAW Bayer')
 
-
 class TestTelescope(unittest.TestCase):
     def test_ctor(self):
         name = 'Celestron Edge HD 1400'
@@ -159,13 +158,19 @@ class TestWorkspace(unittest.TestCase):
         cameraconfig.camera = mock.MagicMock()
         cameraconfig.camera.capture = mock.MagicMock(return_value=[1,2,3,4])
         shotdesc1.cameraconfiguration = cameraconfig
+        workspace.persFacade.writefits = mock.MagicMock()
         workspace.captureflat(shotdesc1)
         self.assertEqual(len(workspace.flats), 1)
         self.assertEqual(len(workspace.flats[0].images), 1)
+        flatshotdesc = workspace.flats[0]
+        firstimg = flatshotdesc.images[0]
+        self.assertEqual(firstimg.order, 1)
+        self.assertEqual(flatshotdesc.kind, 'flat')
         shotdesc2 = workflow.Shotdescription(3, 'RAW Bayer')
         shotdesc2.cameraconfiguration = cameraconfig
         workspace.captureflat(shotdesc2)
         self.assertEqual(len(workspace.flats), 1)
+        workspace.persFacade.writefits.assert_called_with(flatshotdesc)
         shotdesc3 = workflow.Shotdescription(2, 'RAW Bayer')
         shotdesc3.cameraconfiguration = cameraconfig
         workspace.captureflat(shotdesc3)
@@ -191,6 +196,7 @@ class TestShotdescription(unittest.TestCase):
     def test_ctor(self):
         shotdescription = workflow.Shotdescription(3, 'RAW Bayer')
         self.assertIsNotNone(shotdescription)
+        self.assertEqual(shotdescription.kind, 'light')
 
     def test_createShotdescription(self):
         nrOfShots = 5
@@ -298,6 +304,16 @@ class TestPersistenceFacade(unittest.TestCase):
         img = shotdesc.images[0]
         self.persistencefacade.writefits( shotdesc, proj)
         self.assertEqual(img.filename, 'jupiter/jupiter3RAWBayer1.fits')
+        
+    def test_writefits_with_flat(self):
+        flatshotdesc = workflow.Shotdescription(3, 'RAW Bayer')
+        flatshotdesc.kind = 'flat'
+        img = workflow.Image()
+        img.order = 1
+        flatshotdesc.images.append(img)
+        self.persistencefacade.writefits(flatshotdesc)
+        self.assertEqual(img.filename, 'calibrationframes/flats/flat3RAWBayer1.fits')
+            
 
 class TestSpectralChannel(unittest.TestCase):
     def test_ctor(self):
