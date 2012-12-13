@@ -28,7 +28,7 @@ new_frame_cb(unicap_event_t event,
 	     void *user_data) 
 {
   volatile int * framecounter = (volatile int *)user_data;
-  if(buf != NULL)
+  if(buf == NULL)
     {
       buf = malloc(nrOfPixel);
       unsigned char *unicapmem = buffer->data;
