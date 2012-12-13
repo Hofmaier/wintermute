@@ -58,7 +58,7 @@ class Session:
 
     def captureflat(self, shotdescription):
         self.workspace.captureflat(shotdescription)
-        print("Collect Flat")
+
 
 class CameraConfiguration:
     def __init__(self, name, camera=None):
@@ -207,6 +207,10 @@ class Shotdescription:
 
     def setNrOfShots(self, nrOfShots):
         self.images = [Image(order=i+1) for i in range(nrOfShots)]
+        
+    def setimagetype(self, imagetype):
+        self.imagetype = imagetype
+        self.imagingfunctions.extend(self.cameraconfiguration.imagingfunctions[imagetype])
 
     def compareflat(self, shotdesc):
         if self.duration != shotdesc.duration:
@@ -220,13 +224,12 @@ class Shotdescription:
         return True
 
 def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer', imagingfunction=None):
-    print('imagetype' + imagetype)
     shotdesc = Shotdescription(duration, imagetype)
 
     if project is not None:
         shotdesc.cameraconfiguration = project.cameraconfiguration
-        
-        shotdesc.imagingfunctions.extend(shotdesc.cameraconfiguration.imagingfunctions['RAW Bayer'])
+        if imagetype != '':
+            shotdesc.imagingfunctions.extend(shotdesc.cameraconfiguration.imagingfunctions[imagetype])
 
         project.shotdescriptions.append(shotdesc)
     shotdesc.setNrOfShots(nrOfShots)
@@ -307,7 +310,7 @@ class PersistenceFacade:
                 fn = duritstr + str(image.order) + '.fits'
                 fn = fn.replace(' ','')
                 image.filename = os.path.join(basedir, fn)
-                self.fitsmanager.writefits(image.signal, fn)
+                self.fitsmanager.writefits(image.signal, image.filename)
 
     def loadcameraconfigurations(self):
         configtuples = self.database.getimagingfunctions()

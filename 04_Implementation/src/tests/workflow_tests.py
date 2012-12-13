@@ -236,6 +236,13 @@ class TestShotdescription(unittest.TestCase):
         self.assertTrue(flatshotdesc.compareflat(equallightshotdesc))
         differentshotdesc = workflow.createShotdescription(1,3,self.project, self.imagetype)
         self.assertFalse(flatshotdesc.compareflat(differentshotdesc))
+
+    def test_setimagetype(self):
+        shotdesc = workflow.createShotdescription(0,0,self.project,'')
+        self.assertEqual(len(shotdesc.imagingfunctions),0)
+        shotdesc.setimagetype('RAW Bayer')
+        self.assertEqual(shotdesc.imagetype, 'RAW Bayer')
+        self.assertEqual(len(shotdesc.imagingfunctions),3)
         
 class TestPersistenceFacade(unittest.TestCase):
     def setUp(self):
