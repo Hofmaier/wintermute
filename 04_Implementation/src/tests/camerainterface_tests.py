@@ -6,8 +6,8 @@ class TestCamera(unittest.TestCase):
 
     def setUp(self):
         self.name = 'interfacemock'
-        moduletuple = imp.find_module('mockinginterface', ['extensions'])
-        self.modulemock = imp.load_module('mockinginterface', *moduletuple)
+        moduletuple = imp.find_module('mockinterface', ['extensions'])
+        self.modulemock = imp.load_module('mockinterface', *moduletuple)
         camerainterface.moduledict[self.name] = self.modulemock
     
     def test_createCamera(self):
