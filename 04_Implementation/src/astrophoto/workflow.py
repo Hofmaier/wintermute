@@ -49,11 +49,9 @@ class Session:
         self.workspace.persFacade.writefits(shotdesc, self.currentProject)
 
     def capturebias(self, cameraconfiguration):
-        print("Collect Bias")
         pass
 
     def capturedark(self, shotdescription):
-        print("Collect Dark")
         pass
 
     def captureflat(self, shotdescription):
@@ -203,7 +201,6 @@ class Shotdescription:
     def captureflat(self):
         img = Image()
         img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
-        print('signallength: ' + str(len(img.signal)))
         img.order = len(self.images)+1
         self.images.append(img)
 
@@ -320,7 +317,6 @@ class PersistenceFacade:
                 fn = duritstr + str(image.order) + '.fits'
                 fn = fn.replace(' ','')
                 image.filename = os.path.join(basedir, fn)
-                print('writefits: ' + str(len(image.signal)))
                 self.fitsmanager.writefits(image.signal, image.filename)
 
     def loadcameraconfigurations(self):
