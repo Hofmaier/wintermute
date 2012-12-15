@@ -158,6 +158,7 @@ class Workspace:
         if flatshotdesc is None:
             flatshotdesc = copy.copy(lightshotdesc)
             flatshotdesc.kind = 'flat'
+            flatshotdesc.images = []
             self.flats.append(flatshotdesc)
 
         flatshotdesc.captureflat()
@@ -202,6 +203,7 @@ class Shotdescription:
     def captureflat(self):
         img = Image()
         img.signal = self.cameraconfiguration.camera.capture(self.duration, self.imagetype)
+        print('signallength: ' + str(len(img.signal)))
         img.order = len(self.images)+1
         self.images.append(img)
 
@@ -222,6 +224,14 @@ class Shotdescription:
         if self.imagingfunctions != shotdesc.imagingfunctions:
             return False
         return True
+    
+    def taken(self):
+        taken = True
+        for img in self.images:
+            if img.filename == '':
+                taken = False
+
+        return taken
 
 def createShotdescription(nrOfShots, duration, project=None, imagetype='RAW Bayer', imagingfunction=None):
     shotdesc = Shotdescription(duration, imagetype)
@@ -310,6 +320,7 @@ class PersistenceFacade:
                 fn = duritstr + str(image.order) + '.fits'
                 fn = fn.replace(' ','')
                 image.filename = os.path.join(basedir, fn)
+                print('writefits: ' + str(len(image.signal)))
                 self.fitsmanager.writefits(image.signal, image.filename)
 
     def loadcameraconfigurations(self):
